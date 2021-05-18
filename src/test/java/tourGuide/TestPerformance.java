@@ -2,13 +2,11 @@ package tourGuide;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -22,8 +20,15 @@ import tourGuide.service.TourGuideService;
 import tourGuide.user.User;
 import tourGuide.user.UserReward;
 
+@Ignore
 public class TestPerformance {
-	
+
+	@BeforeClass
+	public static void setUp() {
+		Locale.setDefault(Locale.US);
+	}
+
+
 	/*
 	 * A note on performance improvements:
 	 *     

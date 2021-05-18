@@ -5,6 +5,8 @@
  * 
  * Detailed information about configuring a multi-project build in Gradle can be found
  * in the user guide at https://docs.gradle.org/4.8.1/userguide/multi_project_builds.html
+ *
+ * NB : migrate to Gradle 7.0.2
  */
 
-rootProject.name = 'TourGuide'
+rootProject.name = "TourGuide"

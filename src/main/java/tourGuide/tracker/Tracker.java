@@ -21,7 +21,6 @@ public class Tracker extends Thread {
 
 	public Tracker(TourGuideService tourGuideService) {
 		this.tourGuideService = tourGuideService;
-		
 		executorService.submit(this);
 	}
 	

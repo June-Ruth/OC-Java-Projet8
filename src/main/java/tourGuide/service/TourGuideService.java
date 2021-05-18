@@ -46,6 +46,7 @@ public class TourGuideService {
 			initializeInternalUsers();
 			logger.debug("Finished initializing users");
 		}
+
 		tracker = new Tracker(this);
 		addShutDownHook();
 	}
@@ -66,7 +67,7 @@ public class TourGuideService {
 	}
 	
 	public List<User> getAllUsers() {
-		return internalUserMap.values().stream().collect(Collectors.toList());
+		return new ArrayList<>(internalUserMap.values());
 	}
 	
 	public void addUser(User user) {

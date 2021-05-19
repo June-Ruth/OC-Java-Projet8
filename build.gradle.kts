@@ -1,16 +1,19 @@
 plugins {
-    id "java"
-    id "eclipse"
-    id "idea"
-    id "org.springframework.boot" version("2.4.5")
-    id "io.spring.dependency-management" version("1.0.11.RELEASE")
-    id "jacoco"
+    java
+    eclipse
+    idea
+    id("org.springframework.boot") version("2.4.5")
+    id("io.spring.dependency-management") version("1.0.11.RELEASE")
+    jacoco
 }
 
-tasks.bootJar {
-    baseName = "tourGuide"
-    version =  "1.0.0"
+java {
+    toolchain{
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
 }
+
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -18,9 +21,6 @@ repositories {
         dirs("libs")
     }
 }
-
-sourceCompatibility = "1.8".toBigDecimal()
-targetCompatibility = "1.8".toBigDecimal()
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -46,9 +46,9 @@ tasks.test {
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports {
-        xml.enabled true
-        csv.enabled false
-        html.destination layout.buildDirectory.dir("jacocoHtml").get().asFile
+        xml.isEnabled = true
+        csv.isEnabled = false
+        html.destination = layout.buildDirectory.dir("jacocoHtml").get().asFile
     }
 }
 

@@ -10,7 +10,6 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
@@ -18,7 +17,7 @@ import tourGuide.service.RewardsService;
 import tourGuide.service.RewardsServiceImpl;
 import tourGuide.service.TourGuideService;
 import tourGuide.service.TourGuideServiceImpl;
-import tourGuide.user.User;
+import tourGuide.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

@@ -2,8 +2,8 @@ package tourGuide.service;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
-import tourGuide.user.User;
-import tourGuide.user.UserReward;
+import tourGuide.model.User;
+import tourGuide.model.UserReward;
 import tripPricer.Provider;
 
 import java.util.List;

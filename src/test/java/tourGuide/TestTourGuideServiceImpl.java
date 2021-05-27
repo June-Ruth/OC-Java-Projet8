@@ -20,7 +20,7 @@ import tourGuide.service.RewardsService;
 import tourGuide.service.RewardsServiceImpl;
 import tourGuide.service.TourGuideService;
 import tourGuide.service.TourGuideServiceImpl;
-import tourGuide.user.User;
+import tourGuide.model.User;
 import tripPricer.Provider;
 
 public class TestTourGuideServiceImpl {

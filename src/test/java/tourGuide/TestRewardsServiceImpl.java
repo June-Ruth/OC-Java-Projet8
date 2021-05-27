@@ -21,8 +21,8 @@ import tourGuide.service.RewardsService;
 import tourGuide.service.RewardsServiceImpl;
 import tourGuide.service.TourGuideService;
 import tourGuide.service.TourGuideServiceImpl;
-import tourGuide.user.User;
-import tourGuide.user.UserReward;
+import tourGuide.model.User;
+import tourGuide.model.UserReward;
 
 public class TestRewardsServiceImpl {
 

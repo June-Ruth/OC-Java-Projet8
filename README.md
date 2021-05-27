@@ -3,7 +3,7 @@
 ##Modification History
 
 ###4 - Improve architecture using MVC Pattern
-- Create interface to respect SOLID principles
+- Create interface to respect SOLID principles and adapt code for them
 
 ###3 - Migrate Gradle from Groovy to Kotlin Script
 - Adapt syntax to look like Kts

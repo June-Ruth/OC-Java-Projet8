@@ -10,8 +10,8 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
-import tourGuide.user.User;
-import tourGuide.user.UserReward;
+import tourGuide.model.User;
+import tourGuide.model.UserReward;
 
 @Service
 public class RewardsServiceImpl implements RewardsService {
@@ -46,7 +46,7 @@ public class RewardsServiceImpl implements RewardsService {
 		
 		for(VisitedLocation visitedLocation : userLocations) {
 			for(Attraction attraction : attractions) {
-				if(userRewards.stream().noneMatch(r -> r.attraction.attractionName.equals(attraction.attractionName))) {
+				if(userRewards.stream().noneMatch(r -> r.getAttraction().attractionName.equals(attraction.attractionName))) {
 					if(nearAttraction(visitedLocation, attraction)) {
 						user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
 					}

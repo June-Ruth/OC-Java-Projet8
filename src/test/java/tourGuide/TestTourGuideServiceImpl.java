@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.service.RewardsService;
@@ -23,6 +24,7 @@ import tourGuide.service.TourGuideServiceImpl;
 import tourGuide.model.User;
 import tripPricer.Provider;
 
+@ActiveProfiles("test")
 public class TestTourGuideServiceImpl {
 
 	private RewardsService rewardsService;

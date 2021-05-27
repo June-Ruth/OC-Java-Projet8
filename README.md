@@ -4,6 +4,9 @@
 
 ###4 - Improve architecture using MVC Pattern
 - Create interface to respect SOLID principles and adapt code for them
+- Clean model
+- Isolate test methods from services
+- Separate controllers depending on REST conventions
 
 ###3 - Migrate Gradle from Groovy to Kotlin Script
 - Adapt syntax to look like Kts

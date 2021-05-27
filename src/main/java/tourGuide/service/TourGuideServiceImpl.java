@@ -58,7 +58,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	@Override
 	public VisitedLocation getUserLocation(User user) {
 		VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ?
-			user.getLastVisitedLocation() :
+			getLastVisitedLocation(user) :
 			trackUserLocation(user);
 		return visitedLocation;
 	}
@@ -82,7 +82,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 
 	@Override
 	public List<Provider> getTripDeals(User user) {
-		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -> i.getRewardPoints()).sum();
+		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(UserReward::getRewardPoints).sum();
 		List<Provider> providers = tripPricer.getPrice(tripPricerApiKey, user.getUserId(), user.getUserPreferences().getNumberOfAdults(), 
 				user.getUserPreferences().getNumberOfChildren(), user.getUserPreferences().getTripDuration(), cumulatativeRewardPoints);
 		user.setTripDeals(providers);
@@ -92,7 +92,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	@Override
 	public VisitedLocation trackUserLocation(User user) {
 		VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
-		user.addToVisitedLocations(visitedLocation);
+		addToVisitedLocationsOfUser(visitedLocation, user);
 		rewardsService.calculateRewards(user);
 		return visitedLocation;
 	}
@@ -108,7 +108,23 @@ public class TourGuideServiceImpl implements TourGuideService {
 		
 		return nearbyAttractions;
 	}
-	
+
+	@Override
+	public void clearVisitedLocationsOfUser(User user) {
+		user.getVisitedLocations().clear();
+	}
+
+	@Override
+	public void addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user) {
+		List<VisitedLocation> visitedLocations = user.getVisitedLocations();
+		visitedLocations.add(visitedLocation);
+	}
+
+	private VisitedLocation getLastVisitedLocation(User user) {
+		List<VisitedLocation> visitedLocations = user.getVisitedLocations();
+		return visitedLocations.get(visitedLocations.size() - 1);
+	}
+
 	private void addShutDownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() { 
 		      public void run() {
@@ -144,9 +160,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	}
 	
 	private void generateUserLocationHistory(User user) {
-		IntStream.range(0, 3).forEach(i-> {
-			user.addToVisitedLocations(new VisitedLocation(user.getUserId(), new Location(generateRandomLatitude(), generateRandomLongitude()), getRandomTime()));
-		});
+		IntStream.range(0, 3).forEach(i -> addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), new Location(generateRandomLatitude(), generateRandomLongitude()), getRandomTime()), user));
 	}
 	
 	private double generateRandomLongitude() {

@@ -99,25 +99,4 @@ public class User {
 	public void setTripDeals(final List<Provider> tripDeals1) {
 		tripDeals = tripDeals1;
 	}
-
-// TODO : Move to repo or service
-
-	public VisitedLocation getLastVisitedLocation() {
-		return visitedLocations.get(visitedLocations.size() - 1);
-	}
-
-	public void addToVisitedLocations(VisitedLocation visitedLocation) {
-		visitedLocations.add(visitedLocation);
-	}
-
-	public void clearVisitedLocations() {
-		visitedLocations.clear();
-	}
-
-	public void addUserReward(UserReward userReward) {
-		if(userRewards.stream().filter(r -> !r.getAttraction().attractionName.equals(userReward.getAttraction())).count() == 0) {
-			userRewards.add(userReward);
-		}
-	}
-
 }

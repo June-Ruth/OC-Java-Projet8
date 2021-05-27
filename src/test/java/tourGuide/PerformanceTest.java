@@ -214,7 +214,10 @@ public class PerformanceTest {
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
-		allUsers.forEach(user -> user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date())));
+		allUsers.forEach(user -> {
+			tourGuideService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, new Date()), user);
+		});
+
 		allUsers.forEach(rewardsService::calculateRewards);
 
 		for(User user : allUsers) {

@@ -23,7 +23,7 @@ public class RewardsServiceImpl implements RewardsService {
 	private int attractionProximityRange = 200;
 	private final GpsUtil gpsUtil;
 	private final RewardCentral rewardsCentral;
-	
+
 	public RewardsServiceImpl(GpsUtil gpsUtil, RewardCentral rewardCentral) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsCentral = rewardCentral;
@@ -33,25 +33,32 @@ public class RewardsServiceImpl implements RewardsService {
 	public void setProximityBuffer(int proximityBuffer) {
 		this.proximityBuffer = proximityBuffer;
 	}
-	
+
 	public void setDefaultProximityBuffer() {
 		proximityBuffer = defaultProximityBuffer;
 	}
-	
+
 	@Override
 	public void calculateRewards(User user) {
 		List<VisitedLocation> userLocations = new ArrayList<>(user.getVisitedLocations());
 		List<Attraction> attractions = gpsUtil.getAttractions();
 		List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
-		
+
 		for(VisitedLocation visitedLocation : userLocations) {
 			for(Attraction attraction : attractions) {
 				if(userRewards.stream().noneMatch(r -> r.getAttraction().attractionName.equals(attraction.attractionName))) {
 					if(nearAttraction(visitedLocation, attraction)) {
-						user.addUserReward(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)));
+						addUserRewardToUser(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)), user);
 					}
 				}
 			}
+		}
+	}
+
+	public void addUserRewardToUser(UserReward userReward, User user) {
+		List<UserReward> userRewards = user.getUserRewards();
+		if(userRewards.stream().noneMatch(r -> !r.getAttraction().attractionName.equals(userReward.getAttraction().attractionName))) {
+			userRewards.add(userReward);
 		}
 	}
 

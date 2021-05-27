@@ -28,4 +28,8 @@ public interface TourGuideService {
 
     void stopTracker();
 
+    void clearVisitedLocationsOfUser(User user);
+
+    void addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user);
+
 }

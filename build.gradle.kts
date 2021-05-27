@@ -25,7 +25,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.javamoney:moneta:1.3")
+    implementation("org.javamoney:moneta:1.4.1")
     implementation("com.jsoniter:jsoniter:0.9.23")
 
     implementation(fileTree("libs"){include("*.jar")})

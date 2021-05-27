@@ -12,29 +12,42 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
+import tourGuide.service.RewardsService;
 import tourGuide.service.RewardsServiceImpl;
+import tourGuide.service.TourGuideService;
 import tourGuide.service.TourGuideServiceImpl;
 import tourGuide.user.User;
 import tourGuide.user.UserReward;
 
 public class TestRewardsServiceImpl {
 
+	private RewardsService rewardsService;
+	private TourGuideService tourGuideService;
+	private GpsUtil gpsUtil;
+	private RewardCentral rewardCentral;
+
 	@BeforeAll
 	public static void setUp() {
 		Locale.setDefault(Locale.US);
 	}
 
+	@BeforeEach
+	public void beforeEach() {
+		gpsUtil = new GpsUtil();
+		rewardCentral = new RewardCentral();
+		rewardsService = new RewardsServiceImpl(gpsUtil, rewardCentral);
+		//tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
+	}
+
 	@Test
 	public void userGetRewards() {
-		GpsUtil gpsUtil = new GpsUtil();
-		RewardsServiceImpl rewardsServiceImpl = new RewardsServiceImpl(gpsUtil, new RewardCentral());
-
 		InternalTestHelper.setInternalUserNumber(0);
-		TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(gpsUtil, rewardsServiceImpl);
+		TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		Attraction attraction = gpsUtil.getAttractions().get(0);
@@ -47,23 +60,19 @@ public class TestRewardsServiceImpl {
 	
 	@Test
 	public void isWithinAttractionProximity() {
-		GpsUtil gpsUtil = new GpsUtil();
-		RewardsServiceImpl rewardsServiceImpl = new RewardsServiceImpl(gpsUtil, new RewardCentral());
 		Attraction attraction = gpsUtil.getAttractions().get(0);
-		assertTrue(rewardsServiceImpl.isWithinAttractionProximity(attraction, attraction));
+		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
 	}
 	
 	@Disabled // Needs fixed - can throw ConcurrentModificationException
 	@Test
 	public void nearAllAttractions() {
-		GpsUtil gpsUtil = new GpsUtil();
-		RewardsServiceImpl rewardsServiceImpl = new RewardsServiceImpl(gpsUtil, new RewardCentral());
-		rewardsServiceImpl.setProximityBuffer(Integer.MAX_VALUE);
+		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
 
 		InternalTestHelper.setInternalUserNumber(1);
-		TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(gpsUtil, rewardsServiceImpl);
+		TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
-		rewardsServiceImpl.calculateRewards(tourGuideServiceImpl.getAllUsers().get(0));
+		rewardsService.calculateRewards(tourGuideServiceImpl.getAllUsers().get(0));
 		List<UserReward> userRewards = tourGuideServiceImpl.getUserRewards(tourGuideServiceImpl.getAllUsers().get(0));
 		tourGuideServiceImpl.tracker.stopTracking();
 

@@ -26,4 +26,6 @@ public interface TourGuideService {
 
     List<Attraction> getNearByAttractions(VisitedLocation visitedLocation);
 
+    void stopTracker();
+
 }

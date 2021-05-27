@@ -30,14 +30,14 @@ import tripPricer.TripPricer;
 public class TourGuideServiceImpl implements TourGuideService {
 	private Logger logger = LoggerFactory.getLogger(TourGuideServiceImpl.class);
 	private final GpsUtil gpsUtil;
-	private final RewardsServiceImpl rewardsServiceImpl;
+	private final RewardsService rewardsService;
 	private final TripPricer tripPricer = new TripPricer();
 	public final Tracker tracker;
 	boolean testMode = true;
 	
-	public TourGuideServiceImpl(GpsUtil gpsUtil, RewardsServiceImpl rewardsServiceImpl) {
+	public TourGuideServiceImpl(GpsUtil gpsUtil, RewardsService rewardsService) {
 		this.gpsUtil = gpsUtil;
-		this.rewardsServiceImpl = rewardsServiceImpl;
+		this.rewardsService = rewardsService;
 		
 		if(testMode) {
 			logger.info("TestMode enabled");
@@ -93,7 +93,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	public VisitedLocation trackUserLocation(User user) {
 		VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
 		user.addToVisitedLocations(visitedLocation);
-		rewardsServiceImpl.calculateRewards(user);
+		rewardsService.calculateRewards(user);
 		return visitedLocation;
 	}
 
@@ -101,7 +101,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
 		List<Attraction> nearbyAttractions = new ArrayList<>();
 		for(Attraction attraction : gpsUtil.getAttractions()) {
-			if(rewardsServiceImpl.isWithinAttractionProximity(attraction, visitedLocation.location)) {
+			if(rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) {
 				nearbyAttractions.add(attraction);
 			}
 		}
@@ -115,6 +115,11 @@ public class TourGuideServiceImpl implements TourGuideService {
 		        tracker.stopTracking();
 		      } 
 		    }); 
+	}
+
+	@Override
+	public void stopTracker() {
+		tracker.stopTracking();
 	}
 	
 	/**********************************************************************************

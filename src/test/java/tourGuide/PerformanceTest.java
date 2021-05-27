@@ -9,22 +9,39 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
+import tourGuide.service.RewardsService;
 import tourGuide.service.RewardsServiceImpl;
+import tourGuide.service.TourGuideService;
 import tourGuide.service.TourGuideServiceImpl;
 import tourGuide.user.User;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Disabled
+//@Disabled
 public class PerformanceTest {
+
+	private RewardsService rewardsService;
+	private TourGuideService tourGuideService;
+	private GpsUtil gpsUtil;
+	private RewardCentral rewardCentral;
+
 
 	@BeforeAll
 	public static void setUp() {
 		Locale.setDefault(Locale.US);
+	}
+
+	@BeforeEach
+	public void beforeEach() {
+		gpsUtil = new GpsUtil();
+		rewardCentral = new RewardCentral();
+		rewardsService = new RewardsServiceImpl(gpsUtil, rewardCentral);
+		//tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 	}
 
 	/*
@@ -52,26 +69,28 @@ public class PerformanceTest {
 	@Test
 	public void trackLocationWith100UsersTest() {
 		int userNumber = 100;
-		GpsUtil gpsUtil = new GpsUtil();
-		RewardsServiceImpl rewardsServiceImpl = new RewardsServiceImpl(gpsUtil, new RewardCentral());
 		InternalTestHelper.setInternalUserNumber(userNumber);
-		TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(gpsUtil, rewardsServiceImpl);
 
-		List<User> allUsers = tourGuideServiceImpl.getAllUsers();
+		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
+		// NB : si fait remonter au niveau du before each, pb avec le set d'internal test helper
+		// parce que internal test helper est utilisé lors de l'instanciation de TourGuideService
+		// et a donc besoin de l'internalUserNumber sinon valeur par défaut est appliqué
+
+		List<User> allUsers = tourGuideService.getAllUsers();
 		
 	    StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		for(User user : allUsers) {
-			tourGuideServiceImpl.trackUserLocation(user);
+			tourGuideService.trackUserLocation(user);
 		}
 		stopWatch.stop();
-		tourGuideServiceImpl.tracker.stopTracking();
+		tourGuideService.stopTracker();
 
 		System.out.println("Track Location with "+ userNumber + " Users : Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 
-	@Test
+	/*@Test
 	public void trackLocationWith1000UsersTest() {
 		int userNumber = 1000;
 		GpsUtil gpsUtil = new GpsUtil();
@@ -179,37 +198,37 @@ public class PerformanceTest {
 
 		System.out.println("Track Location with "+ userNumber + " Users : Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
-	}
+	}*/
 
 	// GET REWARDS PERFORMANCE TESTS //
 
 	@Test
 	public void getRewardsWith100UsersTest() {
 		int userNumber = 100;
-		GpsUtil gpsUtil = new GpsUtil();
-		RewardsServiceImpl rewardsServiceImpl = new RewardsServiceImpl(gpsUtil, new RewardCentral());
 		InternalTestHelper.setInternalUserNumber(userNumber);
+
+		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
+
+		Attraction attraction = gpsUtil.getAttractions().get(0);
+		List<User> allUsers = tourGuideService.getAllUsers();
+
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		TourGuideServiceImpl tourGuideServiceImpl = new TourGuideServiceImpl(gpsUtil, rewardsServiceImpl);
-		
-	    Attraction attraction = gpsUtil.getAttractions().get(0);
-		List<User> allUsers = tourGuideServiceImpl.getAllUsers();
-		allUsers.forEach(u -> u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date())));
-	     
-	    allUsers.forEach(rewardsServiceImpl::calculateRewards);
-	    
+
+		allUsers.forEach(user -> user.addToVisitedLocations(new VisitedLocation(user.getUserId(), attraction, new Date())));
+		allUsers.forEach(rewardsService::calculateRewards);
+
 		for(User user : allUsers) {
 			assertTrue(user.getUserRewards().size() > 0);
 		}
 		stopWatch.stop();
-		tourGuideServiceImpl.tracker.stopTracking();
+		tourGuideService.stopTracker();
 
 		System.out.println("Get Rewards with " + userNumber + " Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 		assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 
-	@Test
+	/*@Test
 	public void getRewardsWith1000UsersTest() {
 		int userNumber = 1000;
 		GpsUtil gpsUtil = new GpsUtil();
@@ -337,6 +356,6 @@ public class PerformanceTest {
 
 		System.out.println("Get Rewards with " + userNumber + " Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 		assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
-	}
+	}*/
 	
 }

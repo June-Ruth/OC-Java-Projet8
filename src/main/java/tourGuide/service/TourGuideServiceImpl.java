@@ -3,6 +3,9 @@ package tourGuide.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +27,10 @@ public class TourGuideServiceImpl implements TourGuideService {
 	private final GpsUtil gpsUtil;
 	private final RewardsService rewardsService;
 	private final TripPricer tripPricer = new TripPricer();
-	public final Tracker tracker;
+
+	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+	private final Tracker tracker;
+
 
 	boolean testMode = true;
 	private static final String tripPricerApiKey = "test-server-api-key";
@@ -43,8 +49,27 @@ public class TourGuideServiceImpl implements TourGuideService {
 		}
 
 		tracker = new Tracker(this);
+		executorService.scheduleAtFixedRate(tracker, 0, 5, TimeUnit.MINUTES);
 		addShutDownHook();
 	}
+
+
+	private void addShutDownHook() {
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+				tracker.stopTracking();
+				executorService.shutdownNow();
+			}
+		});
+	}
+
+	@Override
+	public void stopTracker() {
+		tracker.stopTracking();
+		executorService.shutdownNow();
+	}
+
+
 
 	@Override
 	public List<UserReward> getUserRewards(User user) {
@@ -121,16 +146,4 @@ public class TourGuideServiceImpl implements TourGuideService {
 		return visitedLocations.get(visitedLocations.size() - 1);
 	}
 
-	private void addShutDownHook() {
-		Runtime.getRuntime().addShutdownHook(new Thread() { 
-		      public void run() {
-		        tracker.stopTracking();
-		      } 
-		    }); 
-	}
-
-	@Override
-	public void stopTracker() {
-		tracker.stopTracking();
-	}
 }

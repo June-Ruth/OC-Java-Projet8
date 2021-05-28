@@ -7,6 +7,7 @@
 - Clean model
 - Isolate test methods from services
 - Separate controllers depending on REST conventions
+- Make Tracker implements Runnable and use ScheduledExecutorService
 
 ###3 - Migrate Gradle from Groovy to Kotlin Script
 - Adapt syntax to look like Kts

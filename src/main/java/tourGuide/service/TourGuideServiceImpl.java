@@ -3,9 +3,6 @@ package tourGuide.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +25,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	private final RewardsService rewardsService;
 	private final TripPricer tripPricer = new TripPricer();
 
-	private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 	private final Tracker tracker;
-
 
 	boolean testMode = true;
 	private static final String tripPricerApiKey = "test-server-api-key";
@@ -49,7 +44,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 		}
 
 		tracker = new Tracker(this);
-		executorService.scheduleAtFixedRate(tracker, 0, 5, TimeUnit.MINUTES);
+		tracker.startTracking();
 		addShutDownHook();
 	}
 
@@ -58,18 +53,15 @@ public class TourGuideServiceImpl implements TourGuideService {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				tracker.stopTracking();
-				executorService.shutdownNow();
 			}
 		});
 	}
 
 	@Override
+	// Utilisé par les tests
 	public void stopTracker() {
 		tracker.stopTracking();
-		executorService.shutdownNow();
 	}
-
-
 
 	@Override
 	public List<UserReward> getUserRewards(User user) {

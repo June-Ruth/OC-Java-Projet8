@@ -57,7 +57,6 @@ public class Tracker implements Runnable {
             LOGGER.debug("Tracker Time Elapsed: "
                     + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
             stopWatch.reset();
-
         }
     }
 

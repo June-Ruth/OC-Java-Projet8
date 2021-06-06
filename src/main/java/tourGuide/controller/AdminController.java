@@ -1,13 +1,25 @@
 package tourGuide.controller;
 
 import com.jsoniter.output.JsonStream;
+import gpsUtil.location.VisitedLocation;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tourGuide.service.TourGuideService;
+
+import java.util.UUID;
 
 @RestController
 public class AdminController {
 
-    @RequestMapping("/users/admin/user-current-locations")
+    private final TourGuideService tourGuideService;
+
+    public AdminController(final TourGuideService tourGuideService1) {
+        tourGuideService = tourGuideService1;
+    }
+
+    @RequestMapping("/admin/users-current-locations")
     public String getAllCurrentLocations() {
         // TODO: Get a list of every user's most recent location as JSON
         //- Note: does not use gpsUtil to query for their current location,
@@ -21,4 +33,22 @@ public class AdminController {
 
         return JsonStream.serialize("");
     }
+
+    @RequestMapping("/admin/users/{userId}")
+    public String getUser(@PathVariable UUID userId) {
+        //TODO
+        return null;
+    }
+
+    @RequestMapping("/admin/users/{userId}/current-location")
+    public String getLocation(@PathVariable UUID userId, @RequestParam String userName) {
+        VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+        return JsonStream.serialize(visitedLocation.location);
+    }
+
+    @RequestMapping("/admin/users/{userId}/rewards")
+    public String getRewards(@PathVariable UUID userId, @RequestParam String username) {
+        return JsonStream.serialize(tourGuideService.getUserRewards(tourGuideService.getUser(username)));
+    }
+
 }

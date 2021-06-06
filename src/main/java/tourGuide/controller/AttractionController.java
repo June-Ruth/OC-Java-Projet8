@@ -34,4 +34,5 @@ public class AttractionController {
         return JsonStream.serialize(tourGuideService.getNearByAttractions(visitedLocation));
     }
 
+    //TODO : obtenir les infos sur les attractions
 }

@@ -2,6 +2,7 @@ package tourGuide.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -46,19 +47,30 @@ public class RewardsServiceImpl implements RewardsService {
 
 		for(VisitedLocation visitedLocation : userLocations) {
 			for(Attraction attraction : attractions) {
-				if(userRewards.stream().noneMatch(r -> r.getAttraction().attractionName.equals(attraction.attractionName))) {
-					if(nearAttraction(visitedLocation, attraction)) {
+				if(isAttractionNotAlreadyInUserRewards(attraction, userRewards)) {
+					if(isNear(visitedLocation, attraction)) {
 						addUserRewardToUser(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)), user);
 					}
 				}
 			}
 		}
+
+		/*return CompletableFuture.runAsync(() -> user.getVisitedLocations().forEach(
+				userLocation -> getAttractionsNearVisitedLocation(userLocation).forEach(attraction -> {
+							if(isAttractionNotAlreadyInUserRewards(attraction, userRewards)) {
+								addUserRewardToUser(new UserReward(userLocation, attraction, getRewardPoints(attraction, user)), user);
+					}
+
+				}
+				)));*/
 	}
 
 	public void addUserRewardToUser(UserReward userReward, User user) {
 		List<UserReward> userRewards = user.getUserRewards();
-		if(userRewards.stream().noneMatch(r -> !r.getAttraction().attractionName.equals(userReward.getAttraction().attractionName))) {
+
+		if(userRewards.stream().noneMatch(reward -> reward.getAttraction().attractionName.equals(userReward.getAttraction().attractionName))) {
 			userRewards.add(userReward);
+			System.out.println(userReward); // FOR TESTING ONLY
 		}
 	}
 
@@ -66,8 +78,20 @@ public class RewardsServiceImpl implements RewardsService {
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
 		return !(getDistance(attraction, location) > attractionProximityRange);
 	}
+
+	private boolean isAttractionNotAlreadyInUserRewards(Attraction attraction, List<UserReward> userRewards) {
+		return userRewards.stream().noneMatch(userReward -> userReward.getAttraction().attractionName
+				.equals(attraction.attractionName));
+	}
+
+	private List<Attraction> getAttractionsNearVisitedLocation(VisitedLocation visitedLocation) {
+		List<Attraction> attractions = gpsUtil.getAttractions();
+		List<Attraction> attractionsNearVisitedLocation = attractions.stream().filter(attraction -> isNear(visitedLocation, attraction)).collect(Collectors.toList());
+
+		return attractionsNearVisitedLocation;
+	}
 	
-	private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
+	private boolean isNear(VisitedLocation visitedLocation, Attraction attraction) {
 		return !(getDistance(attraction, visitedLocation.location) > proximityBuffer);
 	}
 	

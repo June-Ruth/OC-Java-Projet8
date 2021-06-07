@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tourGuide.service.TourGuideService;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 public class AttractionController {
@@ -29,7 +30,7 @@ public class AttractionController {
     // The reward points for visiting each Attraction.
     //    Note: Attraction reward points can be gathered from RewardsCentral
     @RequestMapping("/users/{userId}/attractions/closest-five")
-    public String getNearbyAttractions(@PathVariable UUID userId, @RequestParam String username) {
+    public String getNearbyAttractions(@PathVariable UUID userId, @RequestParam String username) throws ExecutionException, InterruptedException {
         VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(username));
         return JsonStream.serialize(tourGuideService.getNearByAttractions(visitedLocation));
     }

@@ -3,6 +3,8 @@ package tourGuide.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,10 +71,9 @@ public class TourGuideServiceImpl implements TourGuideService {
 	}
 
 	@Override
-	public VisitedLocation getUserLocation(User user) {
+	public VisitedLocation getUserLocation(User user) throws ExecutionException, InterruptedException {
 		VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ?
-			getLastVisitedLocation(user) :
-			trackUserLocation(user);
+			getLastVisitedLocation(user) : (VisitedLocation) trackUserLocation(user);//.get();
 		return visitedLocation;
 	}
 
@@ -104,9 +105,23 @@ public class TourGuideServiceImpl implements TourGuideService {
 
 	@Override
 	public VisitedLocation trackUserLocation(User user) {
-		VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
+		/*VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
 		addToVisitedLocationsOfUser(visitedLocation, user);
 		rewardsService.calculateRewards(user);
+		return visitedLocation;*/
+
+		CompletableFuture<VisitedLocation> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()))
+				.thenCompose(visitedLocation -> CompletableFuture.supplyAsync(() -> addToVisitedLocationsOfUser(visitedLocation, user)));
+
+		rewardsService.calculateRewards(user);
+
+		VisitedLocation visitedLocation = null;
+		try {
+			visitedLocation = completableFuture.get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+
 		return visitedLocation;
 	}
 
@@ -128,9 +143,10 @@ public class TourGuideServiceImpl implements TourGuideService {
 	}
 
 	@Override
-	public void addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user) {
+	public VisitedLocation addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user) {
 		List<VisitedLocation> visitedLocations = user.getVisitedLocations();
 		visitedLocations.add(visitedLocation);
+		return visitedLocation;
 	}
 
 	private VisitedLocation getLastVisitedLocation(User user) {

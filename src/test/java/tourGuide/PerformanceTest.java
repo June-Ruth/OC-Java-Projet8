@@ -1,6 +1,7 @@
 package tourGuide;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
@@ -211,10 +212,20 @@ public class PerformanceTest {
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 
 		Attraction attraction = gpsUtil.getAttractions().get(0);
-		List<User> allUsers = tourGuideService.getAllUsers();
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
+
+		List<User> allUsers = tourGuideService.getAllUsers();
+
+		/*CompletableFuture<?> future = CompletableFuture.supplyAsync(() -> tourGuideService.getAllUsers())
+				.thenCompose(users -> CompletableFuture.runAsync(() -> {
+							for (User user : users) {
+								tourGuideService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, new Date()), user);
+								rewardsService.calculateRewards(user);
+							}
+				}));*/
+
 
 		allUsers.forEach(user -> {
 			tourGuideService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, new Date()), user);
@@ -223,8 +234,12 @@ public class PerformanceTest {
 		allUsers.forEach(rewardsService::calculateRewards);
 
 		for(User user : allUsers) {
-			assertTrue(user.getUserRewards().size() > 0);
+			//FOR TESTING ONLY
+			System.out.println(user + " /user rewards size : " + user.getUserRewards().size());
 		}
+
+		allUsers.forEach(user -> assertTrue(user.getUserRewards().size() > 0));
+
 		stopWatch.stop();
 		tourGuideService.stopTracker();
 

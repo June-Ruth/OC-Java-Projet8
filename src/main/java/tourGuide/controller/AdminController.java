@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tourGuide.service.TourGuideService;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 public class AdminController {
@@ -41,7 +42,7 @@ public class AdminController {
     }
 
     @RequestMapping("/admin/users/{userId}/current-location")
-    public String getLocation(@PathVariable UUID userId, @RequestParam String userName) {
+    public String getLocation(@PathVariable UUID userId, @RequestParam String userName) throws ExecutionException, InterruptedException {
         VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
         return JsonStream.serialize(visitedLocation.location);
     }

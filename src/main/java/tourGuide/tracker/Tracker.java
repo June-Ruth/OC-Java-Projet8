@@ -1,5 +1,6 @@
 package tourGuide.tracker;
 
+import gpsUtil.location.VisitedLocation;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +8,7 @@ import tourGuide.model.User;
 import tourGuide.service.TourGuideService;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +35,7 @@ public class Tracker implements Runnable {
         running.set(false);
         executorService.shutdown();
         try {
-            if (!executorService.awaitTermination(800, TimeUnit.MILLISECONDS)) {
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
                 executorService.shutdownNow();
             }
         } catch (InterruptedException e) {
@@ -48,12 +50,18 @@ public class Tracker implements Runnable {
     public void run() {
         running.set(true);
         StopWatch stopWatch = new StopWatch();
+
         while(running.get()) {
             List<User> users = tourGuideService.getAllUsers();
+
             LOGGER.debug("Begin Tracker. Tracking " + users.size() + " users.");
+
             stopWatch.start();
+
             users.forEach(tourGuideService::trackUserLocation); //synchronized?
+
             stopWatch.stop();
+
             LOGGER.debug("Tracker Time Elapsed: "
                     + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
             stopWatch.reset();

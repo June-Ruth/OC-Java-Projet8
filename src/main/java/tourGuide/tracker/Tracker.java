@@ -21,6 +21,8 @@ public class Tracker implements Runnable {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final AtomicBoolean running = new AtomicBoolean(false);
 
+    private static final long trackingPollingInterval = TimeUnit.MINUTES.toSeconds(5); // TODO : voir pourquoi ne marche pas avec le schedule
+
     private final TourGuideService tourGuideService;
 
     public Tracker(final TourGuideService tourGuideService1) {
@@ -65,6 +67,13 @@ public class Tracker implements Runnable {
             LOGGER.debug("Tracker Time Elapsed: "
                     + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
             stopWatch.reset();
+
+            try {
+                LOGGER.debug("Tracker sleeping");
+                TimeUnit.SECONDS.sleep(trackingPollingInterval);
+            } catch (InterruptedException e) {
+                break;
+            }
         }
     }
 

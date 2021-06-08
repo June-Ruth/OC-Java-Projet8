@@ -3,6 +3,8 @@ package tourGuide.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class RewardsServiceImpl implements RewardsService {
 	private final GpsUtil gpsUtil;
 	private final RewardCentral rewardsCentral;
 
+	//Executor executor = Executors.newFixedThreadPool(2000);
+
 	public RewardsServiceImpl(GpsUtil gpsUtil, RewardCentral rewardCentral) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsCentral = rewardCentral;
@@ -43,15 +47,14 @@ public class RewardsServiceImpl implements RewardsService {
 	@Override
 	public CompletableFuture<?> calculateRewards(User user) {
 		List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
-
-		return CompletableFuture.runAsync(() -> user.getVisitedLocations().forEach(
+		return CompletableFuture.runAsync(() -> user.getVisitedLocations().parallelStream().forEach(
 				userLocation -> getAttractionsNearVisitedLocation(userLocation).forEach(attraction -> {
 							if(isAttractionNotAlreadyInUserRewards(attraction, userRewards)) {
 								addUserRewardToUser(new UserReward(userLocation, attraction, getRewardPoints(attraction, user)), user);
 					}
 
 				}
-				)));
+				)) /*,executor*/);
 	}
 
 	public void addUserRewardToUser(UserReward userReward, User user) {
@@ -59,6 +62,7 @@ public class RewardsServiceImpl implements RewardsService {
 		if(userRewards.stream().noneMatch(reward -> reward.getAttraction().attractionName.equals(userReward.getAttraction().attractionName))) {
 			userRewards.add(userReward);
 		}
+		//TODO : voir si pas nécessaire d'être sur un parallèle stream pour éviter les concurrents modif exceptions
 	}
 
 	@Override

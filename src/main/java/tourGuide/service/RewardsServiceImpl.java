@@ -47,7 +47,7 @@ public class RewardsServiceImpl implements RewardsService {
 	@Override
 	public CompletableFuture<?> calculateRewards(User user) {
 		List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
-		return CompletableFuture.runAsync(() -> user.getVisitedLocations().parallelStream().forEach(
+		return CompletableFuture.runAsync(() -> new ArrayList<>(user.getVisitedLocations()).forEach(
 				userLocation -> getAttractionsNearVisitedLocation(userLocation).forEach(attraction -> {
 							if(isAttractionNotAlreadyInUserRewards(attraction, userRewards)) {
 								addUserRewardToUser(new UserReward(userLocation, attraction, getRewardPoints(attraction, user)), user);
@@ -62,7 +62,6 @@ public class RewardsServiceImpl implements RewardsService {
 		if(userRewards.stream().noneMatch(reward -> reward.getAttraction().attractionName.equals(userReward.getAttraction().attractionName))) {
 			userRewards.add(userReward);
 		}
-		//TODO : voir si pas nécessaire d'être sur un parallèle stream pour éviter les concurrents modif exceptions
 	}
 
 	@Override

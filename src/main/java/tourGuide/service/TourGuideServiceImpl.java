@@ -116,6 +116,10 @@ public class TourGuideServiceImpl implements TourGuideService {
 		rewardsService.calculateRewards(user);
 		return visitedLocation;*/
 
+		/*CompletableFuture<?> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()), executor)
+				.thenAccept(visitedLocation -> addToVisitedLocationsOfUser(visitedLocation, user))
+				.thenRunAsync(() -> rewardsService.calculateRewards(user));*/
+
 		CompletableFuture<VisitedLocation> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()), executor)
 				.thenCompose(visitedLocation -> CompletableFuture.supplyAsync(() -> addToVisitedLocationsOfUser(visitedLocation, user)));
 
@@ -129,6 +133,8 @@ public class TourGuideServiceImpl implements TourGuideService {
 		}
 
 		return visitedLocation;
+
+		//return completableFuture;
 	}
 
 	@Override

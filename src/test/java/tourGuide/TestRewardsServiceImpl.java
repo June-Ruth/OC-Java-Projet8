@@ -54,7 +54,7 @@ public class TestRewardsServiceImpl {
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		Attraction attraction = gpsUtil.getAttractions().get(0);
 		tourGuideService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, new Date()), user);
-		tourGuideService.trackUserLocation(user);
+		tourGuideService.trackUserLocation(user).isDone();
 
 		List<UserReward> userRewards = user.getUserRewards();
 		tourGuideService.stopTracker();
@@ -67,7 +67,6 @@ public class TestRewardsServiceImpl {
 		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
 	}
 	
-	@Disabled // Needs fixed
 	@Test
 	public void nearAllAttractions() {
 		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
@@ -75,7 +74,7 @@ public class TestRewardsServiceImpl {
 		InternalTestHelper.setInternalUserNumber(1);
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
-		rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
+		rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0)).join();
 		List<UserReward> userRewards = tourGuideService.getUserRewards(tourGuideService.getAllUsers().get(0));
 		tourGuideService.stopTracker();
 

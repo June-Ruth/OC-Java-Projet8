@@ -7,13 +7,13 @@ import tourGuide.model.UserReward;
 import tripPricer.Provider;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.CompletableFuture;
 
 public interface TourGuideService {
 
     List<UserReward> getUserRewards(User user);
 
-    VisitedLocation getUserLocation(User user) throws ExecutionException, InterruptedException;
+    VisitedLocation getUserLocation(User user);
 
     User getUser(String userName);
 
@@ -23,7 +23,7 @@ public interface TourGuideService {
 
     List<Provider> getTripDeals(User user);
 
-    VisitedLocation trackUserLocation(User user);
+    CompletableFuture<?> trackUserLocation(User user);
 
     List<Attraction> getNearByAttractions(VisitedLocation visitedLocation);
 

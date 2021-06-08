@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +21,13 @@ import tripPricer.TripPricer;
 
 @Service
 public class TourGuideServiceImpl implements TourGuideService {
-	private Logger logger = LoggerFactory.getLogger(TourGuideServiceImpl.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TourGuideServiceImpl.class);
 	private final GpsUtil gpsUtil;
 	private final RewardsService rewardsService;
 	private final TripPricer tripPricer = new TripPricer();
 
 	private final Tracker tracker;
-	Executor executor = Executors.newFixedThreadPool(2000);
+	//Executor executor = Executors.newFixedThreadPool(2000);
 
 	boolean testMode = true;
 	private static final String tripPricerApiKey = "test-server-api-key";
@@ -42,10 +39,10 @@ public class TourGuideServiceImpl implements TourGuideService {
 		this.rewardsService = rewardsService;
 		
 		if(testMode) {
-			logger.info("TestMode enabled");
-			logger.debug("Initializing users");
+			LOGGER.info("TestMode enabled");
+			LOGGER.debug("Initializing users");
 			internalUserMap = internalTestInitializer.initializeInternalUsers();
-			logger.debug("Finished initializing users");
+			LOGGER.debug("Finished initializing users");
 		}
 
 		tracker = new Tracker(this);
@@ -55,11 +52,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 
 
 	private void addShutDownHook() {
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				tracker.stopTracking();
-			}
-		});
+		Runtime.getRuntime().addShutdownHook(new Thread(tracker::stopTracking));
 	}
 
 	@Override
@@ -74,12 +67,14 @@ public class TourGuideServiceImpl implements TourGuideService {
 	}
 
 	@Override
-	public VisitedLocation getUserLocation(User user) throws ExecutionException, InterruptedException {
+	public VisitedLocation getUserLocation(User user) {
 		if(user.getVisitedLocations().isEmpty()) {
-			trackUserLocation(user);
+			trackUserLocation(user).join();
 		}
 
-		VisitedLocation visitedLocation = getLastVisitedLocation(user);
+		List<VisitedLocation> visitedLocations = new ArrayList<>(user.getVisitedLocations());
+
+		VisitedLocation visitedLocation = visitedLocations.get(visitedLocations.size() - 1);
 		return visitedLocation;
 	}
 
@@ -110,31 +105,13 @@ public class TourGuideServiceImpl implements TourGuideService {
 	}
 
 	@Override
-	public VisitedLocation trackUserLocation(User user) {
-		/*VisitedLocation visitedLocation = gpsUtil.getUserLocation(user.getUserId());
-		addToVisitedLocationsOfUser(visitedLocation, user);
-		rewardsService.calculateRewards(user);
-		return visitedLocation;*/
+	public CompletableFuture<?> trackUserLocation(User user) {
 
-		/*CompletableFuture<?> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()), executor)
+		CompletableFuture<?> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId())/*, executor*/)
 				.thenAccept(visitedLocation -> addToVisitedLocationsOfUser(visitedLocation, user))
-				.thenRunAsync(() -> rewardsService.calculateRewards(user));*/
+				.thenRunAsync(() -> rewardsService.calculateRewards(user));
 
-		CompletableFuture<VisitedLocation> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()), executor)
-				.thenCompose(visitedLocation -> CompletableFuture.supplyAsync(() -> addToVisitedLocationsOfUser(visitedLocation, user)));
-
-		rewardsService.calculateRewards(user);
-
-		VisitedLocation visitedLocation = null;
-		try {
-			visitedLocation = completableFuture.get();
-		} catch (InterruptedException | ExecutionException e) {
-			e.printStackTrace();
-		}
-
-		return visitedLocation;
-
-		//return completableFuture;
+		return completableFuture;
 	}
 
 	@Override
@@ -160,10 +137,4 @@ public class TourGuideServiceImpl implements TourGuideService {
 		visitedLocations.add(visitedLocation);
 		return visitedLocation;
 	}
-
-	private VisitedLocation getLastVisitedLocation(User user) {
-		List<VisitedLocation> visitedLocations = user.getVisitedLocations();
-		return visitedLocations.get(visitedLocations.size() - 1);
-	}
-
 }

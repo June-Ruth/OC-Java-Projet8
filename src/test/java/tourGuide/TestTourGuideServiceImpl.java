@@ -52,7 +52,7 @@ public class TestTourGuideServiceImpl {
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-		VisitedLocation visitedLocation = (VisitedLocation) tourGuideService.trackUserLocation(user);
+		VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
 		tourGuideService.stopTracker();
 		assertEquals(visitedLocation.userId, user.getUserId());
 	}
@@ -102,7 +102,7 @@ public class TestTourGuideServiceImpl {
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-		VisitedLocation visitedLocation = (VisitedLocation) tourGuideService.trackUserLocation(user);
+		VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
 		
 		tourGuideService.stopTracker();
 		
@@ -116,7 +116,7 @@ public class TestTourGuideServiceImpl {
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
-		VisitedLocation visitedLocation = (VisitedLocation) tourGuideService.trackUserLocation(user);
+		VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
 		
 		List<Attraction> attractions = tourGuideService.getNearByAttractions(visitedLocation);
 		

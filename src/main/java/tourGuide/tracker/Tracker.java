@@ -60,7 +60,14 @@ public class Tracker implements Runnable {
 
             stopWatch.start();
 
-            users.forEach(tourGuideService::trackUserLocation); // TODO : CF Join
+            //users.forEach(tourGuideService::trackUserLocation); // TODO : CF Join
+
+            CompletableFuture<?>[] completableFutures = users.stream()
+                    .map(tourGuideService::trackUserLocation)
+                    .toArray(CompletableFuture[]::new);
+
+            CompletableFuture.allOf(completableFutures)
+                    .join();
 
             stopWatch.stop();
 

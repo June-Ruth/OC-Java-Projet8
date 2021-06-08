@@ -84,9 +84,13 @@ public class PerformanceTest {
 	    StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
-		for(User user : allUsers) {
-			tourGuideService.trackUserLocation(user); // TODO : CF Join
-		}
+		CompletableFuture<?>[] completableFutures = allUsers.stream()
+				.map(tourGuideService::trackUserLocation)
+				.toArray(CompletableFuture[]::new);
+
+		CompletableFuture.allOf(completableFutures)
+				.join();
+
 		stopWatch.stop();
 		tourGuideService.stopTracker();
 

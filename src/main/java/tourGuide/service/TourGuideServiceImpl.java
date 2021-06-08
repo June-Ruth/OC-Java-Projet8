@@ -72,8 +72,11 @@ public class TourGuideServiceImpl implements TourGuideService {
 
 	@Override
 	public VisitedLocation getUserLocation(User user) throws ExecutionException, InterruptedException {
-		VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ?
-			getLastVisitedLocation(user) : (VisitedLocation) trackUserLocation(user);//.get();
+		if(user.getVisitedLocations().isEmpty()) {
+			trackUserLocation(user);
+		}
+
+		VisitedLocation visitedLocation = getLastVisitedLocation(user);
 		return visitedLocation;
 	}
 

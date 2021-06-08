@@ -4,11 +4,13 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import tourGuide.model.User;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface RewardsService {
 
     void setProximityBuffer(int proximityBuffer);
 
-    void calculateRewards(User user);
+    CompletableFuture<?> calculateRewards(User user);
 
     boolean isWithinAttractionProximity(Attraction attraction, Location location);
 

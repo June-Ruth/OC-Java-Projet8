@@ -82,8 +82,9 @@ public class PerformanceTest {
 		
 	    StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
+
 		for(User user : allUsers) {
-			tourGuideService.trackUserLocation(user);
+			tourGuideService.trackUserLocation(user); // TODO : CF Join
 		}
 		stopWatch.stop();
 		tourGuideService.stopTracker();
@@ -218,25 +219,16 @@ public class PerformanceTest {
 
 		List<User> allUsers = tourGuideService.getAllUsers();
 
-		/*CompletableFuture<?> future = CompletableFuture.supplyAsync(() -> tourGuideService.getAllUsers())
-				.thenCompose(users -> CompletableFuture.runAsync(() -> {
-							for (User user : users) {
-								tourGuideService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, new Date()), user);
-								rewardsService.calculateRewards(user);
-							}
-				}));*/
-
-
 		allUsers.forEach(user -> {
 			tourGuideService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, new Date()), user);
 		});
 
-		allUsers.forEach(rewardsService::calculateRewards);
+		CompletableFuture<?>[] completableFutures = allUsers.stream()
+				.map(rewardsService::calculateRewards)
+				.toArray(CompletableFuture[]::new);
 
-		for(User user : allUsers) {
-			//FOR TESTING ONLY
-			System.out.println(user + " /user rewards size : " + user.getUserRewards().size());
-		}
+		CompletableFuture.allOf(completableFutures)
+				.join();
 
 		allUsers.forEach(user -> assertTrue(user.getUserRewards().size() > 0));
 
@@ -244,6 +236,8 @@ public class PerformanceTest {
 		tourGuideService.stopTracker();
 
 		System.out.println("Get Rewards with " + userNumber + " Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+
+
 		assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 

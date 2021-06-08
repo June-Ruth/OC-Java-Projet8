@@ -2,6 +2,7 @@ package tourGuide.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -40,37 +41,23 @@ public class RewardsServiceImpl implements RewardsService {
 	}
 
 	@Override
-	public void calculateRewards(User user) {
-		List<VisitedLocation> userLocations = new ArrayList<>(user.getVisitedLocations());
-		List<Attraction> attractions = gpsUtil.getAttractions();
+	public CompletableFuture<?> calculateRewards(User user) {
 		List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
 
-		for(VisitedLocation visitedLocation : userLocations) {
-			for(Attraction attraction : attractions) {
-				if(isAttractionNotAlreadyInUserRewards(attraction, userRewards)) {
-					if(isNear(visitedLocation, attraction)) {
-						addUserRewardToUser(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)), user);
-					}
-				}
-			}
-		}
-
-		/*return CompletableFuture.runAsync(() -> user.getVisitedLocations().forEach(
+		return CompletableFuture.runAsync(() -> user.getVisitedLocations().forEach(
 				userLocation -> getAttractionsNearVisitedLocation(userLocation).forEach(attraction -> {
 							if(isAttractionNotAlreadyInUserRewards(attraction, userRewards)) {
 								addUserRewardToUser(new UserReward(userLocation, attraction, getRewardPoints(attraction, user)), user);
 					}
 
 				}
-				)));*/
+				)));
 	}
 
 	public void addUserRewardToUser(UserReward userReward, User user) {
 		List<UserReward> userRewards = user.getUserRewards();
-
 		if(userRewards.stream().noneMatch(reward -> reward.getAttraction().attractionName.equals(userReward.getAttraction().attractionName))) {
 			userRewards.add(userReward);
-			System.out.println(userReward); // FOR TESTING ONLY
 		}
 	}
 

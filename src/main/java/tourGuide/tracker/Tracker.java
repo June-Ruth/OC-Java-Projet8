@@ -58,7 +58,7 @@ public class Tracker implements Runnable {
 
             stopWatch.start();
 
-            users.forEach(tourGuideService::trackUserLocation); //synchronized?
+            users.forEach(tourGuideService::trackUserLocation); // TODO : CF Join
 
             stopWatch.stop();
 

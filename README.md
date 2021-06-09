@@ -8,6 +8,7 @@
 - Isolate test methods from services
 - Separate controllers depending on REST conventions
 - Make Tracker implements Runnable and use ScheduledExecutorService
+- Implement CompletableFuture and Executor with fixed thread pool
 
 ###3 - Migrate Gradle from Groovy to Kotlin Script
 - Adapt syntax to look like Kts

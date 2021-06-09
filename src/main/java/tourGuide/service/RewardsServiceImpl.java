@@ -28,7 +28,7 @@ public class RewardsServiceImpl implements RewardsService {
 	private final GpsUtil gpsUtil;
 	private final RewardCentral rewardsCentral;
 
-	//Executor executor = Executors.newFixedThreadPool(2000);
+	Executor executor = Executors.newFixedThreadPool(100);
 
 	public RewardsServiceImpl(GpsUtil gpsUtil, RewardCentral rewardCentral) {
 		this.gpsUtil = gpsUtil;
@@ -54,7 +54,7 @@ public class RewardsServiceImpl implements RewardsService {
 					}
 
 				}
-				)) /*,executor*/);
+				)) ,executor);
 	}
 
 	public void addUserRewardToUser(UserReward userReward, User user) {

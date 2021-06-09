@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +29,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	private final TripPricer tripPricer = new TripPricer();
 
 	private final Tracker tracker;
-	//Executor executor = Executors.newFixedThreadPool(2000);
+	Executor executor = Executors.newFixedThreadPool(100);
 
 	boolean testMode = true;
 	private static final String tripPricerApiKey = "test-server-api-key";
@@ -107,7 +109,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	@Override
 	public CompletableFuture<?> trackUserLocation(User user) {
 
-		CompletableFuture<?> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId())/*, executor*/)
+		CompletableFuture<?> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()), executor)
 				.thenAccept(visitedLocation -> addToVisitedLocationsOfUser(visitedLocation, user))
 				.thenRunAsync(() -> rewardsService.calculateRewards(user));
 

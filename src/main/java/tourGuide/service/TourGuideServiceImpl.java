@@ -29,7 +29,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	private final TripPricer tripPricer = new TripPricer();
 
 	private final Tracker tracker;
-	Executor executor = Executors.newFixedThreadPool(100);
+	Executor executor = Executors.newFixedThreadPool(800);
 
 	boolean testMode = true;
 	private static final String tripPricerApiKey = "test-server-api-key";
@@ -108,12 +108,9 @@ public class TourGuideServiceImpl implements TourGuideService {
 
 	@Override
 	public CompletableFuture<?> trackUserLocation(User user) {
-
-		CompletableFuture<?> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()), executor)
+		return CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()), executor)
 				.thenAccept(visitedLocation -> addToVisitedLocationsOfUser(visitedLocation, user))
 				.thenRunAsync(() -> rewardsService.calculateRewards(user));
-
-		return completableFuture;
 	}
 
 	@Override

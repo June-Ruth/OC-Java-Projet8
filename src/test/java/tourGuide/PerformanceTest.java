@@ -3,16 +3,13 @@ package tourGuide;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.time.StopWatch;
 
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.test.context.ActiveProfiles;
 import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
@@ -96,37 +93,42 @@ public class PerformanceTest {
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 
-
+	@Order(1)
 	@Test
 	public void trackLocationWith100UsersTest() {
 		int userNumber = 100;
 		trackLocationWithXUsersModel(userNumber);
 	}
 
+	@Order(2)
 	@Test
 	public void trackLocationWith1000UsersTest() {
 		int userNumber = 1000;
 		trackLocationWithXUsersModel(userNumber);
 	}
 
+	@Order(3)
 	@Test
 	public void trackLocationWith5000UsersTest() {
 		int userNumber = 5000;
 		trackLocationWithXUsersModel(userNumber);
 	}
 
+	@Order(4)
 	@Test
 	public void trackLocationWith10000UsersTest() {
 		int userNumber = 10000;
 		trackLocationWithXUsersModel(userNumber);
 	}
 
+	@Order(5)
 	@Test
 	public void trackLocationWith50000UsersTest() {
 		int userNumber = 50000;
 		trackLocationWithXUsersModel(userNumber);
 	}
 
+	@Order(6)
 	@Test
 	public void trackLocationWith100000UsersTest() {
 		int userNumber = 100000;
@@ -148,9 +150,7 @@ public class PerformanceTest {
 
 		List<User> allUsers = tourGuideService.getAllUsers();
 
-		allUsers.forEach(user -> {
-			tourGuideService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, new Date()), user);
-		});
+		allUsers.forEach(user -> tourGuideService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, new Date()), user));
 
 		CompletableFuture<?>[] completableFutures = allUsers.stream()
 				.map(rewardsService::calculateRewards)
@@ -170,37 +170,42 @@ public class PerformanceTest {
 		assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 
-
+	@Order(7)
 	@Test
 	public void getRewardsWith100UsersTest() {
 		int userNumber = 100;
 		getRewardsWithXUsersModel(userNumber);
 	}
 
+	@Order(8)
 	@Test
 	public void getRewardsWith1000UsersTest() {
 		int userNumber = 1000;
 		getRewardsWithXUsersModel(userNumber);
 	}
 
+	@Order(9)
 	@Test
 	public void getRewardsWith5000UsersTest() {
 		int userNumber = 5000;
 		getRewardsWithXUsersModel(userNumber);
 	}
 
+	@Order(10)
 	@Test
 	public void getRewardsWith10000UsersTest() {
 		int userNumber = 10000;
 		getRewardsWithXUsersModel(userNumber);
 	}
 
+	@Order(11)
 	@Test
 	public void getRewardsWith50000UsersTest() {
 		int userNumber = 50000;
 		getRewardsWithXUsersModel(userNumber);
 	}
 
+	@Order(12)
 	@Test
 	public void getRewardsWith100000UsersTest() {
 		int userNumber = 100000;

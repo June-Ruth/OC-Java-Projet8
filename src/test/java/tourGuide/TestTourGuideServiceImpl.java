@@ -53,7 +53,6 @@ public class TestTourGuideServiceImpl {
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
-		tourGuideService.stopTracker();
 		assertEquals(visitedLocation.userId, user.getUserId());
 	}
 	
@@ -71,8 +70,6 @@ public class TestTourGuideServiceImpl {
 		User retrievedUser = tourGuideService.getUser(user.getUserName());
 		User retrievedUser2 = tourGuideService.getUser(user2.getUserName());
 
-		tourGuideService.stopTracker();
-		
 		assertEquals(user, retrievedUser);
 		assertEquals(user2, retrievedUser2);
 	}
@@ -90,8 +87,6 @@ public class TestTourGuideServiceImpl {
 		
 		List<User> allUsers = tourGuideService.getAllUsers();
 
-		tourGuideService.stopTracker();
-		
 		assertTrue(allUsers.contains(user));
 		assertTrue(allUsers.contains(user2));
 	}
@@ -103,9 +98,7 @@ public class TestTourGuideServiceImpl {
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
-		
-		tourGuideService.stopTracker();
-		
+
 		assertEquals(user.getUserId(), visitedLocation.userId);
 	}
 	
@@ -119,9 +112,7 @@ public class TestTourGuideServiceImpl {
 		VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
 		
 		List<Attraction> attractions = tourGuideService.getNearByAttractions(visitedLocation);
-		
-		tourGuideService.stopTracker();
-		
+
 		assertEquals(5, attractions.size());
 	}
 
@@ -133,9 +124,7 @@ public class TestTourGuideServiceImpl {
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 
 		List<Provider> providers = tourGuideService.getTripDeals(user);
-		
-		tourGuideService.stopTracker();
-		
+
 		assertEquals(5, providers.size());
 	}
 	

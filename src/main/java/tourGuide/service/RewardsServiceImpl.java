@@ -3,7 +3,7 @@ package tourGuide.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -28,7 +28,12 @@ public class RewardsServiceImpl implements RewardsService {
 	private final GpsUtil gpsUtil;
 	private final RewardCentral rewardsCentral;
 
-	Executor executor = Executors.newFixedThreadPool(800);
+	ExecutorService executor = Executors.newFixedThreadPool(800);
+
+	@Override
+	public ExecutorService getExecutor() {
+		return executor;
+	}
 
 	public RewardsServiceImpl(GpsUtil gpsUtil, RewardCentral rewardCentral) {
 		this.gpsUtil = gpsUtil;
@@ -47,19 +52,31 @@ public class RewardsServiceImpl implements RewardsService {
 	@Override
 	public CompletableFuture<?> calculateRewards(User user) {
 		List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
-		return CompletableFuture.runAsync(() -> new ArrayList<>(user.getVisitedLocations()).forEach(
-				userLocation -> getAttractionsNearVisitedLocation(userLocation).forEach(attraction -> {
-							if(isAttractionNotAlreadyInUserRewards(attraction, userRewards)) {
-								addUserRewardToUser(new UserReward(userLocation, attraction, getRewardPoints(attraction, user)), user);
-					}
 
-				}
-				)) ,executor);
+		CompletableFuture<?> completableFuture = CompletableFuture.runAsync(() ->
+				new ArrayList<>(user.getVisitedLocations())
+					.forEach(visitedLocation ->
+						getAttractionsNearVisitedLocation(visitedLocation)
+								.stream()
+								.filter( attraction ->
+										isAttractionNotAlreadyInUserRewards(attraction, userRewards)
+								)
+								.forEach(attraction ->
+										addUserRewardToUser(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)), user)
+								)
+				),
+				executor);
+
+		return completableFuture;
 	}
 
 	public void addUserRewardToUser(UserReward userReward, User user) {
 		List<UserReward> userRewards = user.getUserRewards();
-		if(userRewards.stream().noneMatch(reward -> reward.getAttraction().attractionName.equals(userReward.getAttraction().attractionName))) {
+
+		if(userRewards
+				.stream()
+				.noneMatch(reward ->
+						reward.getAttraction().attractionName.equals(userReward.getAttraction().attractionName))) {
 			userRewards.add(userReward);
 		}
 	}
@@ -70,21 +87,29 @@ public class RewardsServiceImpl implements RewardsService {
 	}
 
 	private boolean isAttractionNotAlreadyInUserRewards(Attraction attraction, List<UserReward> userRewards) {
-		return userRewards.stream().noneMatch(userReward -> userReward.getAttraction().attractionName
-				.equals(attraction.attractionName));
+		return userRewards
+				.stream()
+				.noneMatch(userReward ->
+						userReward.getAttraction().attractionName.equals(attraction.attractionName));
 	}
 
 	private List<Attraction> getAttractionsNearVisitedLocation(VisitedLocation visitedLocation) {
 		List<Attraction> attractions = gpsUtil.getAttractions();
-		List<Attraction> attractionsNearVisitedLocation = attractions.stream().filter(attraction -> isNear(visitedLocation, attraction)).collect(Collectors.toList());
+
+		List<Attraction> attractionsNearVisitedLocation = attractions
+				.stream()
+				.filter(attraction ->
+						isNear(visitedLocation, attraction)
+				)
+				.collect(Collectors.toList());
 
 		return attractionsNearVisitedLocation;
 	}
-	
+
 	private boolean isNear(VisitedLocation visitedLocation, Attraction attraction) {
 		return !(getDistance(attraction, visitedLocation.location) > proximityBuffer);
 	}
-	
+
 	private int getRewardPoints(Attraction attraction, User user) {
 		return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
 	}

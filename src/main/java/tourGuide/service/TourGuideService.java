@@ -8,6 +8,7 @@ import tripPricer.Provider;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 
 public interface TourGuideService {
 
@@ -26,6 +27,8 @@ public interface TourGuideService {
     CompletableFuture<?> trackUserLocation(User user);
 
     List<Attraction> getNearByAttractions(VisitedLocation visitedLocation);
+
+    ExecutorService getExecutor();
 
     void stopTracker();
 

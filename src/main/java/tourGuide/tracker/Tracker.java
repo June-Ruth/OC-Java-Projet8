@@ -44,7 +44,7 @@ public class Tracker implements Runnable {
             executorService.shutdownNow();
         } finally {
             LOGGER.debug("Tracker stopping");
-
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -59,8 +59,6 @@ public class Tracker implements Runnable {
             LOGGER.debug("Begin Tracker. Tracking " + users.size() + " users.");
 
             stopWatch.start();
-
-            //users.forEach(tourGuideService::trackUserLocation); // TODO : CF Join
 
             CompletableFuture<?>[] completableFutures = users.stream()
                     .map(tourGuideService::trackUserLocation)

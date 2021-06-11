@@ -5,8 +5,11 @@ import gpsUtil.location.Location;
 import tourGuide.model.User;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 
 public interface RewardsService {
+
+    ExecutorService getExecutor();
 
     void setProximityBuffer(int proximityBuffer);
 

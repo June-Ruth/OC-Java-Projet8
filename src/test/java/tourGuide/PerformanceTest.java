@@ -2,6 +2,7 @@ package tourGuide;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //@Disabled
 @ActiveProfiles("test")
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PerformanceTest {
 
 	private RewardsService rewardsService;
@@ -42,6 +44,36 @@ public class PerformanceTest {
 		rewardCentral = new RewardCentral();
 		rewardsService = new RewardsServiceImpl(gpsUtil, rewardCentral);
 		//tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
+	}
+
+	@AfterEach
+	public void afterEach() {
+		ExecutorService tourGuideServiceExecutor = tourGuideService.getExecutor();
+		ExecutorService rewardsServiceExecutor = rewardsService.getExecutor();
+
+		tourGuideServiceExecutor.shutdown();
+		try {
+			if (!tourGuideServiceExecutor.awaitTermination(10, TimeUnit.SECONDS)) {
+				tourGuideServiceExecutor.shutdownNow();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			tourGuideServiceExecutor.shutdownNow();
+		} finally {
+			Thread.currentThread().interrupt();
+		}
+
+		rewardsServiceExecutor.shutdown();
+		try {
+			if (!rewardsServiceExecutor.awaitTermination(10, TimeUnit.SECONDS)) {
+				rewardsServiceExecutor.shutdownNow();
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			rewardsServiceExecutor.shutdownNow();
+		} finally {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	/*
@@ -66,13 +98,13 @@ public class PerformanceTest {
 
 	// TRACK LOCATION PERFORMANCE TESTS //
 
-	private void trackLocationWithXUsersModel(int userNumber) {
+	/*private void trackLocationWithXUsersModel(int userNumber) {
 		InternalTestHelper.setInternalUserNumber(userNumber);
 
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		/* NB : si fait remonter au niveau du before each, pb avec le set d'internal test helper
 		parce que internal test helper est utilisé lors de l'instanciation de TourGuideService
-		et a donc besoin de l'internalUserNumber sinon valeur par défaut est appliqué*/
+		et a donc besoin de l'internalUserNumber sinon valeur par défaut est appliqué
 
 		List<User> allUsers = tourGuideService.getAllUsers();
 
@@ -87,7 +119,6 @@ public class PerformanceTest {
 				.join();
 
 		stopWatch.stop();
-		tourGuideService.stopTracker();
 
 		System.out.println("Track Location with "+ userNumber + " Users : Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
@@ -134,7 +165,7 @@ public class PerformanceTest {
 		int userNumber = 100000;
 		trackLocationWithXUsersModel(userNumber);
 	}
-
+*/
 	// GET REWARDS PERFORMANCE TESTS //
 
 
@@ -162,7 +193,6 @@ public class PerformanceTest {
 		allUsers.forEach(user -> assertTrue(user.getUserRewards().size() > 0));
 
 		stopWatch.stop();
-		tourGuideService.stopTracker();
 
 		System.out.println("Get Rewards with " + userNumber + " Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 

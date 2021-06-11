@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,13 @@ public class TourGuideServiceImpl implements TourGuideService {
 	private final RewardsService rewardsService;
 	private final TripPricer tripPricer = new TripPricer();
 
-	private final Tracker tracker;
-	Executor executor = Executors.newFixedThreadPool(800);
+	private Tracker tracker;
+	ExecutorService executor = Executors.newFixedThreadPool(800);
+
+	@Override
+	public ExecutorService getExecutor() {
+		return executor;
+	}
 
 	boolean testMode = true;
 	private static final String tripPricerApiKey = "test-server-api-key";
@@ -39,17 +45,17 @@ public class TourGuideServiceImpl implements TourGuideService {
 	public TourGuideServiceImpl(GpsUtil gpsUtil, RewardsService rewardsService) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsService = rewardsService;
-		
+
 		if(testMode) {
 			LOGGER.info("TestMode enabled");
 			LOGGER.debug("Initializing users");
 			internalUserMap = internalTestInitializer.initializeInternalUsers();
 			LOGGER.debug("Finished initializing users");
+		} else {
+			tracker = new Tracker(this);
+			tracker.startTracking();
+			addShutDownHook();
 		}
-
-		tracker = new Tracker(this);
-		tracker.startTracking();
-		addShutDownHook();
 	}
 
 
@@ -108,9 +114,11 @@ public class TourGuideServiceImpl implements TourGuideService {
 
 	@Override
 	public CompletableFuture<?> trackUserLocation(User user) {
-		return CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()), executor)
+		CompletableFuture<?> completableFuture = CompletableFuture.supplyAsync(() -> gpsUtil.getUserLocation(user.getUserId()), executor)
 				.thenAccept(visitedLocation -> addToVisitedLocationsOfUser(visitedLocation, user))
 				.thenRunAsync(() -> rewardsService.calculateRewards(user));
+
+		return completableFuture;
 	}
 
 	@Override

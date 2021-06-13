@@ -2,6 +2,15 @@
 
 ##Modification History
 
+###4 - Improve architecture using MVC Pattern
+- Create interface to respect SOLID principles and adapt code for them
+- Clean model
+- Isolate test methods from services
+- Separate controllers depending on REST conventions
+- Make Tracker implements Runnable and use ScheduledExecutorService
+- Implement CompletableFuture and Executor with fixed thread pool
+- Create first microservice structure with BuildSrc
+
 ###3 - Migrate Gradle from Groovy to Kotlin Script
 - Adapt syntax to look like Kts
 - Upgrade Gradle to 7.0.2

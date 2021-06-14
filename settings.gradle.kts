@@ -1,5 +1,10 @@
 subdir("applications") {
+    include("admin")
+    include("attractions")
     include("dummy")
+    include("rewards-calculator")
+    include("tracker")
+    include("user-profile")
 }
 
 subdir("core-librairies") {

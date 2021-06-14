@@ -1,4 +1,4 @@
-package org.openclassroom.tourguide.model;
+package org.openclassrooms.tourguide.models;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;

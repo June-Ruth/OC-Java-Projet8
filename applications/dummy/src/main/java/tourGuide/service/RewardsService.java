@@ -2,7 +2,7 @@ package tourGuide.service;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
-import org.openclassroom.tourguide.model.User;
+import org.openclassrooms.tourguide.models.User;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;

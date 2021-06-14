@@ -21,7 +21,7 @@ import tourGuide.service.RewardsService;
 import tourGuide.service.RewardsServiceImpl;
 import tourGuide.service.TourGuideService;
 import tourGuide.service.TourGuideServiceImpl;
-import org.openclassroom.tourguide.model.User;
+import org.openclassrooms.tourguide.models.User;
 import tripPricer.Provider;
 
 @ActiveProfiles("test")

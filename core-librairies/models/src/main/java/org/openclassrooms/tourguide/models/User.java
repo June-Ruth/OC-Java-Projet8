@@ -1,4 +1,4 @@
-package org.openclassroom.tourguide.model;
+package org.openclassrooms.tourguide.models;
 
 import java.util.ArrayList;
 import java.util.Date;

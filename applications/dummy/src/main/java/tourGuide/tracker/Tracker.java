@@ -3,7 +3,7 @@ package tourGuide.tracker;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.openclassroom.tourguide.model.User;
+import org.openclassrooms.tourguide.models.User;
 import tourGuide.service.TourGuideService;
 
 import java.util.List;

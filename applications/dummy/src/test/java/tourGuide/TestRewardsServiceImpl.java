@@ -21,8 +21,8 @@ import tourGuide.service.RewardsService;
 import tourGuide.service.RewardsServiceImpl;
 import tourGuide.service.TourGuideService;
 import tourGuide.service.TourGuideServiceImpl;
-import org.openclassrooms.tourguide.models.User;
-import org.openclassrooms.tourguide.models.UserReward;
+import org.openclassrooms.tourguide.models.model.User;
+import org.openclassrooms.tourguide.models.model.UserReward;
 
 @ActiveProfiles("test")
 public class TestRewardsServiceImpl {

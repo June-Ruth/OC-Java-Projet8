@@ -1,6 +1,5 @@
 package tourGuide.controller;
 
-import com.jsoniter.output.JsonStream;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +22,7 @@ public class TripDealController {
     @RequestMapping("/users/{userId}/trip-deals")
     public String getTripDeals(@PathVariable UUID userId, @RequestParam String username) {
         List<Provider> providers = tourGuideService.getTripDeals(tourGuideService.getUser(username));
-        return JsonStream.serialize(providers);
+        return "";//JsonStream.serialize(providers);
     }
 
 }

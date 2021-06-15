@@ -14,8 +14,8 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
-import org.openclassrooms.tourguide.models.User;
-import org.openclassrooms.tourguide.models.UserReward;
+import org.openclassrooms.tourguide.models.model.User;
+import org.openclassrooms.tourguide.models.model.UserReward;
 
 @Service
 public class RewardsServiceImpl implements RewardsService {

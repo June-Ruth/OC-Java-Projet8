@@ -1,4 +1,4 @@
-package org.openclassrooms.tourguide.models;
+package org.openclassrooms.tourguide.models.model;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;

@@ -2,8 +2,8 @@ package tourGuide.service;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
-import org.openclassrooms.tourguide.models.User;
-import org.openclassrooms.tourguide.models.UserReward;
+import org.openclassrooms.tourguide.models.model.User;
+import org.openclassrooms.tourguide.models.model.UserReward;
 import tripPricer.Provider;
 
 import java.util.List;

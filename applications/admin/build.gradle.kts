@@ -16,7 +16,6 @@ dependencies {
     implementation(project(":models"))
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("com.jsoniter:jsoniter:0.9.23")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

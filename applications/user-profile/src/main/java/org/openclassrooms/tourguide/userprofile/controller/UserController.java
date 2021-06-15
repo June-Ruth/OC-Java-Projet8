@@ -1,5 +1,10 @@
 package org.openclassrooms.tourguide.userprofile.controller;
 
+import org.openclassrooms.tourguide.userprofile.dto.UserContactsDTO;
+import org.openclassrooms.tourguide.models.model.User;
+import org.openclassrooms.tourguide.models.model.UserPreferences;
+import org.openclassrooms.tourguide.userprofile.service.UserService;
+import org.openclassrooms.tourguide.userprofile.util.DtoConverter;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -7,36 +12,41 @@ import java.util.UUID;
 @RestController
 public class UserController {
 
-    public UserController() {
+    private UserService userService;
 
+    public UserController(final UserService userService1) {
+        userService = userService1;
     }
 
-    @RequestMapping("profile/{userId}")
-    public String getUserProfile(@PathVariable UUID userId) {
-        //TODO : afficher les principales informations de profil
-        //userService.getUser(userId)
-        return null;
+    @RequestMapping("/profile/{userId}")
+    public UserContactsDTO getUserProfile(@PathVariable final UUID userId) {
+        User user = userService.getUser(userId);
+        UserContactsDTO userContactsDTO = DtoConverter.convertUserToUserContactsDto(user);
+        return userContactsDTO;
     }
 
-    @PostMapping("profile/{userId}")
-    public String updateUserProfileInformation(@PathVariable UUID userId) {
-        //TODO : Modifier ses informations de profil modifiables
-        //userService.update(userId, userUpdated)
-        return null;
+    @PutMapping("/profile/{userId}")
+    public UserContactsDTO updateUserContacts(@PathVariable final UUID userId,
+                                              @RequestBody final UserContactsDTO userContactsDTO) {
+        User user = userService.getUser(userId);
+        user.setPhoneNumber(userContactsDTO.getPhoneNumber());
+        user.setEmailAddress(userContactsDTO.getEmailAddress());
+        userService.updateUser(user);
+        return userContactsDTO;
     }
 
-    @RequestMapping("profile/{userId}/preferences")
-    public String getUserPreferences(@PathVariable UUID userId) {
-        //TODO : Afficher les préférences de l'utilisateur en matière de voyages
-        //userService.
-        return null;
+    @RequestMapping("/profile/{userId}/preferences")
+    public UserPreferences getUserPreferences(@PathVariable final UUID userId) {
+        UserPreferences userPreferences = userService.getUserPreferences(userId);
+        return userPreferences;
     }
 
-    @PostMapping("profile/{userId}/preferences")
-    public String updateUserPreferences(@PathVariable UUID userId) {
-        //TODO : Modifier les préférences de l'utilisateur
-        return null;
+    @PutMapping("/profile/{userId}/preferences")
+    public UserPreferences updateUserPreferences(@PathVariable final UUID userId,
+                                                 @RequestBody final UserPreferences updatedUserPreferences) {
+        User user = userService.getUser(userId);
+        user.setUserPreferences(updatedUserPreferences);
+        userService.updateUser(user);
+        return updatedUserPreferences;
     }
-
-
 }

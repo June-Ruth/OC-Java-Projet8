@@ -1,4 +1,4 @@
-package org.openclassrooms.tourguide.models;
+package org.openclassrooms.tourguide.models.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +17,6 @@ public class User {
 
 	private String emailAddress;
 
-	//TODO : voir si sert  à quelque chose mais à priori non
 	private Date latestLocationTimestamp;
 
 	private List<VisitedLocation> visitedLocations = new ArrayList<>();

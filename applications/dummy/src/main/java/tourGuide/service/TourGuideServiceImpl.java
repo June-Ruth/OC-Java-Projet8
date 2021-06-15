@@ -16,8 +16,8 @@ import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
 import tourGuide.helper.InternalTestInitializer;
 import tourGuide.tracker.Tracker;
-import org.openclassrooms.tourguide.models.User;
-import org.openclassrooms.tourguide.models.UserReward;
+import org.openclassrooms.tourguide.models.model.User;
+import org.openclassrooms.tourguide.models.model.UserReward;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
 

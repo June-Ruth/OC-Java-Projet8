@@ -1,20 +1,14 @@
-package org.openclassrooms.tourguide.models;
-
-import javax.money.CurrencyUnit;
-import javax.money.Monetary;
-
-import org.javamoney.moneta.Money;
-
+package org.openclassrooms.tourguide.models.model;
 
 public class UserPreferences {
 
 	private int attractionProximity = Integer.MAX_VALUE;
 
-	private final CurrencyUnit currency = Monetary.getCurrency("USD");
+	private final String currency = "USD";
 
-	private Money lowerPricePoint = Money.of(0, currency);
+	private long lowerPricePoint = 0;
 
-	private Money highPricePoint = Money.of(Integer.MAX_VALUE, currency);
+	private long highPricePoint = Integer.MAX_VALUE;
 
 	private int tripDuration = 1;
 
@@ -36,19 +30,19 @@ public class UserPreferences {
 		attractionProximity = attractionProximity1;
 	}
 
-	public Money getLowerPricePoint() {
+	public long getLowerPricePoint() {
 		return lowerPricePoint;
 	}
 
-	public void setLowerPricePoint(final Money lowerPricePoint1) {
+	public void setLowerPricePoint(final long lowerPricePoint1) {
 		lowerPricePoint = lowerPricePoint1;
 	}
 
-	public Money getHighPricePoint() {
+	public long getHighPricePoint() {
 		return highPricePoint;
 	}
 
-	public void setHighPricePoint(final Money highPricePoint1) {
+	public void setHighPricePoint(final long highPricePoint1) {
 		highPricePoint = highPricePoint1;
 	}
 

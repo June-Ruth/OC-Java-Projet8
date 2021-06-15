@@ -1,6 +1,5 @@
 package tourGuide.controller;
 
-import com.jsoniter.output.JsonStream;
 import gpsUtil.location.VisitedLocation;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +31,7 @@ public class AdminController {
         //        ...
         //     }
 
-        return JsonStream.serialize("");
+        return null; //JsonStream.serialize("");
     }
 
     @RequestMapping("/admin/users/{userId}")
@@ -44,12 +43,12 @@ public class AdminController {
     @RequestMapping("/admin/users/{userId}/current-location")
     public String getLocation(@PathVariable UUID userId, @RequestParam String userName) throws ExecutionException, InterruptedException {
         VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
-        return JsonStream.serialize(visitedLocation.location);
+        return null; //JsonStream.serialize(visitedLocation.location);
     }
 
     @RequestMapping("/admin/users/{userId}/rewards")
     public String getRewards(@PathVariable UUID userId, @RequestParam String username) {
-        return JsonStream.serialize(tourGuideService.getUserRewards(tourGuideService.getUser(username)));
+        return null; //JsonStream.serialize(tourGuideService.getUserRewards(tourGuideService.getUser(username)));
     }
 
 }

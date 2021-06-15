@@ -5,7 +5,7 @@ import gpsUtil.location.VisitedLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
-import org.openclassrooms.tourguide.models.User;
+import org.openclassrooms.tourguide.models.model.User;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

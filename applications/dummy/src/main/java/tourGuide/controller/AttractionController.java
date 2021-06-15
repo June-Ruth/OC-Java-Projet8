@@ -1,6 +1,5 @@
 package tourGuide.controller;
 
-import com.jsoniter.output.JsonStream;
 import gpsUtil.location.VisitedLocation;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +31,7 @@ public class AttractionController {
     @RequestMapping("/users/{userId}/attractions/closest-five")
     public String getNearbyAttractions(@PathVariable UUID userId, @RequestParam String username) throws ExecutionException, InterruptedException {
         VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(username));
-        return JsonStream.serialize(tourGuideService.getNearByAttractions(visitedLocation));
+        return "";//JsonStream.serialize(tourGuideService.getNearByAttractions(visitedLocation));
     }
 
     //TODO : obtenir les infos sur les attractions

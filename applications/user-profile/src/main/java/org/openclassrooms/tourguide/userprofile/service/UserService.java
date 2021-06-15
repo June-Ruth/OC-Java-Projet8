@@ -13,6 +13,4 @@ public interface UserService {
     User updateUser(User updatedUser);
 
     UserPreferences getUserPreferences(UUID userId);
-
-    UserPreferences updateUserPreferences(UUID userId);
 }

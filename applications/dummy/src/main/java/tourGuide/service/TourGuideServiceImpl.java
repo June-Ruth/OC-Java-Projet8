@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
-import tourGuide.helper.InternalTestInitializer;
 import tourGuide.tracker.Tracker;
 import org.openclassrooms.tourguide.models.model.User;
 import org.openclassrooms.tourguide.models.model.UserReward;
@@ -36,27 +35,20 @@ public class TourGuideServiceImpl implements TourGuideService {
 		return executor;
 	}
 
-	boolean testMode = true;
 	private static final String tripPricerApiKey = "test-server-api-key";
 	private Map<String, User> internalUserMap;
-	private final InternalTestInitializer internalTestInitializer = new InternalTestInitializer();
 
 	public TourGuideServiceImpl(GpsUtil gpsUtil, RewardsService rewardsService) {
 		this.gpsUtil = gpsUtil;
 		this.rewardsService = rewardsService;
 
-		if(testMode) {
-			LOGGER.info("TestMode enabled");
-			LOGGER.debug("Initializing users");
-			internalUserMap = internalTestInitializer.initializeInternalUsers();
-			LOGGER.debug("Finished initializing users");
-		} else {
+
+		/*
 			tracker = new Tracker(this);
 			tracker.startTracking();
 			addShutDownHook();
-		}
+		*/
 	}
-
 
 	private void addShutDownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread(tracker::stopTracking));
@@ -96,9 +88,9 @@ public class TourGuideServiceImpl implements TourGuideService {
 	}
 
 	@Override
-	public void addUser(User user) {
-		if(!internalUserMap.containsKey(user.getUserName())) {
-			internalUserMap.put(user.getUserName(), user);
+	public void saveUser(User user) {
+		if(!internalUserMap.containsKey(user.getUsername())) {
+			internalUserMap.put(user.getUsername(), user);
 		}
 	}
 

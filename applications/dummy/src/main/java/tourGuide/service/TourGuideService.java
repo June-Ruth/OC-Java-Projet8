@@ -20,7 +20,7 @@ public interface TourGuideService {
 
     List<User> getAllUsers();
 
-    void addUser(User user);
+    void saveUser(User user);
 
     List<Provider> getTripDeals(User user);
 

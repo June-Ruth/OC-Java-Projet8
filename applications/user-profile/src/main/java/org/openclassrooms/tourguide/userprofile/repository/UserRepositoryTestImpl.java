@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,6 +26,11 @@ public class UserRepositoryTestImpl implements UserRepository {
         LOGGER.debug("Finished initializing users");
     }
 
+    @Override
+    public List<User> findAll() {
+        //TODO
+        return null;
+    }
 
     @Override
     public Optional<User> findByUsername(String username) {
@@ -33,9 +39,15 @@ public class UserRepositoryTestImpl implements UserRepository {
     }
 
     @Override
+    public boolean existsByUsername(String username) {
+        //TODO
+        return false;
+    }
+
+    @Override
     public User save(User user) {
-        return internalUserMap.containsKey(user.getUserName()) ?
-                internalUserMap.replace(user.getUserName(), user) :
-                internalUserMap.put(user.getUserName(), user);
+        return internalUserMap.containsKey(user.getUsername()) ?
+                internalUserMap.replace(user.getUsername(), user) :
+                internalUserMap.put(user.getUsername(), user);
     }
 }

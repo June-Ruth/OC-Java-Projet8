@@ -13,7 +13,6 @@ import gpsUtil.location.VisitedLocation;
 import org.junit.jupiter.api.*;
 import org.springframework.test.context.ActiveProfiles;
 import rewardCentral.RewardCentral;
-import tourGuide.helper.InternalTestHelper;
 import tourGuide.service.RewardsService;
 import tourGuide.service.RewardsServiceImpl;
 import tourGuide.service.TourGuideService;
@@ -99,7 +98,7 @@ public class PerformanceTest {
 	// TRACK LOCATION PERFORMANCE TESTS //
 
 	private void trackLocationWithXUsersModel(int userNumber) {
-		InternalTestHelper.setInternalUserNumber(userNumber);
+		//InternalTestHelper.setInternalUserNumber(userNumber);
 
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		/* NB : si fait remonter au niveau du before each, pb avec le set d'internal test helper
@@ -170,7 +169,7 @@ public class PerformanceTest {
 
 
 	private void getRewardsWithXUsersModel(int userNumber) {
-		InternalTestHelper.setInternalUserNumber(userNumber);
+		//InternalTestHelper.setInternalUserNumber(userNumber);
 
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 

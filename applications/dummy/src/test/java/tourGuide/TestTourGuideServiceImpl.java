@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 import rewardCentral.RewardCentral;
-import tourGuide.helper.InternalTestHelper;
 import tourGuide.service.RewardsService;
 import tourGuide.service.RewardsServiceImpl;
 import tourGuide.service.TourGuideService;
@@ -47,7 +46,7 @@ public class TestTourGuideServiceImpl {
 
 	@Test
 	public void getUserLocation() {
-		InternalTestHelper.setInternalUserNumber(0);
+		//InternalTestHelper.setInternalUserNumber(0);
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
@@ -57,17 +56,17 @@ public class TestTourGuideServiceImpl {
 	
 	@Test
 	public void addUser() {
-		InternalTestHelper.setInternalUserNumber(0);
+		//InternalTestHelper.setInternalUserNumber(0);
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
 
-		tourGuideService.addUser(user);
-		tourGuideService.addUser(user2);
+		tourGuideService.saveUser(user);
+		tourGuideService.saveUser(user2);
 		
-		User retrievedUser = tourGuideService.getUser(user.getUserName());
-		User retrievedUser2 = tourGuideService.getUser(user2.getUserName());
+		User retrievedUser = tourGuideService.getUser(user.getUsername());
+		User retrievedUser2 = tourGuideService.getUser(user2.getUsername());
 
 		assertEquals(user, retrievedUser);
 		assertEquals(user2, retrievedUser2);
@@ -75,14 +74,14 @@ public class TestTourGuideServiceImpl {
 	
 	@Test
 	public void getAllUsers() {
-		InternalTestHelper.setInternalUserNumber(0);
+		//InternalTestHelper.setInternalUserNumber(0);
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
 
-		tourGuideService.addUser(user);
-		tourGuideService.addUser(user2);
+		tourGuideService.saveUser(user);
+		tourGuideService.saveUser(user2);
 		
 		List<User> allUsers = tourGuideService.getAllUsers();
 
@@ -92,7 +91,7 @@ public class TestTourGuideServiceImpl {
 	
 	@Test
 	public void trackUser() {
-		InternalTestHelper.setInternalUserNumber(0);
+		//InternalTestHelper.setInternalUserNumber(0);
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
@@ -104,7 +103,7 @@ public class TestTourGuideServiceImpl {
 	@Disabled // Not yet implemented
 	@Test
 	public void getNearbyAttractions() {
-		InternalTestHelper.setInternalUserNumber(0);
+		//InternalTestHelper.setInternalUserNumber(0);
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
@@ -117,7 +116,7 @@ public class TestTourGuideServiceImpl {
 
 	@Test
 	public void getTripDeals() {
-		InternalTestHelper.setInternalUserNumber(0);
+		//InternalTestHelper.setInternalUserNumber(0);
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
 		
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");

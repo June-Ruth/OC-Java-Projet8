@@ -1,10 +1,15 @@
 package org.openclassrooms.tourguide.userprofile.service;
 
+import gpsUtil.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.User;
 import org.openclassrooms.tourguide.models.model.UserPreferences;
+import org.openclassrooms.tourguide.models.model.UserReward;
+import org.openclassrooms.tourguide.userprofile.exception.ElementAlreadyExistingException;
 import org.openclassrooms.tourguide.userprofile.exception.ElementNotFoundException;
 import org.openclassrooms.tourguide.userprofile.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,19 +21,51 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public User getUser(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ElementNotFoundException("No user find for username : " + username));
     }
 
     @Override
+    public User addUser(User user) {
+        if(userRepository.existsByUsername(user.getUsername())) {
+            throw new ElementAlreadyExistingException(
+                    "User " + user.getUsername() + " is already existing");
+        } else {
+            return userRepository.save(user);
+        }
+    }
+
+    @Override
     public User updateUser(User updatedUser) {
-        getUser(updatedUser.getUserName());
+        getUser(updatedUser.getUsername());
         return userRepository.save(updatedUser);
     }
 
     @Override
     public UserPreferences getUserPreferences(String username) {
         return getUser(username).getUserPreferences();
+    }
+
+    @Override
+    public List<UserReward> getUserRewards(String username) {
+        User user = getUser(username);
+        return user.getUserRewards();
+    }
+
+    @Override
+    public VisitedLocation getUserCurrentLocation(String username) {
+        List<VisitedLocation> userVisitedLocations = getUser(username).getVisitedLocations();
+        if(userVisitedLocations.isEmpty()) {
+            //TODO : if VisitedLocations is empty, then track location
+            return  null;
+        } else {
+            return userVisitedLocations.get(userVisitedLocations.size() - 1);
+        }
     }
 }

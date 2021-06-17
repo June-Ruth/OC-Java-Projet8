@@ -28,7 +28,6 @@ public class UserRepositoryTest {
         InternalTestHelper.setInternalUserNumber(99);
         userRepository = new UserRepositoryTestImpl();
         user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
-
     }
 
     // FIND USER BY USERNAME TEST //
@@ -36,13 +35,13 @@ public class UserRepositoryTest {
     @Test
     void findExistingUserByUsernameTest() {
         userRepository.save(user);
-        Optional<User> retrievedUser = userRepository.findByUsername(user.getUserName());
+        Optional<User> retrievedUser = userRepository.findByUsername(user.getUsername());
         assertEquals(Optional.of(user), retrievedUser);
     }
 
     @Test
     void findNonExistentUserByUsernameTest() {
-        assertThrows(NullPointerException.class, () -> userRepository.findByUsername(user.getUserName()));
+        assertThrows(NullPointerException.class, () -> userRepository.findByUsername(user.getUsername()));
     }
 
     // SAVE USER TEST //
@@ -51,14 +50,15 @@ public class UserRepositoryTest {
     void saveExistingUserTest() {
         userRepository.save(user);
         user.setEmailAddress("emailTest");
-        Optional<User> retrievedUser = userRepository.findByUsername(user.getUserName());
+        userRepository.save(user);
+        Optional<User> retrievedUser = userRepository.findByUsername(user.getUsername());
         assertEquals("emailTest", retrievedUser.get().getEmailAddress());
     }
 
     @Test
     void saveNonExistentUserTest() {
         userRepository.save(user);
-        Optional<User> retrievedUser = userRepository.findByUsername(user.getUserName());
+        Optional<User> retrievedUser = userRepository.findByUsername(user.getUsername());
         assertEquals(Optional.of(user), retrievedUser);
     }
 }

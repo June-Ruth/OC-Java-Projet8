@@ -11,7 +11,7 @@ import tripPricer.Provider;
 public class User {
 	private final UUID userId;
 
-	private final String userName;
+	private final String username;
 
 	private String phoneNumber;
 
@@ -28,9 +28,9 @@ public class User {
 	private List<Provider> tripDeals = new ArrayList<>();
 
 	//TODO : voir pourquoi pas un constructeur avec tous les params ?
-	public User(UUID userId, String userName, String phoneNumber, String emailAddress) {
+	public User(UUID userId, String username, String phoneNumber, String emailAddress) {
 		this.userId = userId;
-		this.userName = userName;
+		this.username = username;
 		this.phoneNumber = phoneNumber;
 		this.emailAddress = emailAddress;
 	}
@@ -39,8 +39,8 @@ public class User {
 		return userId;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
 
 	public String getPhoneNumber() {

@@ -22,7 +22,7 @@ import org.openclassrooms.tourguide.models.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//@Disabled
+@Disabled
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PerformanceTest {

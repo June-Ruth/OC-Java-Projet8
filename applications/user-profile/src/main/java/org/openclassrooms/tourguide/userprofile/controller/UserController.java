@@ -18,33 +18,33 @@ public class UserController {
         userService = userService1;
     }
 
-    @RequestMapping("/profile/{userId}")
-    public UserContactsDTO getUserProfile(@PathVariable final UUID userId) {
-        User user = userService.getUser(userId);
+    @RequestMapping("/profile/{username}")
+    public UserContactsDTO getUserProfile(@PathVariable final String username) {
+        User user = userService.getUser(username);
         UserContactsDTO userContactsDTO = DtoConverter.convertUserToUserContactsDto(user);
         return userContactsDTO;
     }
 
-    @PutMapping("/profile/{userId}")
-    public UserContactsDTO updateUserContacts(@PathVariable final UUID userId,
+    @PutMapping("/profile/{username}")
+    public UserContactsDTO updateUserContacts(@PathVariable final String username,
                                               @RequestBody final UserContactsDTO userContactsDTO) {
-        User user = userService.getUser(userId);
+        User user = userService.getUser(username);
         user.setPhoneNumber(userContactsDTO.getPhoneNumber());
         user.setEmailAddress(userContactsDTO.getEmailAddress());
         userService.updateUser(user);
         return userContactsDTO;
     }
 
-    @RequestMapping("/profile/{userId}/preferences")
-    public UserPreferences getUserPreferences(@PathVariable final UUID userId) {
-        UserPreferences userPreferences = userService.getUserPreferences(userId);
+    @RequestMapping("/profile/{username}/preferences")
+    public UserPreferences getUserPreferences(@PathVariable final String username) {
+        UserPreferences userPreferences = userService.getUserPreferences(username);
         return userPreferences;
     }
 
-    @PutMapping("/profile/{userId}/preferences")
-    public UserPreferences updateUserPreferences(@PathVariable final UUID userId,
+    @PutMapping("/profile/{username}/preferences")
+    public UserPreferences updateUserPreferences(@PathVariable final String username,
                                                  @RequestBody final UserPreferences updatedUserPreferences) {
-        User user = userService.getUser(userId);
+        User user = userService.getUser(username);
         user.setUserPreferences(updatedUserPreferences);
         userService.updateUser(user);
         return updatedUserPreferences;

@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.openclassrooms.tourguide.models.model.User;
-import org.openclassrooms.tourguide.models.model.UserPreferences;
 import org.openclassrooms.tourguide.userprofile.exception.ElementNotFoundException;
 import org.openclassrooms.tourguide.userprofile.repository.UserRepository;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 public class UserServiceTest {
 
@@ -26,43 +27,41 @@ public class UserServiceTest {
     private static UserService userService;
 
     private static User user;
-    private static UserPreferences userPreferences;
     private static final UUID uuid1 = UUID.randomUUID();
 
     @BeforeEach
     private void beforeEach() {
         userService = new UserServiceImpl(userRepository);
         user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
-        userPreferences = new UserPreferences();
     }
 
     // GET USER BY ID TESTS //
 
     @Test
     void getUserWithExistingIdTest() {
-        when(userRepository.findUserById(any(UUID.class))).thenReturn(Optional.of(user));
-        userService.getUser(uuid1);
-        verify(userRepository, times(1)).findUserById(uuid1);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+        userService.getUser(user.getUserName());
+        verify(userRepository, times(1)).findByUsername(user.getUserName());
     }
 
     @Test
     void getUserWithNonExistentIdTest() {
-        when(userRepository.findUserById(any(UUID.class))).thenReturn(Optional.empty());
-        assertThrows(ElementNotFoundException.class, () -> userService.getUser(uuid1));
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        assertThrows(ElementNotFoundException.class, () -> userService.getUser(user.getUserName()));
     }
 
     // UPDATE USER //
     @Test
     void updateExistingUserTest() {
-        when(userRepository.findUserById(any(UUID.class))).thenReturn(Optional.of(user));
-        when(userRepository.saveUser(any(User.class))).thenReturn(user);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenReturn(user);
         userService.updateUser(user);
-        verify(userRepository, times(1)).saveUser(user);
+        verify(userRepository, times(1)).save(user);
     }
 
     @Test
     void updateNonExistentUserTest() {
-        when(userRepository.findUserById(any(UUID.class))).thenReturn(Optional.empty());
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
         assertThrows(ElementNotFoundException.class, () -> userService.updateUser(user));
     }
 
@@ -71,14 +70,14 @@ public class UserServiceTest {
 
     @Test
     void getExisitingUserPreferencesTest() {
-        when(userRepository.findUserById(any(UUID.class))).thenReturn(Optional.of(user));
-        userService.getUserPreferences(uuid1);
-        verify(userRepository, times(1)).findUserById(uuid1);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+        userService.getUserPreferences(user.getUserName());
+        verify(userRepository, times(1)).findByUsername(user.getUserName());
     }
 
     @Test
     void getNonExisitentUserPreferencesTest() {
-        when(userRepository.findUserById(any(UUID.class))).thenReturn(Optional.empty());
-        assertThrows(ElementNotFoundException.class, () -> userService.getUserPreferences(uuid1));
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        assertThrows(ElementNotFoundException.class, () -> userService.getUserPreferences(user.getUserName()));
     }
 }

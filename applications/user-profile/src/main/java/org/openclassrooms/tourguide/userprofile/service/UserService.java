@@ -8,9 +8,9 @@ import java.util.UUID;
 
 public interface UserService {
 
-    User getUser(UUID userId);
+    User getUser(String username);
 
     User updateUser(User updatedUser);
 
-    UserPreferences getUserPreferences(UUID userId);
+    UserPreferences getUserPreferences(String username);
 }

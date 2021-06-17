@@ -6,8 +6,6 @@ import org.openclassrooms.tourguide.userprofile.exception.ElementNotFoundExcepti
 import org.openclassrooms.tourguide.userprofile.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -18,19 +16,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(UUID userId) {
-        return userRepository.findUserById(userId)
-                .orElseThrow(() -> new ElementNotFoundException("No user find for id : " + userId));
+    public User getUser(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ElementNotFoundException("No user find for username : " + username));
     }
 
     @Override
     public User updateUser(User updatedUser) {
-        getUser(updatedUser.getUserId());
-        return userRepository.saveUser(updatedUser);
+        getUser(updatedUser.getUserName());
+        return userRepository.save(updatedUser);
     }
 
     @Override
-    public UserPreferences getUserPreferences(UUID userId) {
-        return getUser(userId).getUserPreferences();
+    public UserPreferences getUserPreferences(String username) {
+        return getUser(username).getUserPreferences();
     }
 }

@@ -7,13 +7,12 @@ import org.openclassrooms.tourguide.models.model.User;
 import org.openclassrooms.tourguide.userprofile.helper.InternalTestHelper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 @ExtendWith(SpringExtension.class)
 public class UserRepositoryTest {
 
@@ -21,7 +20,6 @@ public class UserRepositoryTest {
 
     private static User user;
     private static final UUID uuid1 = UUID.randomUUID();
-    private Map<String, User> internalUserMap;
 
     @BeforeEach
     void beforeEach() {
@@ -30,7 +28,14 @@ public class UserRepositoryTest {
         user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
     }
 
-    // FIND USER BY USERNAME TEST //
+    // FIND ALL TESTS //
+
+    @Test
+    void findAllTest() {
+        assertEquals(99, userRepository.findAll().size());
+    }
+
+    // FIND BY USERNAME TESTS //
 
     @Test
     void findExistingUserByUsernameTest() {
@@ -44,7 +49,20 @@ public class UserRepositoryTest {
         assertThrows(NullPointerException.class, () -> userRepository.findByUsername(user.getUsername()));
     }
 
-    // SAVE USER TEST //
+    // EXISTS BY USERNAME TESTS //
+
+    @Test
+    void existsByUsernameTrueTest() {
+        userRepository.save(user);
+        assertTrue(userRepository.existsByUsername(user.getUsername()));
+    }
+
+    @Test
+    void existsByUsernameFalseTest() {
+        assertFalse(userRepository.existsByUsername(user.getUsername()));
+    }
+
+    // SAVE TESTS //
 
     @Test
     void saveExistingUserTest() {

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class UserRepositoryTestImpl implements UserRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRepositoryTestImpl.class);
 
-    private Map<String, User> internalUserMap;
+    private final Map<String, User> internalUserMap;
 
     public UserRepositoryTestImpl() {
         LOGGER.info("TestMode enabled");
@@ -28,8 +29,7 @@ public class UserRepositoryTestImpl implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        //TODO
-        return null;
+        return new ArrayList<>(internalUserMap.values());
     }
 
     @Override
@@ -40,8 +40,7 @@ public class UserRepositoryTestImpl implements UserRepository {
 
     @Override
     public boolean existsByUsername(String username) {
-        //TODO
-        return false;
+        return internalUserMap.containsKey(username);
     }
 
     @Override

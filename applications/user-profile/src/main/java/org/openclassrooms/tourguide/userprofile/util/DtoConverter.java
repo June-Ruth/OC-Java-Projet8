@@ -7,7 +7,7 @@ public class DtoConverter {
 
     private DtoConverter() {}
 
-    public static UserContactsDTO convertUserToUserContactsDto(User user) {
+    public static UserContactsDTO convertUserToUserContactsDto(final User user) {
         UserContactsDTO userContactsDTO = new UserContactsDTO();
         userContactsDTO.setUserId(user.getUserId());
         userContactsDTO.setUserName(user.getUsername());

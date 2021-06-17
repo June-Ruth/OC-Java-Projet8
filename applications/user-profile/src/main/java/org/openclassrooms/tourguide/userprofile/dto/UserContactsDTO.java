@@ -46,14 +46,4 @@ public class UserContactsDTO {
     public void setEmailAddress(final String emailAddress1) {
         emailAddress = emailAddress1;
     }
-
-    @Override
-    public String toString() {
-        return "UserContactsDTO{"
-                + "userId='" + userId + '\''
-                + ", userName='" + userName + '\''
-                + ", phoneNumber='" + phoneNumber + '\''
-                + ", emailAddress=" + emailAddress
-                + '}';
-    }
 }

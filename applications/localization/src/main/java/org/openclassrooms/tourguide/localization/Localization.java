@@ -1,12 +1,12 @@
-package org.openclassrooms.tourguide.tracker;
+package org.openclassrooms.tourguide.localization;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Tracker {
+public class Localization {
 
     public static void main(String[] args) {
-        SpringApplication.run(Tracker.class, args);
+        SpringApplication.run(Localization.class, args);
     }
 }

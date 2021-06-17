@@ -49,17 +49,17 @@ public class UserControllerTest {
         userPreferences = new UserPreferences();
     }
 
-    // GET USER PROFILE TEST //
+    // GET USER PROFILE TESTS //
 
     @Test
-    void getUserProfileWithExistingIdTest() throws Exception {
+    void getUserProfileWithExistingUsernameTest() throws Exception {
         when(userService.getUser(anyString())).thenReturn(user);
         mockMvc.perform(get("/profile/{username}", user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void getUserProfileWithNonExistentIdTest() throws Exception {
+    void getUserProfileWithNonExistentUsernameTest() throws Exception {
         when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/profile/{username}", user.getUsername()))
                 .andExpect(status().isNotFound());
@@ -68,7 +68,7 @@ public class UserControllerTest {
     // UPDATE USER CONTACTS TESTS //
 
     @Test
-    void updateUserContactsWithExistingIdAndValidDataTest() throws Exception {
+    void updateUserContactsWithExistingUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenReturn(user);
         when(userService.updateUser(any(User.class))).thenReturn(user);
         mockMvc.perform(put("/profile/{username}", user.getUsername())
@@ -78,7 +78,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void updateUserContactsWithNonExistentIdAndValidDataTest() throws Exception {
+    void updateUserContactsWithNonExistentUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(put("/profile/{username}", user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userContactsDTO))
@@ -89,14 +89,14 @@ public class UserControllerTest {
     // GET USER PREFERENCES TESTS //
 
     @Test
-    void getUserPreferencesWithExistingIdTest() throws Exception {
+    void getUserPreferencesWithExistingUsernameTest() throws Exception {
         when(userService.getUserPreferences(anyString())).thenReturn(userPreferences);
         mockMvc.perform(get("/profile/{username}/preferences", user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void getUserPreferencesWithNonExistentIdTest() throws Exception {
+    void getUserPreferencesWithNonExistentUsernameTest() throws Exception {
         when(userService.getUserPreferences(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/profile/{username}/preferences", user.getUsername()))
                 .andExpect(status().isNotFound());
@@ -105,7 +105,7 @@ public class UserControllerTest {
     // UPDATE USER PREFERENCES TEST //
 
     @Test
-    void updateUserPreferencesWithExistingIdAndValidDataTest() throws Exception {
+    void updateUserPreferencesWithExistingUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenReturn(user);
         when(userService.updateUser(any(User.class))).thenReturn(user);
         mockMvc.perform(put("/profile/{username}/preferences", user.getUsername())
@@ -115,7 +115,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void updateUserPreferencesWithNonExistentIdAndValidDataTest() throws Exception {
+    void updateUserPreferencesWithNonExistentUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(put("/profile/{username}/preferences", user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userPreferences))

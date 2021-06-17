@@ -61,40 +61,6 @@ public class TourGuideServiceImpl implements TourGuideService {
 	}
 
 	@Override
-	public List<UserReward> getUserRewards(User user) {
-		return user.getUserRewards();
-	}
-
-	@Override
-	public VisitedLocation getUserLocation(User user) {
-		if(user.getVisitedLocations().isEmpty()) {
-			trackUserLocation(user).join();
-		}
-
-		List<VisitedLocation> visitedLocations = new ArrayList<>(user.getVisitedLocations());
-
-		VisitedLocation visitedLocation = visitedLocations.get(visitedLocations.size() - 1);
-		return visitedLocation;
-	}
-
-	@Override
-	public User getUser(String userName) {
-		return internalUserMap.get(userName);
-	}
-
-	@Override
-	public List<User> getAllUsers() {
-		return new ArrayList<>(internalUserMap.values());
-	}
-
-	@Override
-	public void saveUser(User user) {
-		if(!internalUserMap.containsKey(user.getUsername())) {
-			internalUserMap.put(user.getUsername(), user);
-		}
-	}
-
-	@Override
 	public List<Provider> getTripDeals(User user) {
 		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(UserReward::getRewardPoints).sum();
 		List<Provider> providers = tripPricer.getPrice(tripPricerApiKey, user.getUserId(), user.getUserPreferences().getNumberOfAdults(), 
@@ -122,11 +88,6 @@ public class TourGuideServiceImpl implements TourGuideService {
 		}
 		
 		return nearbyAttractions;
-	}
-
-	@Override
-	public void clearVisitedLocationsOfUser(User user) {
-		user.getVisitedLocations().clear();
 	}
 
 	@Override

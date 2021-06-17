@@ -1,9 +1,8 @@
 subdir("applications") {
     include("admin")
-    include("attractions")
     include("dummy")
+    include("localization")
     include("rewards-calculator")
-    include("tracker")
     include("user-profile")
 }
 

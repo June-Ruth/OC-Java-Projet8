@@ -19,20 +19,7 @@ public class AdminController {
         tourGuideService = tourGuideService1;
     }
 
-    @RequestMapping("/admin/users-current-locations")
-    public String getAllCurrentLocations() {
-        // TODO: Get a list of every user's most recent location as JSON
-        //- Note: does not use gpsUtil to query for their current location,
-        //        but rather gathers the user's current location from their stored location history.
-        //
-        // Return object should be the just a JSON mapping of userId to Locations similar to:
-        //     {
-        //        "019b04a9-067a-4c76-8817-ee75088c3822": {"longitude":-48.188821,"latitude":74.84371}
-        //        ...
-        //     }
 
-        return null; //JsonStream.serialize("");
-    }
 
     @RequestMapping("/admin/users/{userId}")
     public String getUser(@PathVariable UUID userId) {
@@ -40,11 +27,7 @@ public class AdminController {
         return null;
     }
 
-    @RequestMapping("/admin/users/{userId}/current-location")
-    public String getLocation(@PathVariable UUID userId, @RequestParam String userName) throws ExecutionException, InterruptedException {
-        VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
-        return null; //JsonStream.serialize(visitedLocation.location);
-    }
+
 
     @RequestMapping("/admin/users/{userId}/rewards")
     public String getRewards(@PathVariable UUID userId, @RequestParam String username) {

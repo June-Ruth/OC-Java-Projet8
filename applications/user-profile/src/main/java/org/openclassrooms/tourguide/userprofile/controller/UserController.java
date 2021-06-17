@@ -7,8 +7,6 @@ import org.openclassrooms.tourguide.userprofile.service.UserService;
 import org.openclassrooms.tourguide.userprofile.util.DtoConverter;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 public class UserController {
 

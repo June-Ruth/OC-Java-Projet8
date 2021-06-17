@@ -12,16 +12,6 @@ import java.util.concurrent.ExecutorService;
 
 public interface TourGuideService {
 
-    List<UserReward> getUserRewards(User user);
-
-    VisitedLocation getUserLocation(User user);
-
-    User getUser(String userName);
-
-    List<User> getAllUsers();
-
-    void saveUser(User user);
-
     List<Provider> getTripDeals(User user);
 
     CompletableFuture<?> trackUserLocation(User user);
@@ -31,8 +21,6 @@ public interface TourGuideService {
     ExecutorService getExecutor();
 
     void stopTracker();
-
-    void clearVisitedLocationsOfUser(User user);
 
     VisitedLocation addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user);
 

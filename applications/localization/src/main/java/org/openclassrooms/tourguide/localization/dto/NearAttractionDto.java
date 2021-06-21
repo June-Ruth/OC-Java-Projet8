@@ -1,6 +1,6 @@
 package org.openclassrooms.tourguide.localization.dto;
 
-public class NearAttractionDTO {
+public class NearAttractionDto {
 
     private String attractionName;
 
@@ -20,7 +20,7 @@ public class NearAttractionDTO {
 
     private int attractionRewardPoints;
 
-    public NearAttractionDTO() { }
+    public NearAttractionDto() { }
 
     public String getAttractionName() {
         return attractionName;

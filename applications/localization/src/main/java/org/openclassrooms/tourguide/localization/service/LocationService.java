@@ -7,8 +7,13 @@ import java.util.List;
 
 public interface LocationService {
 
+    // User Location
+
     VisitedLocation getUserCurrentLocation(String username);
 
+    List<VisitedLocation> getAllUserCurrentLocations();
+
+    // Attraction
 
     Attraction getAttraction(String attractionName);
 

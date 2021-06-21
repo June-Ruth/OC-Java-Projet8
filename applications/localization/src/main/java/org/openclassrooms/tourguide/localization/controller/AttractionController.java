@@ -2,7 +2,7 @@ package org.openclassrooms.tourguide.localization.controller;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
-import org.openclassrooms.tourguide.localization.dto.NearAttractionDTO;
+import org.openclassrooms.tourguide.localization.dto.NearAttractionDto;
 import org.openclassrooms.tourguide.localization.service.LocationService;
 import org.openclassrooms.tourguide.localization.util.DtoConverter;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +28,7 @@ public class AttractionController {
     }
 
     @RequestMapping("/attractions/closest-five")
-    public List<NearAttractionDTO> getNearByAttractions(@RequestParam(name = "username") String username) {
+    public List<NearAttractionDto> getNearByAttractions(@RequestParam(name = "username") String username) {
 
         /* Instead: Get the closest five tourist attractions to the user - no matter how far away they are.
         // Return a new JSON object that contains:
@@ -42,11 +42,11 @@ public class AttractionController {
         VisitedLocation userCurrentLocation = locationService.getUserCurrentLocation(username);
 
         List<Attraction> fiveNearestAttractions = locationService.getFiveNearestAttractions(userCurrentLocation);
-        List<NearAttractionDTO> fiveNearestAttractionsDto = new ArrayList<>();
+        List<NearAttractionDto> fiveNearestAttractionsDto = new ArrayList<>();
 
         for(Attraction attraction : fiveNearestAttractions) {
             int rewardPoints = locationService.getAttractionRewardPoints(attraction);
-            NearAttractionDTO nearAttractionDTO = DtoConverter.convertAttractionToNearAttractionDto(attraction, userCurrentLocation, rewardPoints);
+            NearAttractionDto nearAttractionDTO = DtoConverter.convertAttractionToNearAttractionDto(attraction, userCurrentLocation, rewardPoints);
             fiveNearestAttractionsDto.add(nearAttractionDTO);
         }
         return fiveNearestAttractionsDto;

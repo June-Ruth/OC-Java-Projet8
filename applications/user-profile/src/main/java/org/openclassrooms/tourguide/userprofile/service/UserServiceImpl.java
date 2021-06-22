@@ -9,6 +9,7 @@ import org.openclassrooms.tourguide.userprofile.exception.ElementNotFoundExcepti
 import org.openclassrooms.tourguide.userprofile.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -71,7 +72,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<VisitedLocation> getAllUserCurrentLocations() {
-        //TODO
-        return null;
+        List<User> allUsers = getAllUsers();
+        List<VisitedLocation> allCurrentLocations = new ArrayList<>();
+        for(User user : allUsers) {
+            VisitedLocation currentLocation = getUserCurrentLocation(user.getUsername());
+            allCurrentLocations.add(currentLocation);
+        }
+        return allCurrentLocations;
     }
 }

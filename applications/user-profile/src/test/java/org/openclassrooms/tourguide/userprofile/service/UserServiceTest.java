@@ -159,5 +159,11 @@ public class UserServiceTest {
 
     // GET ALL USER CURRENT LOCATIONS TESTS //
 
-    //TODO
+    @Test
+    void getAllUserCurrentLocations() {
+        when(userRepository.findAll()).thenReturn(allUsers);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+        userService.getAllUserCurrentLocations();
+        verify(userRepository, times(1)).findAll();
+    }
 }

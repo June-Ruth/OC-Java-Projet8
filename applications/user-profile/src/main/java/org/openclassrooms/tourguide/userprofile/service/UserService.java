@@ -1,6 +1,7 @@
 package org.openclassrooms.tourguide.userprofile.service;
 
 
+import gpsUtil.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.User;
 import org.openclassrooms.tourguide.models.model.UserPreferences;
 import org.openclassrooms.tourguide.models.model.UserReward;
@@ -20,4 +21,8 @@ public interface UserService {
     UserPreferences getUserPreferences(String username);
 
     List<UserReward> getUserRewards(String username);
+
+    VisitedLocation getUserCurrentLocation(String username);
+
+    List<VisitedLocation> getAllUserCurrentLocations();
 }

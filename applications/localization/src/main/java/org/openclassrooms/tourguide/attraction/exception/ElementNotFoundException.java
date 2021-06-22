@@ -1,4 +1,4 @@
-package org.openclassrooms.tourguide.localization.exception;
+package org.openclassrooms.tourguide.attraction.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

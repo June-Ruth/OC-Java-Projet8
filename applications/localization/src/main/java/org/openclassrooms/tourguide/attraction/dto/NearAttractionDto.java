@@ -1,4 +1,4 @@
-package org.openclassrooms.tourguide.localization.dto;
+package org.openclassrooms.tourguide.attraction.dto;
 
 public class NearAttractionDto {
 

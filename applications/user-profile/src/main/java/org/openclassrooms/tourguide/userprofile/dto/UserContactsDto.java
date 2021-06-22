@@ -3,7 +3,7 @@ package org.openclassrooms.tourguide.userprofile.dto;
 
 import java.util.UUID;
 
-public class UserContactsDTO {
+public class UserContactsDto {
 
     private UUID userId;
 
@@ -13,7 +13,7 @@ public class UserContactsDTO {
 
     private String emailAddress;
 
-    public UserContactsDTO() { }
+    public UserContactsDto() { }
 
     public UUID getUserId() {
         return userId;

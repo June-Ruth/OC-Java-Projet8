@@ -1,12 +1,12 @@
-package org.openclassrooms.tourguide.localization;
+package org.openclassrooms.tourguide.attraction;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Localization {
+public class AttractionApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(Localization.class, args);
+        SpringApplication.run(AttractionApp.class, args);
     }
 }

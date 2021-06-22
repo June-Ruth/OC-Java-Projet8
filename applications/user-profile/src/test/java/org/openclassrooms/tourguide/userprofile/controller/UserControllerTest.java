@@ -1,9 +1,11 @@
 package org.openclassrooms.tourguide.userprofile.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import gpsUtil.location.Location;
+import gpsUtil.location.VisitedLocation;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openclassrooms.tourguide.userprofile.dto.UserContactsDTO;
+import org.openclassrooms.tourguide.userprofile.dto.UserContactsDto;
 import org.openclassrooms.tourguide.models.model.User;
 import org.openclassrooms.tourguide.models.model.UserPreferences;
 import org.openclassrooms.tourguide.userprofile.exception.ElementNotFoundException;
@@ -16,6 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -38,15 +44,20 @@ public class UserControllerTest {
     private UserService userService;
 
     private static User user;
-    private static UserContactsDTO userContactsDTO;
+    private static UserContactsDto userContactsDTO;
     private static UserPreferences userPreferences;
     private static final UUID uuid1 = UUID.randomUUID();
+    private static VisitedLocation visitedLocation;
+    private static List<VisitedLocation> visitedLocationList;
 
     @BeforeAll
     static void beforeAll() {
         user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
         userContactsDTO = DtoConverter.convertUserToUserContactsDto(user);
         userPreferences = new UserPreferences();
+        visitedLocation = new VisitedLocation(UUID.randomUUID(), new Location(2d, 2d), Date.from(Instant.now()));
+        visitedLocationList = new ArrayList<>();
+        visitedLocationList.add(visitedLocation);
     }
 
     // GET USER PROFILE TESTS //
@@ -54,14 +65,14 @@ public class UserControllerTest {
     @Test
     void getUserProfileWithExistingUsernameTest() throws Exception {
         when(userService.getUser(anyString())).thenReturn(user);
-        mockMvc.perform(get("/profile/{username}", user.getUsername()))
+        mockMvc.perform(get("/users/{username}", user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getUserProfileWithNonExistentUsernameTest() throws Exception {
         when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
-        mockMvc.perform(get("/profile/{username}", user.getUsername()))
+        mockMvc.perform(get("/users/{username}", user.getUsername()))
                 .andExpect(status().isNotFound());
     }
 
@@ -71,7 +82,7 @@ public class UserControllerTest {
     void updateUserContactsWithExistingUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenReturn(user);
         when(userService.updateUser(any(User.class))).thenReturn(user);
-        mockMvc.perform(put("/profile/{username}", user.getUsername())
+        mockMvc.perform(put("/users/{username}", user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userContactsDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -80,7 +91,7 @@ public class UserControllerTest {
     @Test
     void updateUserContactsWithNonExistentUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
-        mockMvc.perform(put("/profile/{username}", user.getUsername())
+        mockMvc.perform(put("/users/{username}", user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userContactsDTO))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -91,14 +102,14 @@ public class UserControllerTest {
     @Test
     void getUserPreferencesWithExistingUsernameTest() throws Exception {
         when(userService.getUserPreferences(anyString())).thenReturn(userPreferences);
-        mockMvc.perform(get("/profile/{username}/preferences", user.getUsername()))
+        mockMvc.perform(get("/users/{username}/preferences", user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getUserPreferencesWithNonExistentUsernameTest() throws Exception {
         when(userService.getUserPreferences(anyString())).thenThrow(ElementNotFoundException.class);
-        mockMvc.perform(get("/profile/{username}/preferences", user.getUsername()))
+        mockMvc.perform(get("/users/{username}/preferences", user.getUsername()))
                 .andExpect(status().isNotFound());
     }
 
@@ -108,7 +119,7 @@ public class UserControllerTest {
     void updateUserPreferencesWithExistingUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenReturn(user);
         when(userService.updateUser(any(User.class))).thenReturn(user);
-        mockMvc.perform(put("/profile/{username}/preferences", user.getUsername())
+        mockMvc.perform(put("/users/{username}/preferences", user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userPreferences))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -117,9 +128,34 @@ public class UserControllerTest {
     @Test
     void updateUserPreferencesWithNonExistentUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
-        mockMvc.perform(put("/profile/{username}/preferences", user.getUsername())
+        mockMvc.perform(put("/users/{username}/preferences", user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userPreferences))
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    // GET ALL CURRENT LOCATIONS TESTS //
+    @Test
+    void getAllCurrentLocations() throws Exception  {
+        when(userService.getAllUserCurrentLocations()).thenReturn(visitedLocationList);
+        mockMvc.perform(get("/users/all-current-locations"))
+                .andExpect(status().isOk());
+    }
+
+
+    // GET USER LOCATION TESTS //
+
+    @Test
+    void getExistingUserLocation() throws Exception {
+        when(userService.getUserCurrentLocation(anyString())).thenReturn(visitedLocation);
+        mockMvc.perform(get("/users/{username}/current-location", user.getUsername()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getNonExistentUserLocation() throws Exception {
+        when(userService.getUserCurrentLocation(anyString())).thenThrow(ElementNotFoundException.class);
+        mockMvc.perform(get("/users/{username}/current-location", user.getUsername()))
                 .andExpect(status().isNotFound());
     }
 }

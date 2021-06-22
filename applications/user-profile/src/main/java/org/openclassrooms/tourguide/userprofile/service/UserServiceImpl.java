@@ -1,5 +1,6 @@
 package org.openclassrooms.tourguide.userprofile.service;
 
+import gpsUtil.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.User;
 import org.openclassrooms.tourguide.models.model.UserPreferences;
 import org.openclassrooms.tourguide.models.model.UserReward;
@@ -51,11 +52,26 @@ public class UserServiceImpl implements UserService {
         return getUser(username).getUserPreferences();
     }
 
-
-    //TODO : pass to rewards MS
     @Override
     public List<UserReward> getUserRewards(String username) {
         User user = getUser(username);
         return user.getUserRewards();
+    }
+
+    @Override
+    public VisitedLocation getUserCurrentLocation(final String username) {
+        List<VisitedLocation> userVisitedLocations = getUser(username).getVisitedLocations();
+        if (userVisitedLocations.isEmpty()) {
+            //TODO : if VisitedLocations is empty, then track location
+            return null;
+        } else {
+            return userVisitedLocations.get(userVisitedLocations.size() - 1);
+        }
+    }
+
+    @Override
+    public List<VisitedLocation> getAllUserCurrentLocations() {
+        //TODO
+        return null;
     }
 }

@@ -1,11 +1,18 @@
 package org.openclassrooms.tourguide.userprofile.controller;
 
-import org.openclassrooms.tourguide.userprofile.dto.UserContactsDTO;
+import gpsUtil.location.Location;
+import gpsUtil.location.VisitedLocation;
+import org.openclassrooms.tourguide.userprofile.dto.UserContactsDto;
 import org.openclassrooms.tourguide.models.model.User;
 import org.openclassrooms.tourguide.models.model.UserPreferences;
 import org.openclassrooms.tourguide.userprofile.service.UserService;
 import org.openclassrooms.tourguide.userprofile.util.DtoConverter;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 public class UserController {
@@ -16,35 +23,57 @@ public class UserController {
         userService = userService1;
     }
 
-    @RequestMapping("/profile/{username}")
-    public UserContactsDTO getUserProfile(@PathVariable final String username) {
+    @GetMapping("/users/{username}")
+    public UserContactsDto getUserProfile(@PathVariable final String username) {
         User user = userService.getUser(username);
-        UserContactsDTO userContactsDTO = DtoConverter.convertUserToUserContactsDto(user);
+        UserContactsDto userContactsDTO = DtoConverter.convertUserToUserContactsDto(user);
         return userContactsDTO;
     }
 
-    @PutMapping("/profile/{username}")
-    public UserContactsDTO updateUserContacts(@PathVariable final String username,
-                                              @RequestBody final UserContactsDTO userContactsDTO) {
+    @PutMapping("/users/{username}")
+    public UserContactsDto updateUserContacts(@PathVariable final String username,
+                                              @RequestBody final UserContactsDto updatedUser) {
         User user = userService.getUser(username);
-        user.setPhoneNumber(userContactsDTO.getPhoneNumber());
-        user.setEmailAddress(userContactsDTO.getEmailAddress());
+        user.setPhoneNumber(updatedUser.getPhoneNumber());
+        user.setEmailAddress(updatedUser.getEmailAddress());
         userService.updateUser(user);
-        return userContactsDTO;
+        return updatedUser;
     }
 
-    @RequestMapping("/profile/{username}/preferences")
+    @GetMapping("/users/{username}/preferences")
     public UserPreferences getUserPreferences(@PathVariable final String username) {
         UserPreferences userPreferences = userService.getUserPreferences(username);
         return userPreferences;
     }
 
-    @PutMapping("/profile/{username}/preferences")
+    @PutMapping("/users/{username}/preferences")
     public UserPreferences updateUserPreferences(@PathVariable final String username,
-                                                 @RequestBody final UserPreferences updatedUserPreferences) {
+                                                 @RequestBody final UserPreferences updatedPreferences) {
         User user = userService.getUser(username);
-        user.setUserPreferences(updatedUserPreferences);
+        user.setUserPreferences(updatedPreferences);
         userService.updateUser(user);
-        return updatedUserPreferences;
+        return updatedPreferences;
+    }
+
+    // Note: does not use gpsUtil to query for their current location,
+    //        but rather gathers the user's current location from their stored location history.
+    // Return object should be the just a JSON mapping of userId to Locations similar to:
+    // { "019b04a9-067a-4c76-8817-ee75088c3822": {"longitude":-48.188821,"latitude":74.84371} ... }
+    @GetMapping("/users/all-current-locations")
+    public Map<UUID, Location> getAllCurrentLocations() {
+        List<VisitedLocation> allUserCurrentLocations = userService.getAllUserCurrentLocations();
+
+        Map<UUID, Location> result = new HashMap<>();
+
+        for(VisitedLocation visitedLocation : allUserCurrentLocations) {
+            result.put(visitedLocation.userId, visitedLocation.location);
+        }
+        return result;
+    }
+
+    @GetMapping("/users/{username}/current-location")
+    public Location getUserLocation(@PathVariable String username) {
+        VisitedLocation lastVisitedLocation = userService.getUserCurrentLocation(username);
+        return lastVisitedLocation.location;
     }
 }

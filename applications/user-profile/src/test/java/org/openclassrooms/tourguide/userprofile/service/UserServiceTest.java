@@ -130,4 +130,34 @@ public class UserServiceTest {
         assertThrows(ElementNotFoundException.class, () -> userService.getUserRewards(user.getUsername()));
         verify(userRepository, times(1)).findByUsername(user.getUsername());
     }
+
+    // GET USER CURRENT LOCATION TESTS //
+
+    @Test
+    void getExistingUserCurrentLocationWithEmptyLocationTest() {
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+        userService.getUserCurrentLocation(user.getUsername());
+        verify(userRepository, times(1)).findByUsername(user.getUsername());
+    }
+
+    @Test
+    void getExistingUserCurrentLocationWithNotEmptyLocationTest() {
+        List<VisitedLocation> visitedLocations = new ArrayList<>();
+        visitedLocations.add(new VisitedLocation(user.getUserId(), new Location(2d, 2d), Date.from(Instant.now())));
+        user.setVisitedLocations(visitedLocations);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+        userService.getUserCurrentLocation(user.getUsername());
+        verify(userRepository, times(1)).findByUsername(user.getUsername());
+    }
+
+    @Test
+    void getNonExistentUserCurrentLocationTest() {
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        assertThrows(ElementNotFoundException.class, () -> userService.getUserCurrentLocation(user.getUsername()));
+        verify(userRepository, times(1)).findByUsername(user.getUsername());
+    }
+
+    // GET ALL USER CURRENT LOCATIONS TESTS //
+
+    //TODO
 }

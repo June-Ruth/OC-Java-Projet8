@@ -154,4 +154,20 @@ public class UserControllerTest {
         mockMvc.perform(get("/users/{username}/current-location", user.getUsername()))
                 .andExpect(status().isNotFound());
     }
+
+    // GET USER REWARDS TESTS //
+
+    @Test
+    void getExistingUserRewards() throws Exception {
+        when(userService.getUser(anyString())).thenReturn(user);
+        mockMvc.perform(get("/users/{username}/rewards", user.getUsername()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getNonExistentUserRewards() throws Exception {
+        when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
+        mockMvc.perform(get("/users/{username}/rewards", user.getUsername()))
+                .andExpect(status().isNotFound());
+    }
 }

@@ -9,4 +9,9 @@ public class UserProfile {
     public static void main(String[] args) {
         SpringApplication.run(UserProfile.class, args);
     }
+
+    // TODO : IT Tests
+    // TODO : Main Tests
+    // TODO : Loggers
+    // TODO : Javadoc
 }

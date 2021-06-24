@@ -131,6 +131,7 @@ public class UserControllerTest {
     }
 
     // GET ALL CURRENT LOCATIONS TESTS //
+
     @Test
     void getAllCurrentLocations() throws Exception  {
         when(userService.getAllUserCurrentLocations()).thenReturn(visitedLocationList);

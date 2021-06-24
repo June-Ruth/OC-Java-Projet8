@@ -1,6 +1,16 @@
 package org.openclassrooms.tourguide.webapp.controller;
 
-public class UserController {
+import org.openclassrooms.tourguide.webapp.service.TourGuideService;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class UserWebController {
+
+    private TourGuideService tourGuideService;
+
+    public UserWebController(final TourGuideService tourGuideService1) {
+        tourGuideService = tourGuideService1;
+    }
 
     /**
      * Get the closest five attractions to the user, no matter how far away they are.
@@ -44,15 +54,9 @@ public class UserController {
             - UserMS : GET : /users/{username}/current-location => READY
             - LocalizationMS : GET : /attractions/closest-five
             - Get rewards for each attractions
-
         - To get trip deals
 
-     TODO : Feature List - As an admin, I want ... :
-      - HomePage
-      - To see all users current locations to analyze it
-        - UserMS : GET : /users/all-current-locations => READY
-      - To see each user current location
-        - UserMS : GET : /users/{username}/current-location => READY
+
 
       */
 

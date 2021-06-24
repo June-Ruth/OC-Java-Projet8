@@ -4,6 +4,7 @@ subdir("applications") {
     include("localization")
     include("rewards-calculator")
     include("user-profile")
+    include("webapp")
 }
 
 subdir("core-librairies") {

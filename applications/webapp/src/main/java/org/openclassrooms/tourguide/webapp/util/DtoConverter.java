@@ -1,12 +1,23 @@
-package org.openclassrooms.tourguide.attraction.util;
+package org.openclassrooms.tourguide.webapp.util;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
-import org.openclassrooms.tourguide.attraction.dto.NearAttractionDto;
+import org.openclassrooms.tourguide.models.model.User;
+import org.openclassrooms.tourguide.webapp.dto.NearAttractionDto;
+import org.openclassrooms.tourguide.webapp.dto.UserContactsDto;
 
 public class DtoConverter {
 
-    private DtoConverter() { }
+    private DtoConverter() {}
+
+    public static UserContactsDto convertUserToUserContactsDto(final User user) {
+        UserContactsDto userContactsDTO = new UserContactsDto();
+        userContactsDTO.setUserId(user.getUserId());
+        userContactsDTO.setUserName(user.getUsername());
+        userContactsDTO.setPhoneNumber(user.getPhoneNumber());
+        userContactsDTO.setEmailAddress(user.getEmailAddress());
+        return userContactsDTO;
+    }
 
     public static NearAttractionDto convertAttractionToNearAttractionDto(final Attraction attraction,
                                                                          final Location userCurrentLocation,

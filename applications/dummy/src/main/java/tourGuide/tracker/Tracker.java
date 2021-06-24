@@ -13,9 +13,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Tracker implements Runnable {
+public class Tracker /*implements Runnable*/ {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tracker.class);
+   /* private static final Logger LOGGER = LoggerFactory.getLogger(Tracker.class);
 
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final AtomicBoolean running = new AtomicBoolean(false);
@@ -79,7 +79,7 @@ public class Tracker implements Runnable {
                 break;
             }
         }
-    }
+    }*/
 
 
 }

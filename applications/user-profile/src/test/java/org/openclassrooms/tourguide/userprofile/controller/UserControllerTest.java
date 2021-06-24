@@ -5,12 +5,10 @@ import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openclassrooms.tourguide.userprofile.dto.UserContactsDto;
 import org.openclassrooms.tourguide.models.model.User;
 import org.openclassrooms.tourguide.models.model.UserPreferences;
 import org.openclassrooms.tourguide.userprofile.exception.ElementNotFoundException;
 import org.openclassrooms.tourguide.userprofile.service.UserService;
-import org.openclassrooms.tourguide.userprofile.util.DtoConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -44,7 +42,6 @@ public class UserControllerTest {
     private UserService userService;
 
     private static User user;
-    private static UserContactsDto userContactsDTO;
     private static UserPreferences userPreferences;
     private static final UUID uuid1 = UUID.randomUUID();
     private static VisitedLocation visitedLocation;
@@ -53,7 +50,6 @@ public class UserControllerTest {
     @BeforeAll
     static void beforeAll() {
         user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
-        userContactsDTO = DtoConverter.convertUserToUserContactsDto(user);
         userPreferences = new UserPreferences();
         visitedLocation = new VisitedLocation(UUID.randomUUID(), new Location(2d, 2d), Date.from(Instant.now()));
         visitedLocationList = new ArrayList<>();
@@ -76,23 +72,23 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // UPDATE USER CONTACTS TESTS //
+    // UPDATE USER TESTS //
 
     @Test
-    void updateUserContactsWithExistingUsernameAndValidDataTest() throws Exception {
+    void updateUserWithExistingUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenReturn(user);
         when(userService.updateUser(any(User.class))).thenReturn(user);
         mockMvc.perform(put("/users/{username}", user.getUsername())
-                .content(new ObjectMapper().writeValueAsString(userContactsDTO))
+                .content(new ObjectMapper().writeValueAsString(user))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void updateUserContactsWithNonExistentUsernameAndValidDataTest() throws Exception {
+    void updateUserWithNonExistentUsernameAndValidDataTest() throws Exception {
         when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(put("/users/{username}", user.getUsername())
-                .content(new ObjectMapper().writeValueAsString(userContactsDTO))
+                .content(new ObjectMapper().writeValueAsString(user))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -101,14 +97,14 @@ public class UserControllerTest {
 
     @Test
     void getUserPreferencesWithExistingUsernameTest() throws Exception {
-        when(userService.getUserPreferences(anyString())).thenReturn(userPreferences);
+        when(userService.getUser(anyString())).thenReturn(user);
         mockMvc.perform(get("/users/{username}/preferences", user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getUserPreferencesWithNonExistentUsernameTest() throws Exception {
-        when(userService.getUserPreferences(anyString())).thenThrow(ElementNotFoundException.class);
+        when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/users/{username}/preferences", user.getUsername()))
                 .andExpect(status().isNotFound());
     }

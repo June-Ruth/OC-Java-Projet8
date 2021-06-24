@@ -35,10 +35,4 @@ public class AttractionServiceImpl implements AttractionService {
         //TODO
         return null;
     }
-
-    @Override
-    public int getAttractionRewardPoints(final Attraction attraction) {
-        //TODO
-        return 0;
-    }
 }

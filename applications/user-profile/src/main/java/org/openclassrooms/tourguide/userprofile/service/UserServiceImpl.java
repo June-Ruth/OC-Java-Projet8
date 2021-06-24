@@ -2,8 +2,6 @@ package org.openclassrooms.tourguide.userprofile.service;
 
 import gpsUtil.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.User;
-import org.openclassrooms.tourguide.models.model.UserPreferences;
-import org.openclassrooms.tourguide.models.model.UserReward;
 import org.openclassrooms.tourguide.userprofile.exception.ElementAlreadyExistingException;
 import org.openclassrooms.tourguide.userprofile.exception.ElementNotFoundException;
 import org.openclassrooms.tourguide.userprofile.repository.UserRepository;
@@ -16,6 +14,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+
+    //private WebClient webClientAttraction;
 
     public UserServiceImpl(final UserRepository userRepository1) {
         userRepository = userRepository1;
@@ -46,17 +46,6 @@ public class UserServiceImpl implements UserService {
     public User updateUser(User updatedUser) {
         getUser(updatedUser.getUsername());
         return userRepository.save(updatedUser);
-    }
-
-    @Override
-    public UserPreferences getUserPreferences(String username) {
-        return getUser(username).getUserPreferences();
-    }
-
-    @Override
-    public List<UserReward> getUserRewards(String username) {
-        User user = getUser(username);
-        return user.getUserRewards();
     }
 
     @Override

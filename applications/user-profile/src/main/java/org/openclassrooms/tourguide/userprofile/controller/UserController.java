@@ -2,17 +2,12 @@ package org.openclassrooms.tourguide.userprofile.controller;
 
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
-import org.openclassrooms.tourguide.userprofile.dto.UserContactsDto;
 import org.openclassrooms.tourguide.models.model.User;
 import org.openclassrooms.tourguide.models.model.UserPreferences;
 import org.openclassrooms.tourguide.userprofile.service.UserService;
-import org.openclassrooms.tourguide.userprofile.util.DtoConverter;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 public class UserController {
@@ -24,15 +19,14 @@ public class UserController {
     }
 
     @GetMapping("/users/{username}")
-    public UserContactsDto getUserProfile(@PathVariable final String username) {
+    public User getUserProfile(@PathVariable final String username) {
         User user = userService.getUser(username);
-        UserContactsDto userContactsDTO = DtoConverter.convertUserToUserContactsDto(user);
-        return userContactsDTO;
+        return user;
     }
 
     @PutMapping("/users/{username}")
-    public UserContactsDto updateUserContacts(@PathVariable final String username,
-                                              @RequestBody final UserContactsDto updatedUser) {
+    public User updateUser(@PathVariable final String username,
+                           @RequestBody final User updatedUser) {
         User user = userService.getUser(username);
         user.setPhoneNumber(updatedUser.getPhoneNumber());
         user.setEmailAddress(updatedUser.getEmailAddress());
@@ -42,8 +36,7 @@ public class UserController {
 
     @GetMapping("/users/{username}/preferences")
     public UserPreferences getUserPreferences(@PathVariable final String username) {
-        UserPreferences userPreferences = userService.getUserPreferences(username);
-        return userPreferences;
+        return userService.getUser(username).getUserPreferences();
     }
 
     @PutMapping("/users/{username}/preferences")

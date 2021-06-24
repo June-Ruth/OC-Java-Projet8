@@ -13,7 +13,7 @@ import java.util.UUID;
 @RestController
 public class TripDealController {
 
-    private final TourGuideService tourGuideService;
+   /* private final TourGuideService tourGuideService;
 
     public TripDealController(final TourGuideService tourGuideService1) {
         tourGuideService = tourGuideService1;
@@ -23,6 +23,6 @@ public class TripDealController {
     public String getTripDeals(@PathVariable UUID userId, @RequestParam String username) {
         List<Provider> providers = tourGuideService.getTripDeals(tourGuideService.getUser(username));
         return "";//JsonStream.serialize(providers);
-    }
+    }*/
 
 }

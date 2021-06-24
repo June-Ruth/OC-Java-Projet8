@@ -98,39 +98,6 @@ public class UserServiceTest {
         assertThrows(ElementNotFoundException.class, () -> userService.updateUser(user));
     }
 
-
-    // GET USER PREFERENCE TESTS //
-
-    @Test
-    void getExistingUserPreferencesTest() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        userService.getUserPreferences(user.getUsername());
-        verify(userRepository, times(1)).findByUsername(user.getUsername());
-    }
-
-    @Test
-    void getNonExistentUserPreferencesTest() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-        assertThrows(ElementNotFoundException.class, () -> userService.getUserPreferences(user.getUsername()));
-        verify(userRepository, times(1)).findByUsername(user.getUsername());
-    }
-
-    // GET USER REWARDS TESTS //
-
-    @Test
-    void getExistingUserRewardsTest() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
-        userService.getUserRewards(user.getUsername());
-        verify(userRepository, times(1)).findByUsername(user.getUsername());
-    }
-
-    @Test
-    void getNonExistentUserRewardsTest() {
-        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
-        assertThrows(ElementNotFoundException.class, () -> userService.getUserRewards(user.getUsername()));
-        verify(userRepository, times(1)).findByUsername(user.getUsername());
-    }
-
     // GET USER CURRENT LOCATION TESTS //
 
     @Test
@@ -166,4 +133,12 @@ public class UserServiceTest {
         userService.getAllUserCurrentLocations();
         verify(userRepository, times(1)).findAll();
     }
+
+    // GET USER FIVE CLOSEST ATTRACTIONS TESTS //
+
+   /* @Test
+    void getUserFiveClosestAttractions() {
+        //TODO
+        userService.getUserFiveClosestAttractions(user.getUsername());
+    }*/
 }

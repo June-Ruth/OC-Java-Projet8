@@ -77,6 +77,4 @@ public class UserPreferences {
 	public void setNumberOfChildren(final int numberOfChildren1) {
 		numberOfChildren = numberOfChildren1;
 	}
-
-
 }

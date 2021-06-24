@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PerformanceTest {
-
+/*
 	private RewardsService rewardsService;
 	private TourGuideService tourGuideService;
 	private GpsUtil gpsUtil;
@@ -97,7 +97,7 @@ public class PerformanceTest {
 
 	// TRACK LOCATION PERFORMANCE TESTS //
 
-	private void trackLocationWithXUsersModel(int userNumber) {
+/*	private void trackLocationWithXUsersModel(int userNumber) {
 		//InternalTestHelper.setInternalUserNumber(userNumber);
 
 		tourGuideService = new TourGuideServiceImpl(gpsUtil, rewardsService);
@@ -105,7 +105,7 @@ public class PerformanceTest {
 		parce que internal test helper est utilisé lors de l'instanciation de TourGuideService
 		et a donc besoin de l'internalUserNumber sinon valeur par défaut est appliqué*/
 
-		List<User> allUsers = tourGuideService.getAllUsers();
+/*		List<User> allUsers = tourGuideService.getAllUsers();
 
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
@@ -239,6 +239,6 @@ public class PerformanceTest {
 	public void getRewardsWith100000UsersTest() {
 		int userNumber = 100000;
 		getRewardsWithXUsersModel(userNumber);
-	}
+	}*/
 	
 }

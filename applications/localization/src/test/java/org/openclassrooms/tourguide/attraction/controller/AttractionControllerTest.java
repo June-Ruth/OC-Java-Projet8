@@ -63,7 +63,6 @@ public class AttractionControllerTest {
     @Test
     void getNearByAttractions() throws Exception {
         when(attractionService.getFiveNearestAttractions(any(Location.class))).thenReturn(attractionList);
-        when(attractionService.getAttractionRewardPoints(any(Attraction.class))).thenReturn(2);
         mockMvc.perform(get("/attractions/closest-five?latitude=" + userCurrentLatitude + "&longitude=" + userCurrentLongitude))
                 .andExpect(status().isOk());
     }

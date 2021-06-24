@@ -21,8 +21,8 @@ import tripPricer.Provider;
 import tripPricer.TripPricer;
 
 @Service
-public class TourGuideServiceImpl implements TourGuideService {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TourGuideServiceImpl.class);
+public class TourGuideServiceImpl /*implements TourGuideService */{
+	/*private static final Logger LOGGER = LoggerFactory.getLogger(TourGuideServiceImpl.class);
 	private final GpsUtil gpsUtil;
 	private final RewardsService rewardsService;
 	private final TripPricer tripPricer = new TripPricer();
@@ -48,7 +48,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 			tracker.startTracking();
 			addShutDownHook();
 		*/
-	}
+/*	}
 
 	private void addShutDownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread(tracker::stopTracking));
@@ -95,5 +95,5 @@ public class TourGuideServiceImpl implements TourGuideService {
 		List<VisitedLocation> visitedLocations = user.getVisitedLocations();
 		visitedLocations.add(visitedLocation);
 		return visitedLocation;
-	}
+	}*/
 }

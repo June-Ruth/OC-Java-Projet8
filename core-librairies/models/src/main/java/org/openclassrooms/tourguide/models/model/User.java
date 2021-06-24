@@ -5,18 +5,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
+import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import gpsUtil.location.VisitedLocation;
 import tripPricer.Provider;
 
 public class User {
-	private final UUID userId;
+	private UUID userId;
 
-	private final String username;
+	private String username;
 
 	private String phoneNumber;
 
 	private String emailAddress;
 
+	@JsonDeserialize(using = DateDeserializers.DateDeserializer.class)
+	@JsonSerialize(using = DateSerializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date latestLocationTimestamp;
 
 	private List<VisitedLocation> visitedLocations = new ArrayList<>();
@@ -34,6 +42,8 @@ public class User {
 		this.phoneNumber = phoneNumber;
 		this.emailAddress = emailAddress;
 	}
+
+	public User() { }
 
 	public UUID getUserId() {
 		return userId;

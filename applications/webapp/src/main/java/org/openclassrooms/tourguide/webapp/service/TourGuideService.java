@@ -1,9 +1,9 @@
 package org.openclassrooms.tourguide.webapp.service;
 
-import gpsUtil.location.VisitedLocation;
-import org.openclassrooms.tourguide.models.model.User;
-import org.openclassrooms.tourguide.models.model.UserPreferences;
-import org.openclassrooms.tourguide.models.model.UserReward;
+import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
+import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserPreferences;
+import org.openclassrooms.tourguide.models.model.user.UserReward;
 
 import java.util.List;
 

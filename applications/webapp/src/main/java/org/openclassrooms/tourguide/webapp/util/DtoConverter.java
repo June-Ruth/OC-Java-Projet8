@@ -1,8 +1,8 @@
 package org.openclassrooms.tourguide.webapp.util;
 
-import gpsUtil.location.Attraction;
-import gpsUtil.location.Location;
-import org.openclassrooms.tourguide.models.model.User;
+import org.openclassrooms.tourguide.models.model.location.Attraction;
+import org.openclassrooms.tourguide.models.model.location.Location;
+import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.webapp.dto.NearAttractionDto;
 import org.openclassrooms.tourguide.webapp.dto.UserContactsDto;
 
@@ -23,11 +23,11 @@ public class DtoConverter {
                                                                          final Location userCurrentLocation,
                                                                          final int rewardPoints) {
         NearAttractionDto nearAttractionDTO = new NearAttractionDto();
-        nearAttractionDTO.setAttractionName(attraction.attractionName);
-        nearAttractionDTO.setAttractionLatitude(attraction.latitude);
-        nearAttractionDTO.setAttractionLongitude(attraction.longitude);
-        nearAttractionDTO.setUserLatitude(userCurrentLocation.latitude);
-        nearAttractionDTO.setUserLongitude(userCurrentLocation.longitude);
+        nearAttractionDTO.setAttractionName(attraction.getAttractionName());
+        nearAttractionDTO.setAttractionLatitude(attraction.getLatitude());
+        nearAttractionDTO.setAttractionLongitude(attraction.getLongitude());
+        nearAttractionDTO.setUserLatitude(userCurrentLocation.getLatitude());
+        nearAttractionDTO.setUserLongitude(userCurrentLocation.getLongitude());
         nearAttractionDTO.setAttractionRewardPoints(rewardPoints);
         return nearAttractionDTO;
     }

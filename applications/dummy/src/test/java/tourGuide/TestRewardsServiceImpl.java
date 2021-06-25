@@ -3,26 +3,8 @@ package tourGuide;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
-
-import gpsUtil.GpsUtil;
-import gpsUtil.location.Attraction;
-import gpsUtil.location.VisitedLocation;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
-import rewardCentral.RewardCentral;
-import tourGuide.service.RewardsService;
-import tourGuide.service.RewardsServiceImpl;
-import tourGuide.service.TourGuideService;
-import tourGuide.service.TourGuideServiceImpl;
-import org.openclassrooms.tourguide.models.model.User;
-import org.openclassrooms.tourguide.models.model.UserReward;
 
 @Disabled
 @ActiveProfiles("test")

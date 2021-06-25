@@ -1,7 +1,7 @@
 package org.openclassrooms.tourguide.webapp.controller;
 
-import gpsUtil.location.Location;
-import gpsUtil.location.VisitedLocation;
+import org.openclassrooms.tourguide.models.model.location.Location;
+import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
 import org.openclassrooms.tourguide.webapp.service.TourGuideService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +44,7 @@ public class AdminWebController {
         List<VisitedLocation> allUserCurrentLocations = tourGuideService.getAllUserCurrentLocations();
         Map<UUID, Location> result = new HashMap<>();
         for(VisitedLocation visitedLocation : allUserCurrentLocations) {
-            result.put(visitedLocation.userId, visitedLocation.location);
+            result.put(visitedLocation.getUserId(), visitedLocation.getLocation());
         }
         return result;
     }

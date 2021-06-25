@@ -1,8 +1,8 @@
 package org.openclassrooms.tourguide.webapp.controller;
 
-import org.openclassrooms.tourguide.models.model.User;
-import org.openclassrooms.tourguide.models.model.UserPreferences;
-import org.openclassrooms.tourguide.models.model.UserReward;
+import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserPreferences;
+import org.openclassrooms.tourguide.models.model.user.UserReward;
 import org.openclassrooms.tourguide.webapp.dto.UserContactsDto;
 import org.openclassrooms.tourguide.webapp.service.TourGuideService;
 import org.openclassrooms.tourguide.webapp.util.DtoConverter;
@@ -77,7 +77,7 @@ public class UserWebController {
      * @param username of the authenticated user
      * @return user preferences - if user doesn't exist, throw ElementNotFoundException
      */
-    @GetMapping("/preferences")
+    @GetMapping("/profile/preferences")
     public UserPreferences getUserPreferences(@RequestParam(name = "username") final String username) {
         LOGGER.info("Getting user preferences for user : " + username);
         return tourGuideService.getUserPreferences(username);
@@ -90,7 +90,7 @@ public class UserWebController {
      * @param updatedPreferences of the authenticated user
      * @return updated user preferences - if user doesn't exist, throw ElementNotFoundException
      */
-    @PutMapping("/preferences")
+    @PutMapping("/profile/preferences")
     public UserPreferences updateUserPreferences(@RequestParam(name = "username") final String username,
                                                  @RequestBody final UserPreferences updatedPreferences) {
         LOGGER.info("Updating user preferences for user : " + username + " with preferences : " + updatedPreferences);
@@ -103,7 +103,7 @@ public class UserWebController {
      * @param username of the authenticated user
      * @return list of user rewards - if user doesn't exist, throw ElementNotFoundException
      */
-    @GetMapping("/rewards")
+    @GetMapping("/profile/rewards")
     public List<UserReward> getUserRewards(@RequestParam(name = "username") final String username) {
         LOGGER.info("Getting user rewards for user : " + username);
         return tourGuideService.getUserRewards(username);

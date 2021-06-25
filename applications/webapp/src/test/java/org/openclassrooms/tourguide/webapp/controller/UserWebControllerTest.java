@@ -3,9 +3,9 @@ package org.openclassrooms.tourguide.webapp.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openclassrooms.tourguide.models.model.User;
-import org.openclassrooms.tourguide.models.model.UserPreferences;
-import org.openclassrooms.tourguide.models.model.UserReward;
+import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserPreferences;
+import org.openclassrooms.tourguide.models.model.user.UserReward;
 import org.openclassrooms.tourguide.webapp.exception.ElementNotFoundException;
 import org.openclassrooms.tourguide.webapp.service.TourGuideService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +49,6 @@ public class UserWebControllerTest {
         user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
         userPreferences = new UserPreferences();
         userRewards = new ArrayList<>();
-
     }
 
     // HOME PAGE TESTS //
@@ -81,14 +80,14 @@ public class UserWebControllerTest {
     @Test
     void getUserPreferencesWithExistingUsernameTest() throws Exception {
         when(tourGuideService.getUserPreferences(anyString())).thenReturn(userPreferences);
-        mockMvc.perform(get("/preferences?username=" + user.getUsername()))
+        mockMvc.perform(get("/profile/preferences?username=" + user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getUserPreferencesWithNonExistentUsernameTest() throws Exception {
         when(tourGuideService.getUserPreferences(anyString())).thenThrow(ElementNotFoundException.class);
-        mockMvc.perform(get("/preferences?username=" + user.getUsername()))
+        mockMvc.perform(get("/profile/preferences?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());
     }
 
@@ -97,7 +96,7 @@ public class UserWebControllerTest {
     @Test
     void updateUserPreferencesWithExistingUsernameAndValidDataTest() throws Exception {
         when(tourGuideService.updateUserPreferences(anyString(),any(UserPreferences.class))).thenReturn(userPreferences);
-        mockMvc.perform(put("/preferences?username=" + user.getUsername())
+        mockMvc.perform(put("/profile/preferences?username=" + user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userPreferences))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -106,7 +105,7 @@ public class UserWebControllerTest {
     @Test
     void updateUserPreferencesWithNonExistentUsernameAndValidDataTest() throws Exception {
         when(tourGuideService.updateUserPreferences(anyString(),any(UserPreferences.class))).thenThrow(ElementNotFoundException.class);
-        mockMvc.perform(put("/preferences?username=" + user.getUsername())
+        mockMvc.perform(put("/profile/preferences?username=" + user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userPreferences))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -117,14 +116,14 @@ public class UserWebControllerTest {
     @Test
     void getUserRewardsWithExistingUsernameTest() throws Exception {
         when(tourGuideService.getUserRewards(anyString())).thenReturn(userRewards);
-        mockMvc.perform(get("/rewards?username=" + user.getUsername()))
+        mockMvc.perform(get("/profile/rewards?username=" + user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getUserRewardsWithNonExistentUsernameTest() throws Exception {
         when(tourGuideService.getUserRewards(anyString())).thenThrow(ElementNotFoundException.class);
-        mockMvc.perform(get("/rewards?username=" + user.getUsername()))
+        mockMvc.perform(get("/profile/rewards?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());
     }
 }

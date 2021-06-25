@@ -1,18 +1,5 @@
 package tourGuide.tracker;
 
-import org.apache.commons.lang3.time.StopWatch;
-import org.openclassrooms.tourguide.models.model.User;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import tourGuide.service.TourGuideService;
-
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class Tracker /*implements Runnable*/ {
 
    /* private static final Logger LOGGER = LoggerFactory.getLogger(Tracker.class);

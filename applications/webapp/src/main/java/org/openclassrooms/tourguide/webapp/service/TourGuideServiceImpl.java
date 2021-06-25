@@ -1,9 +1,9 @@
 package org.openclassrooms.tourguide.webapp.service;
 
-import gpsUtil.location.VisitedLocation;
-import org.openclassrooms.tourguide.models.model.User;
-import org.openclassrooms.tourguide.models.model.UserPreferences;
-import org.openclassrooms.tourguide.models.model.UserReward;
+import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
+import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserPreferences;
+import org.openclassrooms.tourguide.models.model.user.UserReward;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +26,7 @@ public class TourGuideServiceImpl implements TourGuideService {
     @Override
     public VisitedLocation getUserCurrentLocation(String username) {
         //TODO : WebClient User API -> UserController -> getUserLocation -> GET : "/users/{username}/current-location"
+        // NB : si UserCurrentLocation peut revenir null, si null alors besoin de trackUSerLocation avec Tracker => vérifier éventuellement si situation probable et nécessaire mais initialement prévue
         return null;
     }
 

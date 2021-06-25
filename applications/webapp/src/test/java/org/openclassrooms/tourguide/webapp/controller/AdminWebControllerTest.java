@@ -1,10 +1,10 @@
 package org.openclassrooms.tourguide.webapp.controller;
 
-import gpsUtil.location.Location;
-import gpsUtil.location.VisitedLocation;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openclassrooms.tourguide.models.model.User;
+import org.openclassrooms.tourguide.models.model.location.Location;
+import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
+import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.webapp.exception.ElementNotFoundException;
 import org.openclassrooms.tourguide.webapp.service.TourGuideService;
 import org.springframework.beans.factory.annotation.Autowired;

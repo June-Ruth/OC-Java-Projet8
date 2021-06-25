@@ -1,23 +1,7 @@
 package tourGuide;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.lang3.time.StopWatch;
-
-import gpsUtil.GpsUtil;
-import gpsUtil.location.Attraction;
-import gpsUtil.location.VisitedLocation;
 import org.junit.jupiter.api.*;
 import org.springframework.test.context.ActiveProfiles;
-import rewardCentral.RewardCentral;
-import tourGuide.service.RewardsService;
-import tourGuide.service.RewardsServiceImpl;
-import tourGuide.service.TourGuideService;
-import tourGuide.service.TourGuideServiceImpl;
-import org.openclassrooms.tourguide.models.model.User;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

@@ -11,7 +11,6 @@ version = "1.0.0"
 
 dependencies {
     implementation(project(":models"))
-
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-webflux")

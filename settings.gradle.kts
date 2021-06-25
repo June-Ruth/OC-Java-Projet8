@@ -1,9 +1,7 @@
 subdir("applications") {
-    include("admin")
     include("dummy")
     include("localization")
-    include("rewards-calculator")
-    include("user-profile")
+    include("user-api")
     include("webapp")
 }
 

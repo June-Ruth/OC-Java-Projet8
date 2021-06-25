@@ -72,27 +72,6 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // UPDATE USER TESTS //
-
-    @Test
-    void updateUserWithExistingUsernameAndValidDataTest() throws Exception {
-        when(userService.getUser(anyString())).thenReturn(user);
-        when(userService.updateUser(any(User.class))).thenReturn(user);
-        mockMvc.perform(put("/users/{username}", user.getUsername())
-                .content(new ObjectMapper().writeValueAsString(user))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void updateUserWithNonExistentUsernameAndValidDataTest() throws Exception {
-        when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
-        mockMvc.perform(put("/users/{username}", user.getUsername())
-                .content(new ObjectMapper().writeValueAsString(user))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
-
     // GET USER PREFERENCES TESTS //
 
     @Test

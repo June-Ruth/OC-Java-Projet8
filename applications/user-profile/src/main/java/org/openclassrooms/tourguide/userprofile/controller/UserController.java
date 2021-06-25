@@ -25,16 +25,6 @@ public class UserController {
         return user;
     }
 
-    @PutMapping("/{username}")
-    public User updateUser(@PathVariable final String username,
-                           @RequestBody final User updatedUser) {
-        User user = userService.getUser(username);
-        user.setPhoneNumber(updatedUser.getPhoneNumber());
-        user.setEmailAddress(updatedUser.getEmailAddress());
-        userService.updateUser(user);
-        return updatedUser;
-    }
-
     @GetMapping("/{username}/preferences")
     public UserPreferences getUserPreferences(@PathVariable final String username) {
         return userService.getUser(username).getUserPreferences();

@@ -1,10 +1,21 @@
 package org.openclassrooms.tourguide.webapp.controller;
 
+import org.openclassrooms.tourguide.models.model.User;
+import org.openclassrooms.tourguide.models.model.UserPreferences;
+import org.openclassrooms.tourguide.models.model.UserReward;
+import org.openclassrooms.tourguide.webapp.dto.UserContactsDto;
 import org.openclassrooms.tourguide.webapp.service.TourGuideService;
-import org.springframework.web.bind.annotation.RestController;
+import org.openclassrooms.tourguide.webapp.util.DtoConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class UserWebController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserWebController.class);
 
     private TourGuideService tourGuideService;
 
@@ -12,7 +23,7 @@ public class UserWebController {
         tourGuideService = tourGuideService1;
     }
 
-    /**
+    /*
      * Get the closest five attractions to the user, no matter how far away they are.
      * @param username of user - may throw 404 exception if user doesn't exist.
      * @return nearAttractionDto
@@ -36,18 +47,69 @@ public class UserWebController {
         return fiveNearestAttractionsDto;
     }*/
 
+    /**
+     * Home Page for current user on the app.
+     * @return home message
+     */
+    @GetMapping("/home")
+    public String homePage() {
+        LOGGER.info("Getting home page.");
+        return "Greetings from TourGuide Enterprise ! Welcome User.";
+    }
+
+    /**
+     * As authenticated user, access to its profile information.
+     * Authentication is not implemented yet.
+     * @param username of the authenticated user
+     * @return user profile information - if user doesn't exist, throw ElementNotFoundException
+     * @see UserContactsDto
+     */
+    @GetMapping("/profile")
+    public UserContactsDto getUserProfile(@RequestParam(name = "username") final String username) {
+        LOGGER.info("Getting user profile for user : " + username);
+        User user = tourGuideService.getUser(username);
+        return  DtoConverter.convertUserToUserContactsDto(user);
+    }
+
+    /**
+     * As authenticated user, access to its preferences for trips.
+     * Authentication is not implemented yet.
+     * @param username of the authenticated user
+     * @return user preferences - if user doesn't exist, throw ElementNotFoundException
+     */
+    @GetMapping("/preferences")
+    public UserPreferences getUserPreferences(@RequestParam(name = "username") final String username) {
+        LOGGER.info("Getting user preferences for user : " + username);
+        return tourGuideService.getUserPreferences(username);
+    }
+
+    /**
+     * As authenticated user, update its preferences for trips.
+     * Authentication is not implemented yet.
+     * @param username of the authenticated user
+     * @param updatedPreferences of the authenticated user
+     * @return updated user preferences - if user doesn't exist, throw ElementNotFoundException
+     */
+    @PutMapping("/preferences")
+    public UserPreferences updateUserPreferences(@RequestParam(name = "username") final String username,
+                                                 @RequestBody final UserPreferences updatedPreferences) {
+        LOGGER.info("Updating user preferences for user : " + username + " with preferences : " + updatedPreferences);
+        return tourGuideService.updateUserPreferences(username, updatedPreferences);
+    }
+
+    /**
+     * As authenticated user, access to its rewards for trips.
+     * Authentication is not implemented yet.
+     * @param username of the authenticated user
+     * @return list of user rewards - if user doesn't exist, throw ElementNotFoundException
+     */
+    @GetMapping("/rewards")
+    public List<UserReward> getUserRewards(@RequestParam(name = "username") final String username) {
+        LOGGER.info("Getting user rewards for user : " + username);
+        return tourGuideService.getUserRewards(username);
+    }
+
     /* TODO : Feature List - As a user, I want ... :
-        - HomePage
-        - To see my contact information
-            - UserMS : GET : /users/{username} => READY
-        - To modify my contact information
-            - UserMS : PUT : /users/{username} => READY
-        - To see my preferences to know how trip deals are provided
-            - UserMS : GET : /users/{username}/preferences => READY
-        - To modify my preferences to have appropriate trip deals
-            - UserMS : PUT : /users/{username}/preferences => READY
-        - To see my rewards to anticipate trip deals
-            - UserMS : GET : /users/{username}/rewards => READY
         - To get attraction information
             - LocalizationMS : /attractions/{attractionName} => READY
         - To get attraction proposals near my location
@@ -55,9 +117,6 @@ public class UserWebController {
             - LocalizationMS : GET : /attractions/closest-five
             - Get rewards for each attractions
         - To get trip deals
-
-
-
-      */
+     */
 
 }

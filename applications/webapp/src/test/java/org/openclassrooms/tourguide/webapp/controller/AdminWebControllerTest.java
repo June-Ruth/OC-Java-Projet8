@@ -6,7 +6,7 @@ import org.openclassrooms.tourguide.models.model.location.Location;
 import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.webapp.exception.ElementNotFoundException;
-import org.openclassrooms.tourguide.webapp.service.TourGuideService;
+import org.openclassrooms.tourguide.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -32,7 +32,7 @@ public class AdminWebControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private TourGuideService tourGuideService;
+    private UserService userService;
 
     private static User user;
     private static final UUID uuid1 = UUID.randomUUID();
@@ -59,7 +59,7 @@ public class AdminWebControllerTest {
 
     @Test
     void getAllCurrentLocations() throws Exception  {
-        when(tourGuideService.getAllUserCurrentLocations()).thenReturn(visitedLocationList);
+        when(userService.getAllUserCurrentLocations()).thenReturn(visitedLocationList);
         mockMvc.perform(get("/admin/users/all-current-locations"))
                 .andExpect(status().isOk());
     }
@@ -68,14 +68,14 @@ public class AdminWebControllerTest {
 
     @Test
     void getExistingUserLocation() throws Exception {
-        when(tourGuideService.getUserCurrentLocation(anyString())).thenReturn(visitedLocation);
+        when(userService.getUserCurrentLocation(anyString())).thenReturn(visitedLocation);
         mockMvc.perform(get("/admin/users/current-location?username=" + user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getNonExistentUserLocation() throws Exception {
-        when(tourGuideService.getUserCurrentLocation(anyString())).thenThrow(ElementNotFoundException.class);
+        when(userService.getUserCurrentLocation(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/admin/users/current-location?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());
     }

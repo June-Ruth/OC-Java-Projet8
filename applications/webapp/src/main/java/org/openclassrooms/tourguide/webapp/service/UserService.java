@@ -7,7 +7,7 @@ import org.openclassrooms.tourguide.models.model.user.UserReward;
 
 import java.util.List;
 
-public interface TourGuideService {
+public interface UserService {
 
     /**
      * Get all user's current location.

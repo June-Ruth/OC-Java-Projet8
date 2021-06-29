@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TourGuideServiceImpl implements TourGuideService {
+public class UserServiceImpl implements UserService {
 
     /**
      * @inheritDoc

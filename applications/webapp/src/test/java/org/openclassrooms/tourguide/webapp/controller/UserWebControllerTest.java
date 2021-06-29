@@ -3,11 +3,13 @@ package org.openclassrooms.tourguide.webapp.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.models.model.user.UserPreferences;
 import org.openclassrooms.tourguide.models.model.user.UserReward;
 import org.openclassrooms.tourguide.webapp.exception.ElementNotFoundException;
-import org.openclassrooms.tourguide.webapp.service.TourGuideService;
+import org.openclassrooms.tourguide.webapp.service.LocationService;
+import org.openclassrooms.tourguide.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -37,18 +39,23 @@ public class UserWebControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private TourGuideService tourGuideService;
+    private UserService userService;
+
+    @MockBean
+    private LocationService locationService;
 
     private static User user;
     private static final UUID uuid1 = UUID.randomUUID();
     private static UserPreferences userPreferences;
     private static List<UserReward> userRewards;
+    private static Attraction attraction;
 
     @BeforeAll
     static void beforeAll() {
         user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
         userPreferences = new UserPreferences();
         userRewards = new ArrayList<>();
+        attraction = new Attraction("attractionName", "city", "state", 2d, 2d);
     }
 
     // HOME PAGE TESTS //
@@ -63,14 +70,14 @@ public class UserWebControllerTest {
 
     @Test
     void getUserProfileWithExistingUsernameTest() throws Exception {
-        when(tourGuideService.getUser(anyString())).thenReturn(user);
+        when(userService.getUser(anyString())).thenReturn(user);
         mockMvc.perform(get("/profile?username=" + user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getUserProfileWithNonExistentUsernameTest() throws Exception {
-        when(tourGuideService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
+        when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/profile?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());
     }
@@ -79,14 +86,14 @@ public class UserWebControllerTest {
 
     @Test
     void getUserPreferencesWithExistingUsernameTest() throws Exception {
-        when(tourGuideService.getUserPreferences(anyString())).thenReturn(userPreferences);
+        when(userService.getUserPreferences(anyString())).thenReturn(userPreferences);
         mockMvc.perform(get("/profile/preferences?username=" + user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getUserPreferencesWithNonExistentUsernameTest() throws Exception {
-        when(tourGuideService.getUserPreferences(anyString())).thenThrow(ElementNotFoundException.class);
+        when(userService.getUserPreferences(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/profile/preferences?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());
     }
@@ -95,7 +102,7 @@ public class UserWebControllerTest {
 
     @Test
     void updateUserPreferencesWithExistingUsernameAndValidDataTest() throws Exception {
-        when(tourGuideService.updateUserPreferences(anyString(),any(UserPreferences.class))).thenReturn(userPreferences);
+        when(userService.updateUserPreferences(anyString(),any(UserPreferences.class))).thenReturn(userPreferences);
         mockMvc.perform(put("/profile/preferences?username=" + user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userPreferences))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -104,7 +111,7 @@ public class UserWebControllerTest {
 
     @Test
     void updateUserPreferencesWithNonExistentUsernameAndValidDataTest() throws Exception {
-        when(tourGuideService.updateUserPreferences(anyString(),any(UserPreferences.class))).thenThrow(ElementNotFoundException.class);
+        when(userService.updateUserPreferences(anyString(),any(UserPreferences.class))).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(put("/profile/preferences?username=" + user.getUsername())
                 .content(new ObjectMapper().writeValueAsString(userPreferences))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -115,15 +122,36 @@ public class UserWebControllerTest {
 
     @Test
     void getUserRewardsWithExistingUsernameTest() throws Exception {
-        when(tourGuideService.getUserRewards(anyString())).thenReturn(userRewards);
+        when(userService.getUserRewards(anyString())).thenReturn(userRewards);
         mockMvc.perform(get("/profile/rewards?username=" + user.getUsername()))
                 .andExpect(status().isOk());
     }
 
     @Test
     void getUserRewardsWithNonExistentUsernameTest() throws Exception {
-        when(tourGuideService.getUserRewards(anyString())).thenThrow(ElementNotFoundException.class);
+        when(userService.getUserRewards(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/profile/rewards?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());
     }
+
+    // GET ATTRACTION INFORMATION TESTS //
+
+    @Test
+    void getExistingAttractionInformationTest() throws Exception {
+        when(locationService.getAttraction(anyString())).thenReturn(attraction);
+        mockMvc.perform(get("/attractions?attractionName=" + attraction.getAttractionName()))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getNonExistentAttractionInformationTest() throws Exception {
+        when(locationService.getAttraction(anyString())).thenThrow(ElementNotFoundException.class);
+        mockMvc.perform(get("/attractions?attractionName=" + attraction.getAttractionName()))
+                .andExpect(status().isNotFound());
+    }
+
+    // GET ATTRACTION PROPOSALS TESTS //
+
+    //TODO
+
 }

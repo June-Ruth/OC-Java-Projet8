@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
-@WebMvcTest
+@WebMvcTest(AttractionController.class)
 public class AttractionControllerTest {
 
     @Autowired
@@ -79,9 +79,10 @@ public class AttractionControllerTest {
 
     @Test
     void getAttractionProposalsWithExistingUser() throws Exception {
+        when(userService.getUser(anyString())).thenReturn(user);
         when(userService.getUserCurrentLocation(anyString())).thenReturn(visitedLocation);
         when(locationService.getFiveClosestAttractions(any(Location.class))).thenReturn(attractionList);
-        when(rewardsService.calculateRewards(any(Attraction.class))).thenReturn(3);
+        when(rewardsService.getAttractionRewardPoints(any(Attraction.class))).thenReturn(3);
         when(locationService.getUserDistanceFromAttraction(any(Location.class), anyDouble(), anyDouble())).thenReturn(2d);
         mockMvc.perform(get("/attractions/closest-five?username=" + user.getUsername()))
                 .andExpect(status().isOk());
@@ -90,7 +91,7 @@ public class AttractionControllerTest {
 
     @Test
     void getAttractionProposalsWithNonExistentgUser() throws Exception {
-        when(userService.getUserCurrentLocation(anyString())).thenThrow(ElementNotFoundException.class);
+        when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/attractions/closest-five?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());
     }

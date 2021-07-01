@@ -11,6 +11,10 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
+    public UserServiceImpl() {
+
+    }
+
     /**
      * @inheritDoc
      */

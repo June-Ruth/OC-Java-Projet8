@@ -9,5 +9,5 @@ public interface RewardsService {
      * @param attraction specified
      * @return rewards as int
      */
-    int calculateRewards(Attraction attraction);
+    int getAttractionRewardPoints(Attraction attraction);
 }

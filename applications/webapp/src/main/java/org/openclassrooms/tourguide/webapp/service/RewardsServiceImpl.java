@@ -10,14 +10,13 @@ public class RewardsServiceImpl implements RewardsService {
      * @inheritDoc
      */
     @Override
-    public int calculateRewards(Attraction attraction) {
+    public int getAttractionRewardPoints(Attraction attraction) {
         //TODO
         return 0;
     }
 
    /* @Override
     public int getAttractionRewardPoints(Attraction attraction) {
-        //TODO ; aller le chercher dans le calculate Rewards
         return 0;
     }*/
 }

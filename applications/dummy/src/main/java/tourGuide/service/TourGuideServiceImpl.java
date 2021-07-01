@@ -17,7 +17,6 @@ public class TourGuideServiceImpl /*implements TourGuideService */{
 		return executor;
 	}
 
-	private static final String tripPricerApiKey = "test-server-api-key";
 	private Map<String, User> internalUserMap;
 
 	public TourGuideServiceImpl(GpsUtil gpsUtil, RewardsService rewardsService) {
@@ -42,14 +41,7 @@ public class TourGuideServiceImpl /*implements TourGuideService */{
 		tracker.stopTracking();
 	}
 
-	@Override
-	public List<Provider> getTripDeals(User user) {
-		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(UserReward::getRewardPoints).sum();
-		List<Provider> providers = tripPricer.getPrice(tripPricerApiKey, user.getUserId(), user.getUserPreferences().getNumberOfAdults(), 
-				user.getUserPreferences().getNumberOfChildren(), user.getUserPreferences().getTripDuration(), cumulatativeRewardPoints);
-		user.setTripDeals(providers);
-		return providers;
-	}
+
 
 	@Override
 	public CompletableFuture<?> trackUserLocation(User user) {

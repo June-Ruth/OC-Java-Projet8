@@ -18,8 +18,8 @@ import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.models.model.user.UserReward;
 
 @Service
-public class RewardsServiceImpl implements RewardsService {
-    private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
+public class RewardsServiceImpl /* implements RewardsService */ {
+   /* private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 
 	// proximity in miles
     private int defaultProximityBuffer = 10;
@@ -126,6 +126,6 @@ public class RewardsServiceImpl implements RewardsService {
         double nauticalMiles = 60 * Math.toDegrees(angle);
         double statuteMiles = STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
         return statuteMiles;
-	}
+	}*/
 
 }

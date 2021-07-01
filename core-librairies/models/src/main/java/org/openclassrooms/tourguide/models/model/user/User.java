@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.DateDeserializers;
 import com.fasterxml.jackson.databind.ser.std.DateSerializer;
 import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
-import tripPricer.Provider;
+import org.openclassrooms.tourguide.models.model.trip.Provider;
 
 public class User {
 	private UUID userId;

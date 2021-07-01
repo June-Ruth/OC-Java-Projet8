@@ -21,7 +21,8 @@ public class DtoConverter {
 
     public static NearAttractionDto convertAttractionToNearAttractionDto(final Attraction attraction,
                                                                          final Location userCurrentLocation,
-                                                                         final int rewardPoints) {
+                                                                         final int rewardPoints,
+                                                                         final double userDistanceFromAttraction) {
         NearAttractionDto nearAttractionDTO = new NearAttractionDto();
         nearAttractionDTO.setAttractionName(attraction.getAttractionName());
         nearAttractionDTO.setAttractionLatitude(attraction.getLatitude());
@@ -29,6 +30,7 @@ public class DtoConverter {
         nearAttractionDTO.setUserLatitude(userCurrentLocation.getLatitude());
         nearAttractionDTO.setUserLongitude(userCurrentLocation.getLongitude());
         nearAttractionDTO.setAttractionRewardPoints(rewardPoints);
+        nearAttractionDTO.setUserDistanceFromLocation(userDistanceFromAttraction);
         return nearAttractionDTO;
     }
 }

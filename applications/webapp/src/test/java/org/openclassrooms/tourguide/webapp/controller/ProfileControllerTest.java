@@ -3,7 +3,6 @@ package org.openclassrooms.tourguide.webapp.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.models.model.user.UserPreferences;
 import org.openclassrooms.tourguide.models.model.user.UserReward;
@@ -29,8 +28,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
-@WebMvcTest(UserWebController.class)
-public class UserWebControllerTest {
+@WebMvcTest(ProfileController.class)
+public class ProfileControllerTest {
 
     /* NB : here, we no test what happens in case of invalid data for updating user information or preferences
     because we don't have any information about what means valid or invalid.*/
@@ -48,22 +47,12 @@ public class UserWebControllerTest {
     private static final UUID uuid1 = UUID.randomUUID();
     private static UserPreferences userPreferences;
     private static List<UserReward> userRewards;
-    private static Attraction attraction;
 
     @BeforeAll
     static void beforeAll() {
         user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
         userPreferences = new UserPreferences();
         userRewards = new ArrayList<>();
-        attraction = new Attraction("attractionName", "city", "state", 2d, 2d);
-    }
-
-    // HOME PAGE TESTS //
-
-    @Test
-    void homePageTest() throws Exception {
-        mockMvc.perform(get("/home"))
-                .andExpect(status().isOk());
     }
 
     // GET USER PROFILE TESTS //
@@ -133,25 +122,4 @@ public class UserWebControllerTest {
         mockMvc.perform(get("/profile/rewards?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());
     }
-
-    // GET ATTRACTION INFORMATION TESTS //
-
-    @Test
-    void getExistingAttractionInformationTest() throws Exception {
-        when(locationService.getAttraction(anyString())).thenReturn(attraction);
-        mockMvc.perform(get("/attractions?attractionName=" + attraction.getAttractionName()))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void getNonExistentAttractionInformationTest() throws Exception {
-        when(locationService.getAttraction(anyString())).thenThrow(ElementNotFoundException.class);
-        mockMvc.perform(get("/attractions?attractionName=" + attraction.getAttractionName()))
-                .andExpect(status().isNotFound());
-    }
-
-    // GET ATTRACTION PROPOSALS TESTS //
-
-    //TODO
-
 }

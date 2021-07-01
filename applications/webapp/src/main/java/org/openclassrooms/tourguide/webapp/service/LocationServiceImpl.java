@@ -24,6 +24,27 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public List<Attraction> getFiveClosestAttractions(final Location location) {
         //TODO
+
+        /*double userCurrentLatitude = getUserCurrentLocation(username).location.latitude;
+        double userCurrentLongitude = getUserCurrentLocation(username).location.longitude;
+        List<Attraction> fiveNearestAttraction = new ArrayList<>();
+
+        List<Attraction> fiveClosestAttractions = webClientAttraction.get()
+                .uri("/attractions/closest-five?latitude=" + userCurrentLatitude + "&longitude=" + userCurrentLongitude)
+                .retrieve().bodyToFlux(Attraction.class).collectList().block();
+        return fiveClosestAttractions;*/
+
         return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public double getUserDistanceFromAttraction(final Location userLocation,
+                                                final double attractionLatitude,
+                                                final double attractionLongitude) {
+        //TODO
+        return 0;
     }
 }

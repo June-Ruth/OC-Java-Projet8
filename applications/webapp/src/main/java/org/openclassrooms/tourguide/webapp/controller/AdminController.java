@@ -14,13 +14,13 @@ import java.util.UUID;
 
 @RequestMapping("/admin")
 @RestController
-public class AdminWebController {
+public class AdminController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AdminWebController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
     private UserService userService;
 
-    public AdminWebController(final UserService userService1) {
+    public AdminController(final UserService userService1) {
         userService = userService1;
     }
 

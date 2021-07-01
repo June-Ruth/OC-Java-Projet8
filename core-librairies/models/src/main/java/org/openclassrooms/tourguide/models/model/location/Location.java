@@ -27,3 +27,4 @@ public class Location {
         latitude = latitude1;
     }
 }
+

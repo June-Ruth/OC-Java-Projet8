@@ -16,7 +16,7 @@ public class NearAttractionDto {
      * Distance between the user and the attraction.
      * In Miles.
      */
-    private double userDistanceFromLocation;
+    private double userDistanceFromAttraction;
 
     private int attractionRewardPoints;
 
@@ -63,11 +63,11 @@ public class NearAttractionDto {
     }
 
     public double getUserDistanceFromLocation() {
-        return userDistanceFromLocation;
+        return userDistanceFromAttraction;
     }
 
-    public void setUserDistanceFromLocation(final double userDistanceFromLocation1) {
-        userDistanceFromLocation = userDistanceFromLocation1;
+    public void setUserDistanceFromLocation(final double userDistanceFromAttraction1) {
+        userDistanceFromAttraction = userDistanceFromAttraction1;
     }
 
     public int getAttractionRewardPoints() {

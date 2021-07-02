@@ -3,13 +3,16 @@ package org.openclassrooms.tourguide.gpsapi.controller;
 import org.openclassrooms.tourguide.gpsapi.service.GpsService;
 import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.location.Location;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
 public class GpsController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GpsController.class);
 
     private final GpsService gpsService;
 
@@ -24,6 +27,7 @@ public class GpsController {
      */
     @GetMapping("/attractions/{attractionName}")
     public Attraction getAttractionInformation(@PathVariable String attractionName) {
+        LOGGER.info("Getting attraction " + attractionName);
         return gpsService.getAttraction(attractionName);
     }
 
@@ -34,6 +38,7 @@ public class GpsController {
      */
     @GetMapping("/attractions/closest-five")
     public Map<Double, Attraction> getFiveClosestAttractions(@RequestBody Location userCurrentLocation) {
+        LOGGER.info("Getting closest attraction from " + userCurrentLocation);
         Map<Double, Attraction> fiveNearestAttractions = gpsService.getFiveNearestAttractions(userCurrentLocation);
         return fiveNearestAttractions;
     }

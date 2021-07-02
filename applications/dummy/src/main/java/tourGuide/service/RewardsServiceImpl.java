@@ -19,7 +19,7 @@ import org.openclassrooms.tourguide.models.model.user.UserReward;
 
 @Service
 public class RewardsServiceImpl /* implements RewardsService */ {
-   /* private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
+  /*  private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 
 	// proximity in miles
     private int defaultProximityBuffer = 10;
@@ -107,10 +107,6 @@ public class RewardsServiceImpl /* implements RewardsService */ {
 
 	private boolean isNear(VisitedLocation visitedLocation, Attraction attraction) {
 		return !(getDistance(attraction, visitedLocation.location) > proximityBuffer);
-	}
-
-	private int getRewardPoints(Attraction attraction, User user) {
-		return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
 	}
 
 	@Override

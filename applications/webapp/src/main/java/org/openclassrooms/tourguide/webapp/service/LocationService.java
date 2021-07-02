@@ -3,7 +3,7 @@ package org.openclassrooms.tourguide.webapp.service;
 import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.location.Location;
 
-import java.util.List;
+import java.util.Map;
 
 public interface LocationService {
 
@@ -15,18 +15,9 @@ public interface LocationService {
     Attraction getAttraction(String attractionName);
 
     /**
-     * Get a list of the five closest attractions from the specified location.
+     * Get a list of the five closest attractions from the specified location with their distance.
      * @param location specified
-     * @return list of the five closest attractions
+     * @return map of the five closest attractions as value and the distance as key
      */
-    List<Attraction> getFiveClosestAttractions(Location location);
-
-    /**
-     * Get the distance between an user location and an attraction.
-     * @param userLocation of user concerned
-     * @param attractionLatitude of attraction concerned
-     * @param attractionLongitude of attraction concerned
-     * @return distance as double
-     */
-    double getUserDistanceFromAttraction(Location userLocation, double attractionLatitude, double attractionLongitude);
+    Map<Double, Attraction> getFiveClosestAttractionsWithDistance(Location location);
 }

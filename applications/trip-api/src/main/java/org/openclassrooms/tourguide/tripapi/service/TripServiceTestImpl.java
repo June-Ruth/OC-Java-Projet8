@@ -38,13 +38,14 @@ public class TripServiceTestImpl implements TripService {
                 .mapToInt(UserReward::getRewardPoints)
                 .sum();
 
-        List<tripPricer.Provider> libraryProviders = tripPricer.getPrice(tripPricerApiKey,
+        return tripPricer.getPrice(tripPricerApiKey,
                 user.getUserId(),
                 user.getUserPreferences().getNumberOfAdults(),
                 user.getUserPreferences().getNumberOfChildren(),
                 user.getUserPreferences().getTripDuration(),
-                cumulativeRewardPoints);
-
-        return libraryProviders.stream().map(FromLibraryToModelConvertor::convertProvider).collect(Collectors.toList());
+                cumulativeRewardPoints)
+                .stream()
+                .map(FromLibraryToModelConvertor::convertProvider)
+                .collect(Collectors.toList());
     }
 }

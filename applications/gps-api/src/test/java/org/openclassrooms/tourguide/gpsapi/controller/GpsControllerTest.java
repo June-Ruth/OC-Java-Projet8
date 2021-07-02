@@ -14,8 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -35,14 +35,14 @@ public class GpsControllerTest {
     private GpsService gpsService;
 
     private static Attraction attraction;
-    private static List<Attraction> attractionList = new ArrayList<>();
+    private static Map<Double, Attraction> attractionList = new HashMap<Double, Attraction>();
     private static Location userCurrentLocation;
 
     @BeforeAll
     static void beforeAll() {
         attraction = new Attraction("name", "city", "state", 1d, 1d);
         userCurrentLocation = new Location(2d, 2d);
-        attractionList.add(attraction);
+        attractionList.put(2d, attraction);
     }
 
     // GET ATTRACTION INFORMATION TESTS //
@@ -71,5 +71,4 @@ public class GpsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
-
 }

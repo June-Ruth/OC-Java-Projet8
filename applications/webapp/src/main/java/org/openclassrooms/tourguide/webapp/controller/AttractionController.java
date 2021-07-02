@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AttractionController {
@@ -58,18 +59,17 @@ public class AttractionController {
     public List<NearAttractionDto> getAttractionProposals(@RequestParam(name = "username") final String username) {
         LOGGER.info("Getting attraction proposals for user : " + username);
 
-        User user = userService.getUser(username);
-
         Location userCurrentLocation = userService.getUserCurrentLocation(username).getLocation();
-        List<Attraction> fiveClosestAttractions = locationService.getFiveClosestAttractions(userCurrentLocation);
 
+        Map<Double, Attraction> fiveClosestAttractions = locationService.getFiveClosestAttractionsWithDistance(userCurrentLocation);
         List<NearAttractionDto> fiveClosestAttractionsDto = new ArrayList<>();
-        for(Attraction attraction : fiveClosestAttractions) {
+
+        fiveClosestAttractions.forEach((distance, attraction) -> {
             int rewardPoints = rewardsService.getAttractionRewardPoints(attraction);
-            double userDistanceFromAttraction = locationService.getUserDistanceFromAttraction(userCurrentLocation, attraction.getLatitude(), attraction.getLongitude());
-            NearAttractionDto nearAttractionDTO = DtoConverter.convertAttractionToNearAttractionDto(attraction, userCurrentLocation, rewardPoints, userDistanceFromAttraction);
+            NearAttractionDto nearAttractionDTO = DtoConverter.convertAttractionToNearAttractionDto(attraction, userCurrentLocation, rewardPoints, distance);
             fiveClosestAttractionsDto.add(nearAttractionDTO);
-        }
+        });
+
         return fiveClosestAttractionsDto;
     }
 }

@@ -4,7 +4,7 @@ import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.location.Location;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Map;
 
 @Service
 public class LocationServiceImpl implements LocationService {
@@ -22,7 +22,7 @@ public class LocationServiceImpl implements LocationService {
      * @inheritDoc
      */
     @Override
-    public List<Attraction> getFiveClosestAttractions(final Location location) {
+    public Map<Double, Attraction> getFiveClosestAttractionsWithDistance(final Location location) {
         //TODO : WebClient Gps API - GPSController -> getFiveClosestAttractions -> GET : "/attractions/closest-five"
 
         /*
@@ -37,16 +37,5 @@ public class LocationServiceImpl implements LocationService {
         return fiveClosestAttractions;*/
 
         return null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public double getUserDistanceFromAttraction(final Location userLocation,
-                                                final double attractionLatitude,
-                                                final double attractionLongitude) {
-        //TODO
-        return 0;
     }
 }

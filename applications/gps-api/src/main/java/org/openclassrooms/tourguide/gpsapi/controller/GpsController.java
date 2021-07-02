@@ -6,6 +6,7 @@ import org.openclassrooms.tourguide.models.model.location.Location;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class GpsController {
@@ -32,8 +33,8 @@ public class GpsController {
      * @return list of attraction
      */
     @GetMapping("/attractions/closest-five")
-    public List<Attraction> getFiveClosestAttractions(@RequestBody Location userCurrentLocation) {
-        List<Attraction> fiveNearestAttractions = gpsService.getFiveNearestAttractions(userCurrentLocation);
+    public Map<Double, Attraction> getFiveClosestAttractions(@RequestBody Location userCurrentLocation) {
+        Map<Double, Attraction> fiveNearestAttractions = gpsService.getFiveNearestAttractions(userCurrentLocation);
         return fiveNearestAttractions;
     }
 }

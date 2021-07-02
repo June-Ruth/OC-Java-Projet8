@@ -19,7 +19,7 @@ public class TripsServiceImpl implements TripsService {
     public List<Provider> getTripDeals(User user) {
         List<Provider> providers = new ArrayList<>();
         //TODO : WebClient Trip API -> TripController -> getTripDeals -> GET : "/trips/{username}"
-        user.setTripDeals(providers);
+        user.setTripDeals(providers); //TODO : devrait appeler le user service puis user API pour update user
         return null;
     }
 }

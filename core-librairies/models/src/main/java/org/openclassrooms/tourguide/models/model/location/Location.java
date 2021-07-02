@@ -11,6 +11,8 @@ public class Location {
         longitude = longitude1;
     }
 
+    public Location() { }
+
     public double getLongitude() {
         return longitude;
     }

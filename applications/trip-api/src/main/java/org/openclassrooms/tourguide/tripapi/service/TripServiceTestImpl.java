@@ -47,7 +47,4 @@ public class TripServiceTestImpl implements TripService {
 
         return libraryProviders.stream().map(FromLibraryToModelConvertor::convertProvider).collect(Collectors.toList());
     }
-
-
-
 }

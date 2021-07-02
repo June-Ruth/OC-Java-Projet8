@@ -18,7 +18,7 @@ public class TripsServiceImpl implements TripsService {
     @Override
     public List<Provider> getTripDeals(User user) {
         List<Provider> providers = new ArrayList<>();
-        //TODO : WebClient Trip API -> TripController -> getTripDeals -> GET : "/trips/{username}
+        //TODO : WebClient Trip API -> TripController -> getTripDeals -> GET : "/trips/{username}"
         user.setTripDeals(providers);
         return null;
     }

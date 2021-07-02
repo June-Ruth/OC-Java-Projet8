@@ -1,6 +1,6 @@
 subdir("applications") {
     include("dummy")
-    include("localization")
+    include("gps-api")
     include("trip-api")
     include("user-api")
     include("webapp")

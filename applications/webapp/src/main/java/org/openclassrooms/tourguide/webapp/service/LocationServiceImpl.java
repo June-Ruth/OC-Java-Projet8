@@ -14,7 +14,7 @@ public class LocationServiceImpl implements LocationService {
      */
     @Override
     public Attraction getAttraction (final String attractionName) {
-        //TODO
+        //TODO : WebClient Gps API -> GpsController -> getAttractionInformation -> GET : "/attractions/{attractionName}"
         return null;
     }
 
@@ -23,9 +23,11 @@ public class LocationServiceImpl implements LocationService {
      */
     @Override
     public List<Attraction> getFiveClosestAttractions(final Location location) {
-        //TODO
+        //TODO : WebClient Gps API - GPSController -> getFiveClosestAttractions -> GET : "/attractions/closest-five"
 
-        /*double userCurrentLatitude = getUserCurrentLocation(username).location.latitude;
+        /*
+        EXEMPLE WEBCLIENT
+        double userCurrentLatitude = getUserCurrentLocation(username).location.latitude;
         double userCurrentLongitude = getUserCurrentLocation(username).location.longitude;
         List<Attraction> fiveNearestAttraction = new ArrayList<>();
 

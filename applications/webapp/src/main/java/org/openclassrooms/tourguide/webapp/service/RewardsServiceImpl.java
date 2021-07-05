@@ -1,13 +1,7 @@
 package org.openclassrooms.tourguide.webapp.service;
 
 import org.openclassrooms.tourguide.models.model.location.Attraction;
-import org.openclassrooms.tourguide.models.model.user.User;
-import org.openclassrooms.tourguide.models.model.user.UserReward;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class RewardsServiceImpl implements RewardsService {

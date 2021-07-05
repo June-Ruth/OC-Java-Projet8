@@ -2,7 +2,6 @@ package org.openclassrooms.tourguide.webapp.controller;
 
 import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.location.Location;
-import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.webapp.dto.NearAttractionDto;
 import org.openclassrooms.tourguide.webapp.service.LocationService;
 import org.openclassrooms.tourguide.webapp.service.RewardsService;

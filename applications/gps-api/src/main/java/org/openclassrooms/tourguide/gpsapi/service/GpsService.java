@@ -1,9 +1,8 @@
 package org.openclassrooms.tourguide.gpsapi.service;
 
 import org.openclassrooms.tourguide.models.model.location.Attraction;
-import org.openclassrooms.tourguide.models.model.location.Location;
 
-import java.util.Map;
+import java.util.List;
 
 public interface GpsService {
 
@@ -15,10 +14,9 @@ public interface GpsService {
     Attraction getAttraction(String attractionName);
 
     /**
-     * Get the closest five attractions to the userLocation, no matter how far away they are.
-     * @param location of the user
-     * @return map of attraction with distance from user as key
+     * Get all attractions.
+     * @return list of all attractions
      */
-    Map<Double, Attraction> getFiveNearestAttractions(Location location);
+    List<Attraction> getAllAttractions();
 
 }

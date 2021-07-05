@@ -2,12 +2,11 @@ package org.openclassrooms.tourguide.gpsapi.controller;
 
 import org.openclassrooms.tourguide.gpsapi.service.GpsService;
 import org.openclassrooms.tourguide.models.model.location.Attraction;
-import org.openclassrooms.tourguide.models.model.location.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 public class GpsController {
@@ -32,14 +31,12 @@ public class GpsController {
     }
 
     /**
-     * Get the closest five attractions to the userLocation, no matter how far away they are.
-     * @param userCurrentLocation as Location
-     * @return list of attraction
+     * Get all attractions.
+     * @return list of attractions
      */
-    @GetMapping("/attractions/closest-five")
-    public Map<Double, Attraction> getFiveClosestAttractions(@RequestBody Location userCurrentLocation) {
-        LOGGER.info("Getting closest attraction from " + userCurrentLocation);
-        Map<Double, Attraction> fiveNearestAttractions = gpsService.getFiveNearestAttractions(userCurrentLocation);
-        return fiveNearestAttractions;
+    @GetMapping("/attractions")
+    public List<Attraction> getAllAttractions() {
+        LOGGER.info("Getting all attractions");
+        return gpsService.getAllAttractions();
     }
 }

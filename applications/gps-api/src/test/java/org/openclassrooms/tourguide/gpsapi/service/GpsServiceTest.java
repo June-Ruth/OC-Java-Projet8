@@ -80,13 +80,6 @@ public class GpsServiceTest {
         assertThrows(ElementNotFoundException.class, () -> gpsService.getAttraction(attraction1.attractionName));
     }
 
-    // GET FIVE NEAREST ATTRACTIONS TEST //
 
-    @Test
-    void getFiveNearestAttractionsTest() {
-        when(gpsUtil.getAttractions()).thenReturn(attractionList);
-        Map<Double, org.openclassrooms.tourguide.models.model.location.Attraction> result = gpsService.getFiveNearestAttractions(new Location(1d, 1d));
-        assertEquals(5, result.size());
-    }
 
 }

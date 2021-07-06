@@ -25,10 +25,10 @@ public class LocationServiceImpl implements LocationService {
     }
 
     /**
-     * Get all the referenced attractions.
-     * @return list of all attractions
+     * @inheritDoc
      */
-    private List<Attraction> getAllAttractions() {
+    @Override
+    public List<Attraction> getAllAttractions() {
         LOGGER.info("Getting all referenced attraction");
         //TODO : WebClient Gps API -> GpsController -> getAllAttractions -> GET : "/attractions"
         return null;
@@ -48,14 +48,11 @@ public class LocationServiceImpl implements LocationService {
             distanceWithAttraction.put(distance, attraction);
         }
 
-        int i = 0;
-        while (i < 5) {
-            i++;
+        for (int i = 0; i < 5; i++) {
             Map.Entry<Double, Attraction> entry  = distanceWithAttraction.pollFirstEntry();
             nearestAttractions.put(entry.getKey(), entry.getValue());
         }
         return nearestAttractions;
-
         /*
         EXEMPLE WEBCLIENT
         double userCurrentLatitude = getUserCurrentLocation(username).location.latitude;

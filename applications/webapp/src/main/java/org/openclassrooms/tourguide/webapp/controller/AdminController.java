@@ -21,7 +21,7 @@ public class AdminController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminController.class);
 
-    private UserService userService;
+    private final UserService userService;
 
     public AdminController(final UserService userService1) {
         userService = userService1;

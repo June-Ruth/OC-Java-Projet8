@@ -17,6 +17,10 @@ public class VisitedLocation {
         timeVisited = timeVisited1;
     }
 
+    public VisitedLocation() {
+
+    }
+
     public UUID getUserId() {
         return userId;
     }

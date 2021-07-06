@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class AdminIT {
 
-    //TODO : voir comment param les différents bean notamment en param internal test helper
+    /* Before running IT, make sure that web clients are running and that internal helper is set up to 1.*/
 
     @Autowired
     private MockMvc mockMvc;

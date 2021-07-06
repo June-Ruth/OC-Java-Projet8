@@ -80,9 +80,10 @@ public class AttractionControllerTest {
 
     @Test
     void getAttractionProposalsWithExistingUser() throws Exception {
+        when(userService.getUser(anyString())).thenReturn(user);
         when(userService.getUserCurrentLocation(anyString())).thenReturn(visitedLocation);
         when(locationService.getFiveClosestAttractionsWithDistance(any(Location.class))).thenReturn(attractionList);
-        when(rewardsService.getAttractionRewardPoints(any(Attraction.class))).thenReturn(3);
+        when(rewardsService.getAttractionRewardPoints(any(Attraction.class), any(User.class))).thenReturn(3);
         mockMvc.perform(get("/attractions/closest-five?username=" + user.getUsername()))
                 .andExpect(status().isOk());
     }
@@ -90,7 +91,7 @@ public class AttractionControllerTest {
 
     @Test
     void getAttractionProposalsWithNonExistentgUser() throws Exception {
-        when(userService.getUserCurrentLocation(anyString())).thenThrow(ElementNotFoundException.class);
+        when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/attractions/closest-five?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());
     }

@@ -2,6 +2,7 @@ package org.openclassrooms.tourguide.webapp.controller;
 
 import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.location.Location;
+import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.webapp.dto.NearAttractionDto;
 import org.openclassrooms.tourguide.webapp.service.LocationService;
 import org.openclassrooms.tourguide.webapp.service.RewardsService;
@@ -58,13 +59,15 @@ public class AttractionController {
     public List<NearAttractionDto> getAttractionProposals(@RequestParam(name = "username") final String username) {
         LOGGER.info("Getting attraction proposals for user : " + username);
 
+        User user = userService.getUser(username);
+
         Location userCurrentLocation = userService.getUserCurrentLocation(username).getLocation();
 
         Map<Double, Attraction> fiveClosestAttractions = locationService.getFiveClosestAttractionsWithDistance(userCurrentLocation);
         List<NearAttractionDto> fiveClosestAttractionsDto = new ArrayList<>();
 
         fiveClosestAttractions.forEach((distance, attraction) -> {
-            int rewardPoints = rewardsService.getAttractionRewardPoints(attraction);
+            int rewardPoints = rewardsService.getAttractionRewardPoints(attraction, user);
             NearAttractionDto nearAttractionDTO = DtoConverter.convertAttractionToNearAttractionDto(attraction, userCurrentLocation, rewardPoints, distance);
             fiveClosestAttractionsDto.add(nearAttractionDTO);
         });

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -51,13 +52,13 @@ public class UserServiceImpl implements UserService {
         return webClientUserApi
                 .get()
                 .uri("/users/" + username + "/current-location")
-                .exchangeToMono(response -> {
-                    if(response.statusCode().is2xxSuccessful()) {
-                        return response.bodyToMono(VisitedLocation.class);
-                    } else if(response.statusCode().equals(HttpStatus.NOT_FOUND)) {
-                        throw new ElementNotFoundException("username not found");
+                .exchangeToMono(clientResponse -> {
+                    if(clientResponse.statusCode().equals(HttpStatus.OK)) {
+                        return clientResponse.bodyToMono(VisitedLocation.class);
+                    } else if(clientResponse.statusCode().equals(HttpStatus.NOT_FOUND)) {
+                        throw new ElementNotFoundException("username : " + username + " not found");
                     } else {
-                        return response.createException()
+                        return clientResponse.createException()
                                 .flatMap(Mono::error);
                     }
                 })
@@ -68,36 +69,94 @@ public class UserServiceImpl implements UserService {
     /**
      * @inheritDoc
      */
+    //TODO : check test
     @Override
     public User getUser(String username) {
-        //TODO : WebClient User API -> UserController -> getUser -> GET : "/users/{username}
-        return null;
+        LOGGER.info("Getting user with username : " + username);
+        return webClientUserApi
+                .get()
+                .uri("/users/" + username)
+                .exchangeToMono(clientResponse -> {
+                    if(clientResponse.statusCode().equals(HttpStatus.OK)) {
+                        return clientResponse.bodyToMono(User.class);
+                    } else if(clientResponse.statusCode().equals(HttpStatus.NOT_FOUND)) {
+                        throw new ElementNotFoundException("username : " + username + " not found");
+                    } else {
+                        return clientResponse.createException()
+                                .flatMap(Mono::error);
+                    }
+                })
+                .block();
     }
 
     /**
      * @inheritDoc
      */
+    //TODO : check test
     @Override
     public UserPreferences getUserPreferences(String username) {
-        //TODO : WebClient User API -> UserController -> getUserPreferences -> GET : "/users/{username}/preferences
-        return null;
+        LOGGER.info("Getting user preferences for user : " + username);
+        return webClientUserApi
+                .get()
+                .uri("/users/" + username + "/preferences")
+                .exchangeToMono(clientResponse -> {
+                    if(clientResponse.statusCode().equals(HttpStatus.OK)) {
+                        return clientResponse.bodyToMono(UserPreferences.class);
+                    } else if(clientResponse.statusCode().equals(HttpStatus.NOT_FOUND)) {
+                        throw new ElementNotFoundException("username : " + username + " not found");
+                    } else {
+                        return clientResponse.createException()
+                                .flatMap(Mono::error);
+                    }
+                })
+                .block();
     }
 
     /**
      * @inheritDoc
      */
+    //TODO : check test
     @Override
     public UserPreferences updateUserPreferences(String username, UserPreferences updatedPreferences) {
-        //TODO : WebClient User API -> UserController -> getUserPreferences -> PUT : "/users/{username}/preferences
-        return null;
+        LOGGER.info("Update user : " + username + " with updated preferences : " + updatedPreferences);
+        return webClientUserApi
+                .put()
+                .uri("/users/" + username + "/preferences")
+                .body(Mono.just(updatedPreferences), UserPreferences.class)
+                .exchangeToMono(clientResponse -> {
+                    if(clientResponse.statusCode().equals(HttpStatus.OK)) {
+                        return clientResponse.bodyToMono(UserPreferences.class);
+                    } else if(clientResponse.statusCode().equals(HttpStatus.NOT_FOUND)) {
+                        throw new ElementNotFoundException("username : " + username + " not found");
+                    } else {
+                        return clientResponse.createException()
+                                .flatMap(Mono::error);
+                    }
+                })
+                .block();
     }
 
     /**
      * @inheritDoc
      */
+    //TODO : check test
     @Override
     public List<UserReward> getUserRewards(String username) {
-        //TODO : WebClient User API -> UserController -> getUserRewards -> GET : "/users/{username}/rewards
-        return null;
+        LOGGER.info("Getting user rewards for user : " + username);
+        return webClientUserApi
+                .get()
+                .uri("/users/" + username + "/rewards")
+                .exchangeToFlux(clientResponse -> {
+                    if(clientResponse.statusCode().equals(HttpStatus.OK)) {
+                        return clientResponse.bodyToFlux(UserReward.class);
+                    } else if(clientResponse.statusCode().equals(HttpStatus.NOT_FOUND)) {
+                        throw new ElementNotFoundException("username : " + username + " not found");
+                    } else {
+                        return clientResponse.createException()
+                                .flatMapMany(Flux::error);
+                    }
+                })
+                .collectList()
+                .block();
     }
 }

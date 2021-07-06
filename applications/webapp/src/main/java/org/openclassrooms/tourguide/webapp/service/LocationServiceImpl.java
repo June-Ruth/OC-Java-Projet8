@@ -2,9 +2,14 @@ package org.openclassrooms.tourguide.webapp.service;
 
 import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.location.Location;
+import org.openclassrooms.tourguide.webapp.exception.ElementNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
@@ -15,23 +20,49 @@ public class LocationServiceImpl implements LocationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LocationServiceImpl.class);
 
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public Attraction getAttraction (final String attractionName) {
-        //TODO : WebClient Gps API -> GpsController -> getAttractionInformation -> GET : "/attractions/{attractionName}"
-        return null;
+    private final WebClient webClientGpsApi;
+
+    public LocationServiceImpl(@Qualifier("getWebClientGpsApi") final WebClient webClientGpsApi1) {
+        webClientGpsApi = webClientGpsApi1;
     }
 
     /**
      * @inheritDoc
      */
+    //TODO : check test
+    @Override
+    public Attraction getAttraction (final String attractionName) {
+        LOGGER.info("Getting attraction with name : " + attractionName);
+        return webClientGpsApi
+                .get()
+                .uri("/attractions/" + attractionName)
+                .exchangeToMono(clientResponse -> {
+                            if(clientResponse.statusCode().equals(HttpStatus.OK)) {
+                                return clientResponse.bodyToMono(Attraction.class);
+                            } else if(clientResponse.statusCode().equals(HttpStatus.NOT_FOUND)) {
+                                throw new ElementNotFoundException("attraction with name : " + attractionName + " not found");
+                            } else {
+                                return clientResponse.createException()
+                                        .flatMap(Mono::error);
+                            }
+                })
+                .block();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    //TODO : check test
     @Override
     public List<Attraction> getAllAttractions() {
         LOGGER.info("Getting all referenced attraction");
-        //TODO : WebClient Gps API -> GpsController -> getAllAttractions -> GET : "/attractions"
-        return null;
+        return webClientGpsApi
+                .get()
+                .uri("/attractions")
+                .retrieve()
+                .bodyToFlux(Attraction.class)
+                .collectList()
+                .block();
     }
 
     /**
@@ -53,16 +84,6 @@ public class LocationServiceImpl implements LocationService {
             nearestAttractions.put(entry.getKey(), entry.getValue());
         }
         return nearestAttractions;
-        /*
-        EXEMPLE WEBCLIENT
-        double userCurrentLatitude = getUserCurrentLocation(username).location.latitude;
-        double userCurrentLongitude = getUserCurrentLocation(username).location.longitude;
-        List<Attraction> fiveNearestAttraction = new ArrayList<>();
-
-        List<Attraction> fiveClosestAttractions = webClientAttraction.get()
-                .uri("/attractions/closest-five?latitude=" + userCurrentLatitude + "&longitude=" + userCurrentLongitude)
-                .retrieve().bodyToFlux(Attraction.class).collectList().block();
-        return fiveClosestAttractions;*/
     }
 
     private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;

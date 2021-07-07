@@ -1,21 +1,8 @@
 package tourGuide.tracker;
 
-import org.apache.commons.lang3.time.StopWatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.openclassroom.tourguide.model.User;
-import tourGuide.service.TourGuideService;
+public class Tracker /*implements Runnable*/ {
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-public class Tracker implements Runnable {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Tracker.class);
+   /* private static final Logger LOGGER = LoggerFactory.getLogger(Tracker.class);
 
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final AtomicBoolean running = new AtomicBoolean(false);
@@ -79,7 +66,7 @@ public class Tracker implements Runnable {
                 break;
             }
         }
-    }
+    }*/
 
 
 }

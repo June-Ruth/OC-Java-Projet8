@@ -2,8 +2,7 @@ package tourGuide.service;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
-import org.openclassroom.tourguide.model.User;
-import org.openclassroom.tourguide.model.UserReward;
+import org.openclassrooms.tourguide.models.model.user.User;
 import tripPricer.Provider;
 
 import java.util.List;
@@ -11,16 +10,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
 public interface TourGuideService {
-
-    List<UserReward> getUserRewards(User user);
-
-    VisitedLocation getUserLocation(User user);
-
-    User getUser(String userName);
-
-    List<User> getAllUsers();
-
-    void addUser(User user);
 
     List<Provider> getTripDeals(User user);
 
@@ -31,8 +20,6 @@ public interface TourGuideService {
     ExecutorService getExecutor();
 
     void stopTracker();
-
-    void clearVisitedLocationsOfUser(User user);
 
     VisitedLocation addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user);
 

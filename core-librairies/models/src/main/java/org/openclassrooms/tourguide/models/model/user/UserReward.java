@@ -15,7 +15,6 @@ public class UserReward {
 		this.rewardPoints = rewardPoints;
 	}
 
-	//TODO : pourquoi ?
 	public UserReward(VisitedLocation visitedLocation, Attraction attraction) {
 		this.visitedLocation = visitedLocation;
 		this.attraction = attraction;

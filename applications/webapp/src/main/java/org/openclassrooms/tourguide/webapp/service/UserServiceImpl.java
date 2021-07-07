@@ -69,7 +69,6 @@ public class UserServiceImpl implements UserService {
     /**
      * @inheritDoc
      */
-    //TODO : check test
     @Override
     public User getUser(String username) {
         LOGGER.info("Getting user with username : " + username);
@@ -92,7 +91,6 @@ public class UserServiceImpl implements UserService {
     /**
      * @inheritDoc
      */
-    //TODO : check test
     @Override
     public UserPreferences getUserPreferences(String username) {
         LOGGER.info("Getting user preferences for user : " + username);
@@ -115,7 +113,6 @@ public class UserServiceImpl implements UserService {
     /**
      * @inheritDoc
      */
-    //TODO : check test
     @Override
     public UserPreferences updateUserPreferences(String username, UserPreferences updatedPreferences) {
         LOGGER.info("Update user : " + username + " with updated preferences : " + updatedPreferences);
@@ -139,7 +136,6 @@ public class UserServiceImpl implements UserService {
     /**
      * @inheritDoc
      */
-    //TODO : check test
     @Override
     public List<UserReward> getUserRewards(String username) {
         LOGGER.info("Getting user rewards for user : " + username);

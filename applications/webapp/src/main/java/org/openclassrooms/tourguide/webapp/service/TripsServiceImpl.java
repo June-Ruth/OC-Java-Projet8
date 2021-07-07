@@ -28,7 +28,6 @@ public class TripsServiceImpl implements TripsService {
     /**
      * @inheritDoc
      */
-    //TODO : check test
     @Override
     public List<Provider> getTripDeals(User user) {
         LOGGER.info("Getting trip deals for user " + user.getUsername());

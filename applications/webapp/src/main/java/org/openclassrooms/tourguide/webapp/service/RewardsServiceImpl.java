@@ -22,7 +22,6 @@ public class RewardsServiceImpl implements RewardsService {
     /**
      * @inheritDoc
      */
-    //TODO : check test
     @Override
     public int getAttractionRewardPoints(final Attraction attraction, final User user) {
         LOGGER.info("Get attraction reward points for attraction "

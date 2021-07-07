@@ -29,7 +29,6 @@ public class LocationServiceImpl implements LocationService {
     /**
      * @inheritDoc
      */
-    //TODO : check test
     @Override
     public Attraction getAttraction (final String attractionName) {
         LOGGER.info("Getting attraction with name : " + attractionName);
@@ -52,7 +51,6 @@ public class LocationServiceImpl implements LocationService {
     /**
      * @inheritDoc
      */
-    //TODO : check test
     @Override
     public List<Attraction> getAllAttractions() {
         LOGGER.info("Getting all referenced attraction");

@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.openclassrooms.tourguide.models.model.location.Location;
 import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserPreferences;
 import org.openclassrooms.tourguide.userapi.exception.ElementAlreadyExistingException;
 import org.openclassrooms.tourguide.userapi.exception.ElementNotFoundException;
 import org.openclassrooms.tourguide.userapi.repository.UserRepository;
@@ -36,7 +37,7 @@ public class UserServiceTest {
     @BeforeEach
     private void beforeEach() {
         userService = new UserServiceImpl(userRepository);
-        user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
+        user = new User(uuid1, "userName", "phoneNumber", "emailAddress",  Date.from(Instant.now()), new ArrayList<>(), new ArrayList<>(), new UserPreferences(), new ArrayList<>());
         allUsers.add(user);
     }
 

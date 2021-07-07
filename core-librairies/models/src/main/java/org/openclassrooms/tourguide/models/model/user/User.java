@@ -35,12 +35,25 @@ public class User {
 
 	private List<Provider> tripDeals = new ArrayList<>();
 
-	//TODO : voir pourquoi pas un constructeur avec tous les params ?
-	public User(UUID userId, String username, String phoneNumber, String emailAddress) {
-		this.userId = userId;
-		this.username = username;
-		this.phoneNumber = phoneNumber;
-		this.emailAddress = emailAddress;
+
+	public User(final UUID userId1,
+				final String username1,
+				final String phoneNumber1,
+				final String emailAddress1,
+				final Date latestLocationTimestamp1,
+				final List<VisitedLocation> visitedLocations1,
+				final List<UserReward> userRewards1,
+				final UserPreferences userPreferences1,
+				final List<Provider> tripDeals1) {
+		userId = userId1;
+		username = username1;
+		phoneNumber = phoneNumber1;
+		emailAddress = emailAddress1;
+		latestLocationTimestamp = latestLocationTimestamp1;
+		visitedLocations = visitedLocations1;
+		userRewards = userRewards1;
+		userPreferences = userPreferences1;
+		tripDeals =tripDeals1;
 	}
 
 	public User() { }

@@ -1,5 +1,4 @@
 subdir("applications") {
-    include("dummy")
     include("gps-api")
     include("reward-api")
     include("trip-api")

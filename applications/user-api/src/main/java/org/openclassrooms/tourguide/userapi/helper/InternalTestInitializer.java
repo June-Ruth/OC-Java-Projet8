@@ -2,11 +2,15 @@ package org.openclassrooms.tourguide.userapi.helper;
 
 import org.openclassrooms.tourguide.models.model.location.Location;
 import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
+import org.openclassrooms.tourguide.models.model.trip.Provider;
 import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserPreferences;
+import org.openclassrooms.tourguide.models.model.user.UserReward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
@@ -31,7 +35,12 @@ public class InternalTestInitializer {
             String userName = "internalUser" + i;
             String phone = "000";
             String email = userName + "@tourGuide.com";
-            User user = new User(UUID.randomUUID(), userName, phone, email);
+            Date date = Date.from(Instant.now());
+            List<VisitedLocation> visitedLocations = new ArrayList<>();
+            List<UserReward> userRewards = new ArrayList<>();
+            UserPreferences userPreferences = new UserPreferences();
+            List<Provider> providerList = new ArrayList<>();
+            User user = new User(UUID.randomUUID(), userName, phone, email, date, visitedLocations, userRewards, userPreferences, providerList);
             generateUserLocationHistory(user);
 
             internalUserMap.put(userName, user);

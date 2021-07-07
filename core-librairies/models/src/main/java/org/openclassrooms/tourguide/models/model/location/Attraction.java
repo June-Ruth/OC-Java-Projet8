@@ -21,6 +21,10 @@ public class Attraction extends Location {
         attractionId = UUID.randomUUID();
     }
 
+    public Attraction() {
+
+    }
+
     public String getAttractionName() {
         return attractionName;
     }

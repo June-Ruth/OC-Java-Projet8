@@ -19,13 +19,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Disabled
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ProfileIT {
 
-    //TODO : voir comment param les différents bean notamment en param internal test helper
+    /* Before running IT, make sure that web clients are running and that internal helper is set up to 1.*/
+
+    /* NB : here, we no test what happens in case of invalid data for updating user information or preferences
+    because we don't have any information about what means valid or invalid.*/
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,10 +44,11 @@ public class ProfileIT {
         userPreferences = new UserPreferences();
     }
 
+    // GET USER PROFILE IT //
+
     @Test
-    void getUserProfileIT() throws Exception {
-        String username = "username";
-        // TODO voir pour correspondre avec l'initializer
+    void getUserProfileWithExistingUsernameIT() throws Exception {
+        String username = "internalUser1"; //depending on initializer
         mockMvc.perform(get("/profile?username=" + username))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -53,9 +56,19 @@ public class ProfileIT {
     }
 
     @Test
-    void getUserPreferencesIT() throws Exception {
-        String username = "username";
-        // TODO voir pour correspondre avec l'initializer
+    void getUserProfileWithNonExistentUsernameIT() throws Exception {
+        String username = "non existent";
+        mockMvc.perform(get("/profile?username=" + username))
+                .andExpect(status().isNotFound())
+                .andExpect(handler().methodName("getUserProfile"));
+    }
+
+
+    // GET USER PREFERENCES IT //
+
+    @Test
+    void getUserPreferencesWithExistingUsernameIT() throws Exception {
+        String username = "internalUser1"; //depending on initializer
         mockMvc.perform(get("/profile/preferences?username=" + username))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -63,9 +76,18 @@ public class ProfileIT {
     }
 
     @Test
-    void updateUserPreferencesIT() throws Exception {
-        String username = "username";
-        // TODO voir pour correspondre avec l'initializer
+    void getUserPreferencesWithNonExistentUsernameIT() throws Exception {
+        String username = "non existent";
+        mockMvc.perform(get("/profile/preferences?username=" + username))
+                .andExpect(status().isNotFound())
+                .andExpect(handler().methodName("getUserPreferences"));
+    }
+
+    // UPDATE USER PREFERENCES IT //
+
+    @Test
+    void updateUserPreferencesWithExistingUsernameAndValidDataIT() throws Exception {
+        String username = "internalUser1"; //depending on initializer
         mockMvc.perform(put("/profile/preferences?username=" + username)
                 .content(new ObjectMapper().writeValueAsString(userPreferences))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -75,12 +97,32 @@ public class ProfileIT {
     }
 
     @Test
-    void getUserRewardsIT() throws Exception {
-        String username = "username";
-        // TODO voir pour correspondre avec l'initializer
+    void updateUserPreferencesWithNonExistentUsernameAndValidDataIT() throws Exception {
+        String username = "non existent";
+        mockMvc.perform(put("/profile/preferences?username=" + username)
+                .content(new ObjectMapper().writeValueAsString(userPreferences))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(handler().methodName("updateUserPreferences"));
+    }
+
+    // GET USER REWARDS IT //
+
+    @Test
+    void getUserRewardsWithExistingUsernameIT() throws Exception {
+        String username = "internalUser1"; //depending on initializer
         mockMvc.perform(get("/profile/rewards?username=" + username))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(handler().methodName("getUserRewards"));
     }
+
+    @Test
+    void getUserRewardsWithNonExistentUsernameIT() throws Exception {
+        String username = "non existent";
+        mockMvc.perform(get("/profile/rewards?username=" + username))
+                .andExpect(status().isNotFound())
+                .andExpect(handler().methodName("getUserRewards"));
+    }
+
 }

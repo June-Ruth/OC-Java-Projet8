@@ -16,6 +16,8 @@ public class Provider {
         tripId = tripId1;
     }
 
+    public Provider() { }
+
     public UUID getTripId() {
         return tripId;
     }

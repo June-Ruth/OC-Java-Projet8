@@ -16,7 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,7 +52,7 @@ public class ProfileControllerTest {
 
     @BeforeAll
     static void beforeAll() {
-        user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
+        user = new User(uuid1, "userName", "phoneNumber", "emailAddress",  Date.from(Instant.now()), new ArrayList<>(), new ArrayList<>(), new UserPreferences(), new ArrayList<>());
         userPreferences = new UserPreferences();
         userRewards = new ArrayList<>();
     }
@@ -107,7 +109,7 @@ public class ProfileControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // GET USER PREFERENCES TESTS //
+    // GET USER REWARDS TESTS //
 
     @Test
     void getUserRewardsWithExistingUsernameTest() throws Exception {

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.openclassrooms.tourguide.models.model.location.Location;
 import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserPreferences;
 import org.openclassrooms.tourguide.webapp.exception.ElementNotFoundException;
 import org.openclassrooms.tourguide.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class AdminControllerTest {
 
     @BeforeAll
     static void beforeAll() {
-        user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
+        user = new User(uuid1, "userName", "phoneNumber", "emailAddress",  Date.from(Instant.now()), new ArrayList<>(), new ArrayList<>(), new UserPreferences(), new ArrayList<>());
         visitedLocation = new VisitedLocation(UUID.randomUUID(), new Location(2d, 2d), Date.from(Instant.now()));
         visitedLocationList = new ArrayList<>();
         visitedLocationList.add(visitedLocation);

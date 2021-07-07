@@ -6,6 +6,7 @@ import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.location.Location;
 import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserPreferences;
 import org.openclassrooms.tourguide.webapp.exception.ElementNotFoundException;
 import org.openclassrooms.tourguide.webapp.service.LocationService;
 import org.openclassrooms.tourguide.webapp.service.RewardsService;
@@ -17,10 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -52,7 +50,7 @@ public class AttractionControllerTest {
 
     @BeforeAll
     static void beforeAll() {
-        user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
+        user = new User(uuid1, "userName", "phoneNumber", "emailAddress", Date.from(Instant.now()), new ArrayList<>(), new ArrayList<>(), new UserPreferences(), new ArrayList<>());
         attraction = new Attraction("attractionName", "city", "state", 2d, 2d);
         visitedLocation = new VisitedLocation(UUID.randomUUID(), new Location(2d, 2d), Date.from(Instant.now()));
         attractionList = new HashMap<>();
@@ -79,7 +77,7 @@ public class AttractionControllerTest {
     // GET ATTRACTION PROPOSALS TESTS //
 
     @Test
-    void getAttractionProposalsWithExistingUser() throws Exception {
+    void getAttractionProposalsWithExistingUserTest() throws Exception {
         when(userService.getUser(anyString())).thenReturn(user);
         when(userService.getUserCurrentLocation(anyString())).thenReturn(visitedLocation);
         when(locationService.getFiveClosestAttractionsWithDistance(any(Location.class))).thenReturn(attractionList);
@@ -90,7 +88,7 @@ public class AttractionControllerTest {
 
 
     @Test
-    void getAttractionProposalsWithNonExistentgUser() throws Exception {
+    void getAttractionProposalsWithNonExistentUserTest() throws Exception {
         when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/attractions/closest-five?username=" + user.getUsername()))
                 .andExpect(status().isNotFound());

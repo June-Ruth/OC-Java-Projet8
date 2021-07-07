@@ -4,10 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserPreferences;
 import org.openclassrooms.tourguide.userapi.helper.InternalTestHelper;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,7 +31,7 @@ public class UserRepositoryTest {
     void beforeEach() {
         InternalTestHelper.setInternalUserNumber(99);
         userRepository = new UserRepositoryTestImpl();
-        user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
+        user = new User(uuid1, "userName", "phoneNumber", "emailAddress",  Date.from(Instant.now()), new ArrayList<>(), new ArrayList<>(), new UserPreferences(), new ArrayList<>());
     }
 
     // FIND ALL TESTS //
@@ -48,7 +52,8 @@ public class UserRepositoryTest {
 
     @Test
     void findNonExistentUserByUsernameTest() {
-        assertThrows(NullPointerException.class, () -> userRepository.findByUsername(user.getUsername()));
+        Optional<User> retrievedUser = userRepository.findByUsername(user.getUsername());
+        assertEquals(Optional.empty(), retrievedUser);
     }
 
     // EXISTS BY USERNAME TESTS //

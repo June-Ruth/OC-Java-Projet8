@@ -1,11 +1,8 @@
 package org.openclassrooms.tourguide.webapp.integration;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -32,9 +29,16 @@ public class AdminIT {
         Locale.setDefault(Locale.US);
     }
 
-    @BeforeEach
-    public void beforeEach() {
+    // HOME PAGE IT //
+
+    @Test
+    void homePageTest() throws Exception {
+        mockMvc.perform(get("/admin/home"))
+                .andExpect(status().isOk())
+                .andExpect(handler().methodName("homePage"));
     }
+
+    // GET ALL USERS CURRENT LOCATIONS IT //
 
     @Test
     void getAllUsersCurrentLocationsIT() throws Exception {
@@ -43,6 +47,8 @@ public class AdminIT {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(handler().methodName("getAllUsersCurrentLocations"));
     }
+
+    // GET USER LOCATION IT //
 
     @Test
     void getExistingUserLocationIT() throws Exception {
@@ -54,5 +60,12 @@ public class AdminIT {
                 .andExpect(handler().methodName("getUserLocation"));
     }
 
-    //TODO : non existent user ?
+    @Test
+    void getNonExistentUserLocationIT() throws Exception {
+        String username = "non existent";
+
+        mockMvc.perform(get("/admin/users/current-location?username=" + username))
+                .andExpect(status().isNotFound())
+                .andExpect(handler().methodName("getUserLocation"));
+    }
 }

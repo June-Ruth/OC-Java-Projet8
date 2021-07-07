@@ -50,7 +50,7 @@ public class UserControllerTest {
 
     @BeforeAll
     static void beforeAll() {
-        user = new User(uuid1, "userName", "phoneNumber", "emailAddress");
+        user = new User(uuid1, "userName", "phoneNumber", "emailAddress",  Date.from(Instant.now()), new ArrayList<>(), new ArrayList<>(), new UserPreferences(), new ArrayList<>());
         userPreferences = new UserPreferences();
         visitedLocation = new VisitedLocation(UUID.randomUUID(), new Location(2d, 2d), Date.from(Instant.now()));
         visitedLocationList = new ArrayList<>();

@@ -1,8 +1,6 @@
 package org.openclassrooms.tourguide.webapp.integration;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,13 +16,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-@Disabled
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AttractionIT {
 
-    //TODO : voir comment param les différents bean notamment en param internal test helper
+    /* Before running IT, make sure that web clients are running and that internal helper is set up to 1.*/
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,16 +31,13 @@ public class AttractionIT {
         Locale.setDefault(Locale.US);
     }
 
-    @BeforeEach
-    public void beforeEach() {
-    }
+    // GET ATTRACTION INFORMATION IT //
 
     @Test
-    void getAttractionInformationIT() throws Exception {
-        String attractionName = "username";
-        // TODO voir pour correspondre avec l'existant'
+    void getExistingAttractionInformationIT() throws Exception {
+        String attractionName = "Disneyland"; //depending on GpsUtil
 
-        mockMvc.perform(get("/attractions?attractionName="))
+        mockMvc.perform(get("/attractions?attractionName=" + attractionName))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(handler().methodName("getAttractionInformation"))
@@ -51,13 +45,32 @@ public class AttractionIT {
     }
 
     @Test
-    void getAttractionProposalsIT() throws Exception {
-        String username = "username";
-        // TODO voir pour correspondre avec l'initializer
+    void getNonExistentAttractionInformationIT() throws Exception {
+        String attractionName = "non existent";
 
-        mockMvc.perform(get("/attractions/closest-five?username="))
+        mockMvc.perform(get("/attractions?attractionName=" + attractionName))
+                .andExpect(status().isNotFound())
+                .andExpect(handler().methodName("getAttractionInformation"));
+    }
+
+    // GET ATTRACTION PROPOSALS IT //
+
+    @Test
+    void getAttractionProposalsWithExistingUserIT() throws Exception {
+        String username = "internalUser1"; //depending on initializer
+
+        mockMvc.perform(get("/attractions/closest-five?username=" + username))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(handler().methodName("getAttractionProposals"));
+    }
+
+    @Test
+    void getAttractionProposalsWithNonExistentUserIT() throws Exception {
+        String username = "non existent";
+
+        mockMvc.perform(get("/attractions/closest-five?username=" + username))
+                .andExpect(status().isNotFound())
                 .andExpect(handler().methodName("getAttractionProposals"));
     }
 

@@ -18,14 +18,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-@Disabled
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TripDealIT {
 
-
-    //TODO : voir comment param les différents bean notamment en param internal test helper
+    /* Before running IT, make sure that web clients are running and that internal helper is set up to 1.*/
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,18 +33,22 @@ public class TripDealIT {
         Locale.setDefault(Locale.US);
     }
 
-    @BeforeEach
-    public void beforeEach() {
+    //GET TRIP DEALS TESTS //
+
+    @Test
+    void getTripDealsForExistingUserIT() throws Exception {
+        String username = "internalUser1"; //depending on initializer
+        mockMvc.perform(get("/trip-deals?username=" + username))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(handler().methodName("getTripDeals"));
     }
 
     @Test
-    void getTripDealsIT() throws Exception {
-        String username = "username";
-        // TODO voir pour correspondre avec l'initializer
-
-        mockMvc.perform(get("/trip-deals?username="))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(handler().methodName("getUserLocation"));
+    void getTripDealsForNonExistentUserIT() throws Exception {
+        String username = "non existent";
+        mockMvc.perform(get("/trip-deals?username=" + username))
+                .andExpect(status().isNotFound())
+                .andExpect(handler().methodName("getTripDeals"));
     }
 }

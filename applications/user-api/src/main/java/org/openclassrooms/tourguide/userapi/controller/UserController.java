@@ -29,7 +29,7 @@ public class UserController {
      * @return user - if user doesn't exist, throw ElementNotFoundException
      */
     @GetMapping("/{username}")
-    public User getUserProfile(@PathVariable final String username) {
+    public User getUserProfile(@PathVariable String username) {
         LOGGER.info("Getting user : " + username);
         User user = userService.getUser(username);
         return user;

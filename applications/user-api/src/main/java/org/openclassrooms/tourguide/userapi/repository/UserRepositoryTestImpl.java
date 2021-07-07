@@ -54,7 +54,7 @@ public class UserRepositoryTestImpl implements UserRepository {
     public Optional<User> findByUsername(String username) {
         LOGGER.info("Finding user : " + username);
         User user = internalUserMap.get(username);
-        return Optional.of(user);
+        return Optional.ofNullable(user);
     }
 
     /**

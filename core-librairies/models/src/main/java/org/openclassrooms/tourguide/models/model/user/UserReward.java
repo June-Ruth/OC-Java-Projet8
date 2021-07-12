@@ -1,7 +1,7 @@
 package org.openclassrooms.tourguide.models.model.user;
 
-import gpsUtil.location.Attraction;
-import gpsUtil.location.VisitedLocation;
+import org.openclassrooms.tourguide.models.model.location.Attraction;
+import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
 
 public class UserReward {
 

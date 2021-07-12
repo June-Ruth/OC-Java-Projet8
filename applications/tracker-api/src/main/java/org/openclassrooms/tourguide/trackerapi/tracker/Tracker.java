@@ -1,7 +1,7 @@
 package org.openclassrooms.tourguide.trackerapi.tracker;
 
 import org.openclassrooms.tourguide.models.model.user.User;
-import org.openclassrooms.tourguide.trackerapi.service.LocationService;
+import org.openclassrooms.tourguide.trackerapi.service.TrackerService;
 import org.openclassrooms.tourguide.trackerapi.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +27,11 @@ public class Tracker implements Runnable {
 
     private final UserService userService;
 
-    private final LocationService locationService;
+    private final TrackerService trackerService;
 
-    public Tracker(final UserService userService1, final LocationService locationService1) {
+    public Tracker(final UserService userService1, final TrackerService trackerService1) {
         userService = userService1;
-        locationService = locationService1;
+        trackerService = trackerService1;
     }
 
     public void startTracking() {
@@ -66,7 +66,7 @@ public class Tracker implements Runnable {
             stopWatch.start();
 
             CompletableFuture<?>[] completableFutures = users.stream()
-                    .map(locationService::trackUserLocation)
+                    .map(trackerService::trackUserLocation)
                     .toArray(CompletableFuture[]::new);
 
             CompletableFuture.allOf(completableFutures)

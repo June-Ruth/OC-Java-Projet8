@@ -47,6 +47,7 @@ public class UserControllerTest {
     private static final UUID uuid1 = UUID.randomUUID();
     private static VisitedLocation visitedLocation;
     private static List<VisitedLocation> visitedLocationList;
+    private static List<User> userList;
 
     @BeforeAll
     static void beforeAll() {
@@ -55,6 +56,8 @@ public class UserControllerTest {
         visitedLocation = new VisitedLocation(UUID.randomUUID(), new Location(2d, 2d), Date.from(Instant.now()));
         visitedLocationList = new ArrayList<>();
         visitedLocationList.add(visitedLocation);
+        userList = new ArrayList<>();
+        userList.add(user);
     }
 
     // GET USER PROFILE TESTS //
@@ -71,6 +74,15 @@ public class UserControllerTest {
         when(userService.getUser(anyString())).thenThrow(ElementNotFoundException.class);
         mockMvc.perform(get("/users/{username}", user.getUsername()))
                 .andExpect(status().isNotFound());
+    }
+
+    // GET ALL USERS TESTS //
+
+    @Test
+    void getAllUsersTest() throws Exception {
+        when(userService.getAllUsers()).thenReturn(userList);
+        mockMvc.perform(get("/users"))
+                .andExpect(status().isOk());
     }
 
     // GET USER PREFERENCES TESTS //

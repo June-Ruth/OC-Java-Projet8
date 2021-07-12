@@ -26,9 +26,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         LOGGER.info("Getting all users");
-        //TODO : WebClient User API -> getAllUsers
-        return null;
-        /*
+        //TODO : IT
          return webClientUserApi
                 .get()
                 .uri("/users")
@@ -36,6 +34,5 @@ public class UserServiceImpl implements UserService {
                 .bodyToFlux(User.class)
                 .collectList()
                 .block();
-         */
     }
 }

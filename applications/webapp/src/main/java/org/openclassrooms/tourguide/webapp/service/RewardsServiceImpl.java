@@ -37,23 +37,4 @@ public class RewardsServiceImpl implements RewardsService {
                 .bodyToMono(Integer.class)
                 .block();
     }
-
-   /* public CompletableFuture<?> calculateRewards(User user) {
-        List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
-
-        CompletableFuture<?> completableFuture = CompletableFuture.runAsync(() ->
-                        new ArrayList<>(user.getVisitedLocations())
-                                .forEach(visitedLocation ->
-                                        getAttractionsNearVisitedLocation(visitedLocation)
-                                                .stream()
-                                                .filter( attraction ->
-                                                        isAttractionNotAlreadyInUserRewards(attraction, userRewards)
-                                                )
-                                                .forEach(attraction ->
-                                                        addUserRewardToUser(new UserReward(visitedLocation, attraction, getRewardPoints(attraction, user)), user)
-                                                )
-                                )
-                ,executor);
-        return completableFuture;
-    }*/
 }

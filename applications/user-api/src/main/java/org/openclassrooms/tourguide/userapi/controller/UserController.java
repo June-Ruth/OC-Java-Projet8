@@ -36,6 +36,16 @@ public class UserController {
     }
 
     /**
+     * Access to all referenced users.
+     * @return list of all users
+     */
+    @GetMapping
+    public List<User> getAllUsers() {
+        LOGGER.info("Getting all referenced users.");
+        return userService.getAllUsers();
+    }
+
+    /**
      * Access to user's preferences for trips.
      * @param username of the user
      * @return user preferences - if user doesn't exist, throw ElementNotFoundException

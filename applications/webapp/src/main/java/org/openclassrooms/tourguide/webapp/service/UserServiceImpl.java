@@ -48,7 +48,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public VisitedLocation getUserCurrentLocation(String username) {
         LOGGER.info(("Getting user location for : " + username));
-        // TODO : si UserCurrentLocation peut revenir null, si null alors besoin de trackUSerLocation avec Tracker => vérifier éventuellement si situation probable et nécessaire mais initialement prévue
         return webClientUserApi
                 .get()
                 .uri("/users/" + username + "/current-location")
@@ -63,7 +62,6 @@ public class UserServiceImpl implements UserService {
                     }
                 })
                 .block();
-
     }
 
     /**

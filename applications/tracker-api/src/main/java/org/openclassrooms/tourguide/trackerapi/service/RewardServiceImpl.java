@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +36,7 @@ public class RewardServiceImpl implements RewardService {
     }
 
     @Override
-    public CompletableFuture<?> calculateRewards(User user) {
+    public Void calculateRewards(User user) {
         LOGGER.info("Calculating rewards for user " + user);
         List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
 
@@ -51,7 +52,22 @@ public class RewardServiceImpl implements RewardService {
                                                         addUserRewardToUser(new UserReward(visitedLocation, attraction, getAttractionRewardPoints(attraction, user)), user)
                                                 )
                                 )
-                ,executor);
+                ,executor).join();
+    }
+
+    @Override
+    //TODO : for testing only, to clean
+    public void addShutDownHook() {
+        try {
+            if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            executor.shutdownNow();
+        } finally {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private int getAttractionRewardPoints(final Attraction attraction, final User user) {

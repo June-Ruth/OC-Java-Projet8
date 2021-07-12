@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TrackerServiceImpl implements TrackerService {
@@ -17,16 +18,13 @@ public class TrackerServiceImpl implements TrackerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrackerServiceImpl.class);
 
     private final LocationService locationService;
-    private final UserService userService;
     private final RewardService rewardService;
 
     ExecutorService executor = Executors.newFixedThreadPool(800);
 
     public TrackerServiceImpl(final LocationService locationService1,
-                              final UserService userService1,
                               final RewardService rewardService1) {
         locationService = locationService1;
-        userService = userService1;
         rewardService = rewardService1;
     }
 
@@ -35,15 +33,31 @@ public class TrackerServiceImpl implements TrackerService {
      */
     @Override
     public CompletableFuture<?> trackUserLocation(User user) {
-
+        LOGGER.info("Tracking user location for user " + user);
         return CompletableFuture.supplyAsync(() -> locationService.getUserLocation(user.getUserId()), executor)
                 .thenAccept(visitedLocation -> addToVisitedLocationsOfUser(visitedLocation, user))
                 .thenRunAsync(() -> rewardService.calculateRewards(user));
     }
 
-    private VisitedLocation addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user) {
+    @Override
+    public VisitedLocation addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user) {
         List<VisitedLocation> visitedLocations = user.getVisitedLocations();
         visitedLocations.add(visitedLocation);
         return visitedLocation;
+    }
+
+    @Override
+    //TODO : for testing only, to clean
+    public void addShutDownHook() {
+        try {
+            if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            executor.shutdownNow();
+        } finally {
+            Thread.currentThread().interrupt();
+        }
     }
 }

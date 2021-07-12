@@ -23,6 +23,7 @@ public class WebClientConfig {
     }
 
     @Bean
+    //TODO : vérifier mais je pense inutile
     public WebClient getWebClientTripApi() {
         return WebClient.create("http://localhost:8084");
     }

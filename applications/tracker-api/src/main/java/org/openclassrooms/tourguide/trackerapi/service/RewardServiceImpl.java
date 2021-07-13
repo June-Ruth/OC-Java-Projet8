@@ -27,16 +27,17 @@ public class RewardServiceImpl implements RewardService {
     private final WebClient webClientRewardApi;
     private final LocationService locationService;
 
-    ExecutorService executor = Executors.newFixedThreadPool(800);
+    private final ExecutorService executor;
 
     public RewardServiceImpl(@Qualifier("getWebClientRewardApi")final WebClient webClientRewardApi1,
                              final LocationService locationService1) {
         webClientRewardApi = webClientRewardApi1;
         locationService = locationService1;
+        executor = Executors.newFixedThreadPool(800);
     }
 
     @Override
-    public Void calculateRewards(User user) {
+    public CompletableFuture<?> calculateRewards(User user) {
         LOGGER.info("Calculating rewards for user " + user);
         List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
 
@@ -52,7 +53,7 @@ public class RewardServiceImpl implements RewardService {
                                                         addUserRewardToUser(new UserReward(visitedLocation, attraction, getAttractionRewardPoints(attraction, user)), user)
                                                 )
                                 )
-                ,executor).join();
+                ,executor);
     }
 
     @Override
@@ -85,14 +86,14 @@ public class RewardServiceImpl implements RewardService {
                 .block();
     }
 
-    private void addUserRewardToUser(UserReward userReward, User user) {
-        LOGGER.info("Adding user reward " + userReward + " to user " + user);
+    private void addUserRewardToUser(UserReward newReward, User user) {
+        LOGGER.info("Adding user reward " + newReward + " to user " + user);
         List<UserReward> userRewards = user.getUserRewards();
         if(userRewards
                 .stream()
                 .noneMatch(reward ->
-                        reward.getAttraction().getAttractionName().equals(userReward.getAttraction().getAttractionName()))) {
-            userRewards.add(userReward);
+                        reward.getAttraction().getAttractionName().equals(newReward.getAttraction().getAttractionName()))) {
+            userRewards.add(newReward);
         }
     }
 

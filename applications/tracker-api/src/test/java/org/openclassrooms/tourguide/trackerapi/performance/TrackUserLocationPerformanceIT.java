@@ -11,11 +11,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Disabled
+//@Disabled
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TrackUserLocationPerformanceIT {
@@ -73,10 +74,12 @@ public class TrackUserLocationPerformanceIT {
 				.map(trackerService::trackUserLocation)
 				.toArray(CompletableFuture[]::new);
 
-		CompletableFuture.allOf(completableFutures)
-				.join();
-
-		stopWatch.stop();
+        try {
+            CompletableFuture.allOf(completableFutures)
+                    .get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
 		System.out.println("\nTrack Location with " + allUsers.size() + " Users : Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.\n");
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));

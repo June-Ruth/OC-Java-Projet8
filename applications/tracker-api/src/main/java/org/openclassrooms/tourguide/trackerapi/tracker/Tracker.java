@@ -34,25 +34,6 @@ public class Tracker implements Runnable {
         trackerService = trackerService1;
     }
 
-    public void startTracking() {
-        executorService.scheduleAtFixedRate(this, 0, 5, TimeUnit.MINUTES);
-    }
-
-    public void stopTracking() {
-        running.set(false);
-        executorService.shutdown();
-        try {
-            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
-                executorService.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            executorService.shutdownNow();
-        } finally {
-            LOGGER.debug("Tracker stopping");
-            Thread.currentThread().interrupt();
-        }
-    }
-
     @Override
     public void run() {
         running.set(true);
@@ -84,6 +65,24 @@ public class Tracker implements Runnable {
             } catch (InterruptedException e) {
                 break;
             }
+        }
+    }
+
+    public void startTracking() {
+        executorService.scheduleAtFixedRate(this, 0, 5, TimeUnit.MINUTES);
+    }
+
+    public void stopTracking() {
+        running.set(false);
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+            LOGGER.debug("Tracker stopping");
+            Thread.currentThread().interrupt();
         }
     }
 }

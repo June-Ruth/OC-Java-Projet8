@@ -15,11 +15,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Disabled
+//@Disabled
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GetRewardsPerformanceIT {
@@ -77,8 +78,12 @@ public class GetRewardsPerformanceIT {
                 .map(rewardService::calculateRewards)
                 .toArray(CompletableFuture[]::new);
 
-        CompletableFuture.allOf(completableFutures)
-                .join();
+        try {
+            CompletableFuture.allOf(completableFutures)
+                    .get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
 
         allUsers.forEach(user -> assertTrue(user.getUserRewards().size() > 0));
 

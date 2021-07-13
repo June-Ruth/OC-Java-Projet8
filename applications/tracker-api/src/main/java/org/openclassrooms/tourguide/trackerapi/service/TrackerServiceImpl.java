@@ -20,12 +20,13 @@ public class TrackerServiceImpl implements TrackerService {
     private final LocationService locationService;
     private final RewardService rewardService;
 
-    ExecutorService executor = Executors.newFixedThreadPool(800);
+    private final ExecutorService executor;
 
     public TrackerServiceImpl(final LocationService locationService1,
                               final RewardService rewardService1) {
         locationService = locationService1;
         rewardService = rewardService1;
+        executor = Executors.newFixedThreadPool(800);
     }
 
     /**
@@ -56,7 +57,6 @@ public class TrackerServiceImpl implements TrackerService {
         } catch (InterruptedException e) {
             e.printStackTrace();
             executor.shutdownNow();
-        } finally {
             Thread.currentThread().interrupt();
         }
     }

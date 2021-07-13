@@ -2,9 +2,11 @@ package org.openclassrooms.tourguide.trackerapi.service;
 
 import org.openclassrooms.tourguide.models.model.user.User;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface RewardService {
 
-    Void calculateRewards(User user);
+    CompletableFuture<?> calculateRewards(User user);
 
     //TODO : for testing only, to clean
     void addShutDownHook();

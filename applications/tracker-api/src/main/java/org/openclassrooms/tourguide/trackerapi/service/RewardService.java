@@ -1,13 +1,9 @@
 package org.openclassrooms.tourguide.trackerapi.service;
 
+import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.user.User;
-
-import java.util.concurrent.CompletableFuture;
 
 public interface RewardService {
 
-    CompletableFuture<?> calculateRewards(User user);
-
-    //TODO : for testing only, to clean
-    void addShutDownHook();
+    int getAttractionRewardPoints(final Attraction attraction, final User user);
 }

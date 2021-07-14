@@ -1,7 +1,7 @@
 package org.openclassrooms.tourguide.trackerapi.tracker;
 
 import org.openclassrooms.tourguide.models.model.user.User;
-import org.openclassrooms.tourguide.trackerapi.service.TrackerService;
+import org.openclassrooms.tourguide.trackerapi.executor.TrackerExecutor;
 import org.openclassrooms.tourguide.trackerapi.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,15 +23,15 @@ public class Tracker implements Runnable {
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final AtomicBoolean running = new AtomicBoolean(false);
 
-    private static final long trackingPollingInterval = TimeUnit.MINUTES.toSeconds(5); // TODO : voir pourquoi ne marche pas avec le schedule
+    private static final long trackingPollingInterval = TimeUnit.MINUTES.toSeconds(5); // TODO : voir pourquoi ne marche pas avec le schedule => parce que doit mettre le schedule dans le main pour initialiser le runnable dans le run
 
     private final UserService userService;
 
-    private final TrackerService trackerService;
+    private final TrackerExecutor trackerExecutor;
 
-    public Tracker(final UserService userService1, final TrackerService trackerService1) {
+    public Tracker(final UserService userService1, final TrackerExecutor trackerExecutor1) {
         userService = userService1;
-        trackerService = trackerService1;
+        trackerExecutor = trackerExecutor1;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class Tracker implements Runnable {
             stopWatch.start();
 
             CompletableFuture<?>[] completableFutures = users.stream()
-                    .map(trackerService::trackUserLocation)
+                    .map(trackerExecutor::trackUserLocation)
                     .toArray(CompletableFuture[]::new);
 
             CompletableFuture.allOf(completableFutures)

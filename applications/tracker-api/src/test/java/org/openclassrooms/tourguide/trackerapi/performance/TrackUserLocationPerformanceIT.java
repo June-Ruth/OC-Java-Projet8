@@ -4,6 +4,8 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.junit.jupiter.api.*;
 import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.trackerapi.config.WebClientConfig;
+import org.openclassrooms.tourguide.trackerapi.executor.RewardExecutor;
+import org.openclassrooms.tourguide.trackerapi.executor.TrackerExecutor;
 import org.openclassrooms.tourguide.trackerapi.service.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -26,7 +28,8 @@ public class TrackUserLocationPerformanceIT {
     private UserService userService;
     private LocationService locationService;
     private RewardService rewardService;
-    private TrackerService trackerService;
+    private TrackerExecutor trackerExecutor;
+    private RewardExecutor rewardExecutor;
     private static WebClient webClientUserApi;
     private static WebClient webClientGpsApi;
     private static WebClient webClientRewardApi;
@@ -46,14 +49,15 @@ public class TrackUserLocationPerformanceIT {
     public void beforeEach(){
         userService = new UserServiceImpl(webClientUserApi);
         locationService = new LocationServiceImpl(webClientGpsApi);
-        rewardService = new RewardServiceImpl(webClientRewardApi, locationService);
-        trackerService = new TrackerServiceImpl(locationService, rewardService);
+        rewardService = new RewardServiceImpl(webClientRewardApi);
+        trackerExecutor = new TrackerExecutor(locationService, userService, rewardExecutor);
+        rewardExecutor = new RewardExecutor(locationService, userService, rewardService);
     }
 
     @AfterEach
     public void afterEach() {
-        trackerService.addShutDownHook();
-        rewardService.addShutDownHook();
+        trackerExecutor.addShutDownHook();
+        rewardExecutor.addShutDownHook();
     }
 
     private void trackLocationWithXUsersModel(int userNumber) {
@@ -71,7 +75,7 @@ public class TrackUserLocationPerformanceIT {
 		stopWatch.start();
 
 		CompletableFuture<?>[] completableFutures = allUsers.stream()
-				.map(trackerService::trackUserLocation)
+				.map(trackerExecutor::trackUserLocation)
 				.toArray(CompletableFuture[]::new);
 
         try {

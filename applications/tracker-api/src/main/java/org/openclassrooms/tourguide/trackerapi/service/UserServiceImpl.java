@@ -1,6 +1,8 @@
 package org.openclassrooms.tourguide.trackerapi.service;
 
+import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.user.User;
+import org.openclassrooms.tourguide.models.model.user.UserReward;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,5 +36,25 @@ public class UserServiceImpl implements UserService {
                 .bodyToFlux(User.class)
                 .collectList()
                 .block();
+    }
+
+    @Override
+    public VisitedLocation addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user) {
+        //TODO ; unit test
+        List<VisitedLocation> visitedLocations = user.getVisitedLocations();
+        visitedLocations.add(visitedLocation);
+        return visitedLocation;
+    }
+
+    @Override
+    public void addUserRewardToUser(UserReward newReward, User user) {
+        LOGGER.info("Adding user reward " + newReward + " to user " + user);
+        List<UserReward> userRewards = user.getUserRewards();
+        if(userRewards
+                .stream()
+                .noneMatch(userReward ->
+                        userReward.getAttraction().getAttractionName().equals(newReward.getAttraction().getAttractionName()))) {
+            userRewards.add(newReward);
+        }
     }
 }

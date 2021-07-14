@@ -6,6 +6,8 @@ import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.trackerapi.config.WebClientConfig;
+import org.openclassrooms.tourguide.trackerapi.executor.RewardExecutor;
+import org.openclassrooms.tourguide.trackerapi.executor.TrackerExecutor;
 import org.openclassrooms.tourguide.trackerapi.service.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -30,7 +32,8 @@ public class GetRewardsPerformanceIT {
     private UserService userService;
     private LocationService locationService;
     private RewardService rewardService;
-    private TrackerService trackerService;
+    private TrackerExecutor trackerExecutor;
+    private RewardExecutor rewardExecutor;
     private static WebClient webClientUserApi;
     private static WebClient webClientGpsApi;
     private static WebClient webClientRewardApi;
@@ -50,14 +53,15 @@ public class GetRewardsPerformanceIT {
     public void beforeEach(){
         userService = new UserServiceImpl(webClientUserApi);
         locationService = new LocationServiceImpl(webClientGpsApi);
-        rewardService = new RewardServiceImpl(webClientRewardApi, locationService);
-        trackerService = new TrackerServiceImpl(locationService, rewardService);
+        rewardService = new RewardServiceImpl(webClientRewardApi);
+        trackerExecutor = new TrackerExecutor(locationService, userService, rewardExecutor);
+        rewardExecutor = new RewardExecutor(locationService, userService, rewardService);
     }
 
     @AfterEach
     public void afterEach() {
-        trackerService.addShutDownHook();
-        rewardService.addShutDownHook();
+        trackerExecutor.addShutDownHook();
+        rewardExecutor.addShutDownHook();
     }
 
     private void getRewardsWithXUsersModel(int userNumber) {
@@ -72,10 +76,10 @@ public class GetRewardsPerformanceIT {
 
         List<User> allUsers = userService.getAllUsers();
 
-        allUsers.forEach(user -> trackerService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, Date.from(Instant.now())), user));
+        allUsers.forEach(user -> userService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, Date.from(Instant.now())), user));
 
         CompletableFuture<?>[] completableFutures = allUsers.stream()
-                .map(rewardService::calculateRewards)
+                .map(rewardExecutor::calculateRewards)
                 .toArray(CompletableFuture[]::new);
 
         try {

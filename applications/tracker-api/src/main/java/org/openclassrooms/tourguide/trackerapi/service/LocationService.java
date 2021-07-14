@@ -15,4 +15,6 @@ public interface LocationService {
      * @return list of all attractions
      */
     List<Attraction> getAllAttractions();
+
+    List<Attraction> getAttractionsNearVisitedLocation(VisitedLocation visitedLocation);
 }

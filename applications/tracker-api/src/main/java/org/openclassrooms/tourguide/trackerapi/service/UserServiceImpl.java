@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public VisitedLocation addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user) {
         //TODO ; unit test
+        LOGGER.info("Adding visited location " + visitedLocation + " to user " + user);
         List<VisitedLocation> visitedLocations = user.getVisitedLocations();
         visitedLocations.add(visitedLocation);
         return visitedLocation;

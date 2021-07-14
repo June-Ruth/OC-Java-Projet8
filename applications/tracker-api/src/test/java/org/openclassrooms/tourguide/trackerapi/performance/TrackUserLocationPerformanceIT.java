@@ -5,7 +5,9 @@ import org.junit.jupiter.api.*;
 import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.trackerapi.config.WebClientConfig;
 import org.openclassrooms.tourguide.trackerapi.executor.RewardExecutor;
+import org.openclassrooms.tourguide.trackerapi.executor.RewardExecutorImpl;
 import org.openclassrooms.tourguide.trackerapi.executor.TrackerExecutor;
+import org.openclassrooms.tourguide.trackerapi.executor.TrackerExecutorImpl;
 import org.openclassrooms.tourguide.trackerapi.service.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,7 +15,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TrackUserLocationPerformanceIT {
-
-    //TODO
 
     private UserService userService;
     private LocationService locationService;
@@ -50,14 +49,13 @@ public class TrackUserLocationPerformanceIT {
         userService = new UserServiceImpl(webClientUserApi);
         locationService = new LocationServiceImpl(webClientGpsApi);
         rewardService = new RewardServiceImpl(webClientRewardApi);
-        trackerExecutor = new TrackerExecutor(locationService, userService, rewardExecutor);
-        rewardExecutor = new RewardExecutor(locationService, userService, rewardService);
+        rewardExecutor = new RewardExecutorImpl(locationService, userService, rewardService);
+        trackerExecutor = new TrackerExecutorImpl(locationService, userService, rewardExecutor);
     }
 
     @AfterEach
     public void afterEach() {
         trackerExecutor.addShutDownHook();
-        rewardExecutor.addShutDownHook();
     }
 
     private void trackLocationWithXUsersModel(int userNumber) {
@@ -78,12 +76,8 @@ public class TrackUserLocationPerformanceIT {
 				.map(trackerExecutor::trackUserLocation)
 				.toArray(CompletableFuture[]::new);
 
-        try {
-            CompletableFuture.allOf(completableFutures)
-                    .get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
+        CompletableFuture.allOf(completableFutures)
+                .join();
 
 		System.out.println("\nTrack Location with " + allUsers.size() + " Users : Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.\n");
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));

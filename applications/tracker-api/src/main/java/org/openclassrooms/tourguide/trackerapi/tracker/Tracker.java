@@ -74,6 +74,7 @@ public class Tracker implements Runnable {
 
     public void stopTracking() {
         running.set(false);
+        trackerExecutor.addShutDownHook();
         executorService.shutdown();
         try {
             if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {

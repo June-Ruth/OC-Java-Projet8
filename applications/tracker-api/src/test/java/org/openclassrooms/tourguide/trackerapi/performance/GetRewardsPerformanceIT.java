@@ -7,7 +7,7 @@ import org.openclassrooms.tourguide.models.model.location.VisitedLocation;
 import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.trackerapi.config.WebClientConfig;
 import org.openclassrooms.tourguide.trackerapi.executor.RewardExecutor;
-import org.openclassrooms.tourguide.trackerapi.executor.TrackerExecutor;
+import org.openclassrooms.tourguide.trackerapi.executor.RewardExecutorImpl;
 import org.openclassrooms.tourguide.trackerapi.service.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -27,12 +27,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GetRewardsPerformanceIT {
 
-    //TODO
-
     private UserService userService;
     private LocationService locationService;
     private RewardService rewardService;
-    private TrackerExecutor trackerExecutor;
     private RewardExecutor rewardExecutor;
     private static WebClient webClientUserApi;
     private static WebClient webClientGpsApi;
@@ -54,13 +51,11 @@ public class GetRewardsPerformanceIT {
         userService = new UserServiceImpl(webClientUserApi);
         locationService = new LocationServiceImpl(webClientGpsApi);
         rewardService = new RewardServiceImpl(webClientRewardApi);
-        trackerExecutor = new TrackerExecutor(locationService, userService, rewardExecutor);
-        rewardExecutor = new RewardExecutor(locationService, userService, rewardService);
+        rewardExecutor = new RewardExecutorImpl(locationService, userService, rewardService);
     }
 
     @AfterEach
     public void afterEach() {
-        trackerExecutor.addShutDownHook();
         rewardExecutor.addShutDownHook();
     }
 

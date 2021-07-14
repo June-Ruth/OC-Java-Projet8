@@ -1,9 +1,7 @@
-package org.openclassrooms.tourguide.webapp.config;
+package org.openclassrooms.tourguide.trackerapi.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
@@ -25,6 +23,7 @@ public class WebClientConfig {
     }
 
     @Bean
+    //TODO : vérifier mais je pense inutile
     public WebClient getWebClientTripApi() {
         return WebClient.create("http://localhost:8084");
     }

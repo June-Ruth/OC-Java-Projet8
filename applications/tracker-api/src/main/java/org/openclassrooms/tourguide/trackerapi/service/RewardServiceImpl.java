@@ -1,4 +1,4 @@
-package org.openclassrooms.tourguide.webapp.service;
+package org.openclassrooms.tourguide.trackerapi.service;
 
 import org.openclassrooms.tourguide.models.model.location.Attraction;
 import org.openclassrooms.tourguide.models.model.user.User;
@@ -9,19 +9,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
-public class RewardsServiceImpl implements RewardsService {
+public class RewardServiceImpl implements RewardService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RewardsServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RewardServiceImpl.class);
 
     private final WebClient webClientRewardApi;
 
-    public RewardsServiceImpl(@Qualifier("getWebClientRewardApi")final WebClient webClientRewardApi1) {
+    public RewardServiceImpl(@Qualifier("getWebClientRewardApi")final WebClient webClientRewardApi1) {
         webClientRewardApi = webClientRewardApi1;
     }
 
-    /**
-     * @inheritDoc
-     */
     @Override
     public int getAttractionRewardPoints(final Attraction attraction, final User user) {
         LOGGER.info("Get attraction reward points for attraction "

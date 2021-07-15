@@ -96,7 +96,7 @@ public class GetRewardsPerformanceIT {
 
     @Order(1)
     @Test
-    public void getRewardsWith100UsersTest() {
+    public void getRewardsWith100UsersIT() {
         int userNumber = 100;
         getRewardsWithXUsersModel(userNumber);
     }
@@ -104,35 +104,35 @@ public class GetRewardsPerformanceIT {
     /*
     @Order(2)
     @Test
-    public void getRewardsWith1000UsersTest() {
+    public void getRewardsWith1000UsersIT() {
         int userNumber = 1000;
         getRewardsWithXUsersModel(userNumber);
     }
 
     @Order(3)
     @Test
-    public void getRewardsWith5000UsersTest() {
+    public void getRewardsWith5000UsersIT() {
         int userNumber = 5000;
         getRewardsWithXUsersModel(userNumber);
     }
 
     @Order(4)
     @Test
-    public void getRewardsWith10000UsersTest() {
+    public void getRewardsWith10000UsersIT() {
         int userNumber = 10000;
         getRewardsWithXUsersModel(userNumber);
     }
 
     @Order(5)
     @Test
-    public void getRewardsWith50000UsersTest() {
+    public void getRewardsWith50000UsersIT() {
         int userNumber = 50000;
         getRewardsWithXUsersModel(userNumber);
     }
 
     @Order(6)
     @Test
-    public void getRewardsWith100000UsersTest() {
+    public void getRewardsWith100000UsersIT() {
         int userNumber = 100000;
         getRewardsWithXUsersModel(userNumber);
     }

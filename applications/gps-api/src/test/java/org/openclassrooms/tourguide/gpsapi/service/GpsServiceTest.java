@@ -63,6 +63,7 @@ public class GpsServiceTest {
         attraction10 = new Attraction("name10", "city10", "state10", 10d, 10d);
         uuid = UUID.randomUUID();
         visitedLocation = new VisitedLocation(uuid, new Location(2d, 2d), Date.from(Instant.now()));
+        attractionList.clear();
         attractionList.add(attraction1);
         attractionList.add(attraction2);
         attractionList.add(attraction3);

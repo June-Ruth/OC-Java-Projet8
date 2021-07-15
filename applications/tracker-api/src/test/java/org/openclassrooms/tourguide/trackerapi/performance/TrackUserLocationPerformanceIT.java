@@ -85,7 +85,7 @@ public class TrackUserLocationPerformanceIT {
 
     @Order(1)
     @Test
-    public void trackLocationWith100UsersTest() {
+    public void trackLocationWith100UsersIT() {
         int userNumber = 100;
         trackLocationWithXUsersModel(userNumber);
     }
@@ -93,35 +93,35 @@ public class TrackUserLocationPerformanceIT {
    /*
     @Order(2)
     @Test
-    public void trackLocationWith1000UsersTest() {
+    public void trackLocationWith1000UsersIT() {
         int userNumber = 1000;
         trackLocationWithXUsersModel(userNumber);
     }
 
     @Order(3)
     @Test
-    public void trackLocationWith5000UsersTest() {
+    public void trackLocationWith5000UsersIT() {
         int userNumber = 5000;
         trackLocationWithXUsersModel(userNumber);
     }
 
     @Order(4)
     @Test
-    public void trackLocationWith10000UsersTest() {
+    public void trackLocationWith10000UsersIT() {
         int userNumber = 10000;
         trackLocationWithXUsersModel(userNumber);
     }
 
     @Order(5)
     @Test
-    public void trackLocationWith50000UsersTest() {
+    public void trackLocationWith50000UsersIT() {
         int userNumber = 50000;
         trackLocationWithXUsersModel(userNumber);
     }
 
     @Order(6)
     @Test
-    public void trackLocationWith100000UsersTest() {
+    public void trackLocationWith100000UsersIT() {
         int userNumber = 100000;
         trackLocationWithXUsersModel(userNumber);
     }

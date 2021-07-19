@@ -13,18 +13,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//@Disabled
 @ActiveProfiles("test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GetRewardsPerformance {
 
     private UserService userService;
@@ -36,6 +34,8 @@ public class GetRewardsPerformance {
     private static WebClient webClientRewardApi;
     private static WebClientConfig webClientConfig;
 
+    private List<User> allUsers;
+    private StopWatch stopWatch;
 
     @BeforeAll
     public static void beforeAll() {
@@ -48,6 +48,8 @@ public class GetRewardsPerformance {
 
     @BeforeEach
     public void beforeEach(){
+        allUsers = new ArrayList<>();
+        stopWatch = new StopWatch();
         userService = new UserServiceImpl(webClientUserApi);
         locationService = new LocationServiceImpl(webClientGpsApi);
         rewardService = new RewardServiceImpl(webClientRewardApi);
@@ -57,21 +59,23 @@ public class GetRewardsPerformance {
     @AfterEach
     public void afterEach() {
         rewardExecutor.addShutDownHook();
+        System.out.println("\nGet Rewards with " + allUsers.size() + " users. Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.\n");
+        stopWatch.reset();
     }
 
-    private void getRewardsWithXUsersModel(int userNumber) {
-        //TODO : pour le nombre d'utilisateur, actuellement utilise la valeur par défaut, pas possible de set
-        //InternalTestHelper.setInternalUserNumber(userNumber);
-
+    @Test
+    void getUserRewardsPerformanceIT() {
+        /*
+        To set user number, use user-api InternalTestHelper default value before running it.
+         */
 
         Attraction attraction = locationService.getAllAttractions().get(0);
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-
-        List<User> allUsers = userService.getAllUsers();
+        allUsers = userService.getAllUsers();
 
         allUsers.forEach(user -> userService.addToVisitedLocationsOfUser(new VisitedLocation(user.getUserId(), attraction, Date.from(Instant.now())), user));
+
+        stopWatch.start();
 
         CompletableFuture<?>[] completableFutures = allUsers.stream()
                 .map(rewardExecutor::calculateRewards)
@@ -79,64 +83,11 @@ public class GetRewardsPerformance {
 
         CompletableFuture.allOf(completableFutures)
                 .join();
-       /*try {
-            CompletableFuture.allOf(completableFutures)
-                    .get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }*/
-
-        allUsers.forEach(user -> assertTrue(user.getUserRewards().size() > 0));
 
         stopWatch.stop();
 
-        System.out.println("Get Rewards with " + userNumber + " Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
-
+        //allUsers.forEach(user -> assertTrue(user.getUserRewards().size() > 0));
 
         assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
     }
-
-    @Order(1)
-    @Test
-    public void getRewardsWith100UsersIT() {
-        int userNumber = 100;
-        getRewardsWithXUsersModel(userNumber);
-    }
-
-    /*
-    @Order(2)
-    @Test
-    public void getRewardsWith1000UsersIT() {
-        int userNumber = 1000;
-        getRewardsWithXUsersModel(userNumber);
-    }
-
-    @Order(3)
-    @Test
-    public void getRewardsWith5000UsersIT() {
-        int userNumber = 5000;
-        getRewardsWithXUsersModel(userNumber);
-    }
-
-    @Order(4)
-    @Test
-    public void getRewardsWith10000UsersIT() {
-        int userNumber = 10000;
-        getRewardsWithXUsersModel(userNumber);
-    }
-
-    @Order(5)
-    @Test
-    public void getRewardsWith50000UsersIT() {
-        int userNumber = 50000;
-        getRewardsWithXUsersModel(userNumber);
-    }
-
-    @Order(6)
-    @Test
-    public void getRewardsWith100000UsersIT() {
-        int userNumber = 100000;
-        getRewardsWithXUsersModel(userNumber);
-    }
-    */
 }

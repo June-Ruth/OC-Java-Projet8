@@ -21,10 +21,4 @@ public class WebClientConfig {
     public WebClient getWebClientRewardApi() {
         return WebClient.create("http://localhost:8083");
     }
-
-    @Bean
-    //TODO : vérifier mais je pense inutile
-    public WebClient getWebClientTripApi() {
-        return WebClient.create("http://localhost:8084");
-    }
 }

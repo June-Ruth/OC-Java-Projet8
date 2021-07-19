@@ -1,7 +1,7 @@
-package org.openclassrooms.tourguide.trackerapi.service;
+package org.openclassrooms.tourguide.trackerapi.tracker;
 
 import org.openclassrooms.tourguide.trackerapi.executor.TrackerExecutor;
-import org.openclassrooms.tourguide.trackerapi.tracker.Tracker;
+import org.openclassrooms.tourguide.trackerapi.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.Executors;

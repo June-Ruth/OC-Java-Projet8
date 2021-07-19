@@ -9,7 +9,7 @@ public class InternalTestHelper {
 	 * Expected internal users number.
 	 * Set to 100,000 for testing //TODO
 	 */
-	private static int internalUserNumber = 3;
+	private static int internalUserNumber = 1;
 
 	public static void setInternalUserNumber(int internalUserNumber) {
 		InternalTestHelper.internalUserNumber = internalUserNumber;

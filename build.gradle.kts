@@ -33,18 +33,6 @@ subprojects {
             }
         }
 
-        tasks.jacocoTestCoverageVerification {
-            violationRules {
-                rule {
-                    limit {
-                        counter = "LINE"
-                        value = "COVEREDRATIO"
-                        minimum = "0.5".toBigDecimal()
-                    }
-                }
-            }
-        }
-
         tasks.check {
             dependsOn(tasks.jacocoTestCoverageVerification)
         }

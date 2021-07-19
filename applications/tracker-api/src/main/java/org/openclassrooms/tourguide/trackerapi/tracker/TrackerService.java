@@ -15,10 +15,8 @@ public class TrackerService {
     private static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public TrackerService(UserService userService, TrackerExecutor trackerExecutor) {
-
         final Tracker tracker = new Tracker(userService, trackerExecutor);
         executorService.scheduleAtFixedRate(tracker, 0, 5, TimeUnit.MINUTES);
-
         Runtime.getRuntime().addShutdownHook(new Thread(TrackerService::stopTracking));
     }
 

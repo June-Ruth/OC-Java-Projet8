@@ -39,7 +39,6 @@ public class RewardExecutorImpl implements  RewardExecutor {
 
     @Override
     public CompletableFuture<?> calculateRewards(User user) {
-        //TODO ; IT
         LOGGER.info("Calculating rewards for user " + user);
         List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
 

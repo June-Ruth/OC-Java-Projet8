@@ -34,7 +34,6 @@ public class TrackerExecutorImpl implements TrackerExecutor {
 
     @Override
     public CompletableFuture<?> trackUserLocation(User user) {
-        //TODO : unit test
         LOGGER.info("Tracking user location for user " + user);
         return CompletableFuture.supplyAsync(() -> locationService.getUserLocation(user.getUserId()), executor)
                 .thenAccept(visitedLocation -> userService.addToVisitedLocationsOfUser(visitedLocation, user))

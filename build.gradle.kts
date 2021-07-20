@@ -10,12 +10,12 @@ subprojects {
     afterEvaluate {
         java {
             toolchain{
-                languageVersion.set(JavaLanguageVersion.of(8))
+                languageVersion.set(JavaLanguageVersion.of(15))
             }
         }
 
         jacoco {
-            toolVersion = "0.8.4"
+            toolVersion = "0.8.7"
         }
 
         tasks.test {

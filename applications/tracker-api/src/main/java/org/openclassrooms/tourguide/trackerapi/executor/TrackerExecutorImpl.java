@@ -29,7 +29,7 @@ public class TrackerExecutorImpl implements TrackerExecutor {
         locationService = locationService1;
         userService = userService1;
         rewardExecutor = rewardExecutor1;
-        executor = Executors.newFixedThreadPool(800);
+        executor = Executors.newFixedThreadPool(16);
     }
 
     @Override

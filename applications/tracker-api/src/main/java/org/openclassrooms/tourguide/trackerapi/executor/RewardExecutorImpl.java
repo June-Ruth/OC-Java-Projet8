@@ -34,7 +34,7 @@ public class RewardExecutorImpl implements  RewardExecutor {
         locationService = locationService1;
         userService = userService1;
         rewardService = rewardService1;
-        executor = Executors.newFixedThreadPool(800);
+        executor = Executors.newFixedThreadPool(16);
     }
 
     @Override

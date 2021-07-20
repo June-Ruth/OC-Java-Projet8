@@ -2,13 +2,14 @@ package org.openclassrooms.tourguide.trackerapi.tracker;
 
 import org.openclassrooms.tourguide.trackerapi.executor.TrackerExecutor;
 import org.openclassrooms.tourguide.trackerapi.service.UserService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
+@Profile("¡test")
 @Service
 public class TrackerService {
 

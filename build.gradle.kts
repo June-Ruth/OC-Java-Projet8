@@ -10,17 +10,18 @@ subprojects {
     afterEvaluate {
         java {
             toolchain{
-                languageVersion.set(JavaLanguageVersion.of(8))
+                languageVersion.set(JavaLanguageVersion.of(15))
             }
         }
 
         jacoco {
-            toolVersion = "0.8.4"
+            toolVersion = "0.8.7"
         }
 
         tasks.test {
             useJUnitPlatform()
             finalizedBy(tasks.jacocoTestReport)
+            exclude("**/*IT.class")
         }
 
         tasks.jacocoTestReport {
@@ -29,18 +30,6 @@ subprojects {
                 xml.isEnabled = true
                 csv.isEnabled = false
                 html.destination = layout.buildDirectory.dir("jacocoHtml").get().asFile
-            }
-        }
-
-        tasks.jacocoTestCoverageVerification {
-            violationRules {
-                rule {
-                    limit {
-                        counter = "LINE"
-                        value = "COVEREDRATIO"
-                        minimum = "0.5".toBigDecimal()
-                    }
-                }
             }
         }
 

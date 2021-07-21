@@ -34,12 +34,11 @@ public class RewardExecutorImpl implements  RewardExecutor {
         locationService = locationService1;
         userService = userService1;
         rewardService = rewardService1;
-        executor = Executors.newFixedThreadPool(800);
+        executor = Executors.newFixedThreadPool(16);
     }
 
     @Override
     public CompletableFuture<?> calculateRewards(User user) {
-        //TODO ; IT
         LOGGER.info("Calculating rewards for user " + user);
         List<UserReward> userRewards = new ArrayList<>(user.getUserRewards());
 

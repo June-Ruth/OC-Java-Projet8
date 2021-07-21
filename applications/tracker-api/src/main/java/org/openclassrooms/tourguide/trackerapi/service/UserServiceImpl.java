@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         LOGGER.info("Getting all users");
-        //TODO : IT
          return webClientUserApi
                 .get()
                 .uri("/users")
@@ -40,7 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public VisitedLocation addToVisitedLocationsOfUser(VisitedLocation visitedLocation, User user) {
-        //TODO ; unit test
         LOGGER.info("Adding visited location " + visitedLocation + " to user " + user);
         List<VisitedLocation> visitedLocations = user.getVisitedLocations();
         visitedLocations.add(visitedLocation);

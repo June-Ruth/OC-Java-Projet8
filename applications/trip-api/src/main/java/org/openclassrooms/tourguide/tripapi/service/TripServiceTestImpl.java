@@ -16,7 +16,7 @@ public class TripServiceTestImpl implements TripService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TripServiceTestImpl.class);
 
-    private final TripPricer tripPricer = new TripPricer(); //TODO : voir si possible de le caler en Bean pour faire plus propre ou si au contraire c'est mieux comme ça
+    private final TripPricer tripPricer = new TripPricer();
 
     public TripServiceTestImpl() { }
 

@@ -30,7 +30,6 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public VisitedLocation getUserLocation(final UUID userId) {
         LOGGER.info("Getting user location for user id : " + userId);
-        //TODO : IT
         return webClientGpsApi
                 .get()
                 .uri("/location/" + userId)
@@ -44,7 +43,6 @@ public class LocationServiceImpl implements LocationService {
      */
     @Override
     public List<Attraction> getAllAttractions() {
-        //TODO : IT
         LOGGER.info("Getting all referenced attraction");
         return webClientGpsApi
                 .get()

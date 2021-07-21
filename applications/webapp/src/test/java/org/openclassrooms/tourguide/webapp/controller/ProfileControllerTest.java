@@ -7,7 +7,7 @@ import org.openclassrooms.tourguide.models.model.user.User;
 import org.openclassrooms.tourguide.models.model.user.UserPreferences;
 import org.openclassrooms.tourguide.models.model.user.UserReward;
 import org.openclassrooms.tourguide.webapp.exception.ElementNotFoundException;
-import org.openclassrooms.tourguide.webapp.service.LocationServiceTest;
+import org.openclassrooms.tourguide.webapp.service.LocationService;
 import org.openclassrooms.tourguide.webapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -43,7 +43,7 @@ public class ProfileControllerTest {
     private UserService userService;
 
     @MockBean
-    private LocationServiceTest locationService;
+    private LocationService locationService;
 
     private static User user;
     private static final UUID uuid1 = UUID.randomUUID();

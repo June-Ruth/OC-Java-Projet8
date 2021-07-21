@@ -42,7 +42,7 @@ public class GpsServiceImpl implements GpsService {
      * @inheritDoc
      */
     @Override
-    public List<Attraction> getAllAttractions() { //TODO : tests
+    public List<Attraction> getAllAttractions() {
         LOGGER.info("Getting all referenced attraction");
         return gpsUtil.getAttractions()
                 .stream()

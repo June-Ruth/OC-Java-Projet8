@@ -1,44 +1,72 @@
 version: '3.9'
+
+networks:
+  backend-network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
 services:
-  webapp:
-    build:
-      context: ./
-      dockerfile: Dockerfile-webapp
-    ports:
-      - "8080:8080"
-    restart: always
   user-api:
     build:
       context: ./
       dockerfile: Dockerfile-user-api
     ports:
       - "8081:8081"
-    restart: always
+    networks:
+      backend-network:
+        ipv4_address: 172.20.0.10
   gps-api:
     build:
       context: ./
-      dockerfile: Dockerfile-user-api
+      dockerfile: Dockerfile-gps-api
     ports:
       - "8082:8082"
-    restart: always
+    networks:
+      backend-network:
+        ipv4_address: 172.20.0.2
   reward-api:
     build:
       context: ./
-      dockerfile: Dockerfile-user-api
+      dockerfile: Dockerfile-reward-api
     ports:
       - "8083:8083"
-    restart: always
+    networks:
+      backend-network:
+        ipv4_address: 172.20.0.3
   trip-api:
     build:
       context: ./
-      dockerfile: Dockerfile-user-api
+      dockerfile: Dockerfile-trip-api
     ports:
       - "8084:8084"
-    restart: always
+    networks:
+      backend-network:
+        ipv4_address: 172.20.0.4
   tracker-api:
+    depends_on:
+      - gps-api
+      - reward-api
+      - user-api
     build:
       context: ./
-      dockerfile: Dockerfile-user-api
+      dockerfile: Dockerfile-tracker-api
     ports:
       - "8085:8085"
-    restart: always
+    networks:
+      backend-network:
+        ipv4_address: 172.20.0.5
+  webapp:
+    depends_on:
+      - gps-api
+      - reward-api
+      - user-api
+      - trip-api
+    build:
+      context: ./
+      dockerfile: Dockerfile-webapp
+    ports:
+      - "8080:8080"
+    networks:
+      backend-network:
+        ipv4_address: 172.20.0.6

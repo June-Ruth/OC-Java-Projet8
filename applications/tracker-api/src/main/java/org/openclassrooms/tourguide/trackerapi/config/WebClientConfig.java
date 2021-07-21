@@ -16,7 +16,7 @@ public class WebClientConfig {
     @Bean
     public WebClient getWebClientUserApi() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8081")
+                .baseUrl("http://172.20.0.1:8081")
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
@@ -24,7 +24,7 @@ public class WebClientConfig {
     @Bean
     public WebClient getWebClientGpsApi() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8082")
+                .baseUrl("http://172.20.0.2:8082")
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
@@ -32,7 +32,7 @@ public class WebClientConfig {
     @Bean
     public WebClient getWebClientRewardApi() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8083")
+                .baseUrl("http://172.20.0.3:8083")
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

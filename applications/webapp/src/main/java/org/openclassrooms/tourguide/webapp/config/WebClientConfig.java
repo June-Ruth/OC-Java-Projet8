@@ -11,21 +11,21 @@ public class WebClientConfig {
 
     @Bean
     public WebClient getWebClientUserApi() {
-        return WebClient.create("http://localhost:8081");
+        return WebClient.create("http://172.20.0.1:8081");
     }
 
     @Bean
     public WebClient getWebClientGpsApi() {
-        return WebClient.create("http://localhost:8082");
+        return WebClient.create("http://172.20.0.2:8082");
     }
 
     @Bean
     public WebClient getWebClientRewardApi() {
-        return WebClient.create("http://localhost:8083");
+        return WebClient.create("http://172.20.0.3:8083");
     }
 
     @Bean
     public WebClient getWebClientTripApi() {
-        return WebClient.create("http://localhost:8084");
+        return WebClient.create("http://172.20.0.4:8084");
     }
 }

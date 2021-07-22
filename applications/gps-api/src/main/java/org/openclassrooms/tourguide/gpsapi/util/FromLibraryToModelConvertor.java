@@ -9,7 +9,7 @@ public class FromLibraryToModelConvertor {
     public static Attraction convertAttraction(final gpsUtil.location.Attraction libraryAttraction) {
         return new Attraction(libraryAttraction.attractionName,
                 libraryAttraction.city,
-                libraryAttraction.city,
+                libraryAttraction.state,
                 libraryAttraction.latitude,
                 libraryAttraction.longitude);
     }

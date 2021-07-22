@@ -1,18 +1,18 @@
 # syntax=docker/dockerfile:1
 
-FROM gradle:7.0.2-jdk8 AS build
+FROM gradle:7.0.2-jdk16 AS build
 
 COPY --chown=gradle:gradle . /buildDir
 
 WORKDIR /buildDir
 RUN gradle :webapp:build --no-daemon
 
-FROM openjdk:8-jre-slim
+FROM openjdk:16-jdk-slim
 
 EXPOSE 8080
 
 RUN mkdir /app
 
-COPY --from=build /buildDir/build/libs/*.jar /app/web-app.jar
+COPY --from=build /buildDir/applications/webapp/build/libs/*.jar /app/webapp.jar
 
-ENTRYPOINT ["java", "-jar", "/app/web-app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/webapp.jar"]

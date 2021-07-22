@@ -38,7 +38,7 @@ public class Attraction extends Location {
     }
 
     public void setCity(final String city1) {
-        city = city;
+        city = city1;
     }
 
     public String getState() {
